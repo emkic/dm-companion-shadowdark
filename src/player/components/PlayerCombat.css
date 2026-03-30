@@ -1,0 +1,89 @@
+.player-combat {
+  position: fixed;
+  top: 32px;
+  left: 40px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 480px;
+}
+
+.pc-header {
+  margin-bottom: 4px;
+}
+
+.pc-round {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.45);
+}
+
+.pc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.player-combatant {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 20px;
+  background: rgba(0, 0, 0, 0.72);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  backdrop-filter: blur(6px);
+  transition: border-color 0.2s, opacity 0.3s;
+}
+
+.player-combatant.active-turn {
+  border-color: rgba(200, 168, 75, 0.6);
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.player-combatant.is-dying {
+  border-color: rgba(150, 30, 200, 0.5);
+  opacity: 0.8;
+}
+
+.player-combatant.is-dead {
+  opacity: 0.6;
+  border-color: rgba(170, 100, 100, 0.3);
+  background: rgba(40, 10, 10, 0.7);
+}
+
+.pc-emoji {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.pc-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+  flex: 1;
+}
+
+.player-combatant.is-dead .pc-name {
+  color: rgba(200, 150, 150, 0.8);
+  text-decoration: line-through;
+}
+
+.pc-estimate {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  flex-shrink: 0;
+}

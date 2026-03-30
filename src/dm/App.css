@@ -1,0 +1,56 @@
+.dm-app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.dm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-panel);
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.app-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.dm-main {
+  display: grid;
+  grid-template-columns: 280px 1fr 280px;
+  gap: 12px;
+  padding: 12px;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.dm-sidebar,
+.dm-right {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.dm-center {
+  overflow-y: auto;
+  min-height: 0;
+}
+
+@media (max-width: 1100px) {
+  .dm-main {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+}

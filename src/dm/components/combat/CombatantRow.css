@@ -1,0 +1,258 @@
+.combatant-row {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 10px;
+  transition: border-color 0.2s, opacity 0.2s;
+}
+
+.combatant-row.current-turn {
+  border-color: var(--accent);
+  box-shadow: 0 0 6px rgba(200, 168, 75, 0.3);
+}
+
+.combatant-row.dying {
+  border-color: #5a0a8a;
+  background: rgba(90, 10, 138, 0.1);
+}
+
+.combatant-row.dead {
+  opacity: 0.55;
+}
+
+.combatant-row.dragging {
+  opacity: 0.7;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  z-index: 999;
+}
+
+.row-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.drag-handle {
+  cursor: grab;
+  color: var(--text);
+  opacity: 0.3;
+  font-size: 1.1rem;
+  padding: 0 2px;
+  user-select: none;
+}
+
+.drag-handle:hover { opacity: 0.8; }
+
+/* Emoji */
+.combatant-emoji {
+  font-size: 1.2rem;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
+  flex-shrink: 0;
+  transition: border-color 0.15s;
+}
+
+.combatant-emoji:hover {
+  border-color: var(--accent);
+}
+
+.emoji-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+  padding: 8px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  max-width: 280px;
+}
+
+.emoji-btn {
+  font-size: 1.1rem;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.1s, background 0.1s;
+}
+
+.emoji-btn:hover {
+  border-color: var(--accent);
+  background: rgba(200, 168, 75, 0.1);
+}
+
+.combatant-name {
+  flex: 1;
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.initiative-cell {
+  display: flex;
+  align-items: center;
+}
+
+.initiative-input {
+  width: 44px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--accent);
+  font-size: 0.85rem;
+  padding: 3px 4px;
+  text-align: center;
+}
+
+.hp-cell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.hp-display {
+  font-family: monospace;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: var(--text);
+  padding: 2px 4px;
+  border-radius: 3px;
+  border: 1px solid transparent;
+}
+
+.hp-display:hover {
+  border-color: var(--border);
+  background: var(--bg-panel);
+}
+
+.hp-edit-input {
+  width: 60px;
+  background: var(--bg-panel);
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  color: var(--text);
+  font-size: 0.9rem;
+  padding: 2px 4px;
+}
+
+.hp-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.btn-tiny {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.7rem;
+  width: 18px;
+  height: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  padding: 0;
+  line-height: 1;
+}
+
+.btn-tiny:hover { border-color: var(--accent); color: var(--accent); }
+
+.estimate-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  border: 1px solid;
+  border-radius: 3px;
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+
+.btn-danger {
+  background: rgba(139, 32, 32, 0.2);
+  border-color: var(--danger-deadly);
+  color: #c87070;
+}
+
+.btn-danger:hover { background: rgba(139, 32, 32, 0.4); }
+
+/* Revive */
+.revive-row {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.revive-input {
+  width: 48px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--text);
+  padding: 3px 5px;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+/* Death prompts */
+.death-timer-prompt,
+.death-save-prompt {
+  margin-top: 8px;
+  padding: 8px;
+  background: rgba(90, 10, 138, 0.15);
+  border: 1px solid #5a0a8a;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.death-timer-info {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #a050c0;
+  letter-spacing: 0.04em;
+}
+
+.death-prompt-text {
+  font-size: 0.8rem;
+  color: #c070e0;
+}
+
+.death-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.death-roll-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.death-roll-input {
+  width: 60px;
+  background: var(--bg);
+  border: 1px solid #5a0a8a;
+  border-radius: 3px;
+  color: var(--text);
+  padding: 4px 6px;
+  font-size: 0.85rem;
+  text-align: center;
+}

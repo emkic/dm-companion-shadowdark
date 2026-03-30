@@ -1,0 +1,426 @@
+.player-torch {
+  position: fixed;
+  top: 28px;
+  right: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 100;
+}
+
+.player-torch.low {
+  animation: torchPulse 2s ease-in-out infinite;
+}
+
+@keyframes torchPulse {
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(200, 100, 30, 0.4)); }
+  50%       { filter: drop-shadow(0 0 28px rgba(200, 40, 10, 0.9)); }
+}
+
+/* Torch flame */
+.torch-flame-wrap {
+  position: relative;
+  width: 56px;
+  height: 90px;
+}
+
+.torch-flame {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  transition: filter 1.2s ease;
+}
+
+.torch-flame.burning .flame-outer { animation: flameOuter 0.4s ease-in-out infinite alternate; }
+.torch-flame.burning .flame-mid   { animation: flameMid   0.3s ease-in-out infinite alternate; }
+.torch-flame.burning .flame-inner { animation: flameInner 0.25s ease-in-out infinite alternate; }
+
+.flame-layer {
+  position: absolute;
+  border-radius: 50% 50% 30% 30%;
+}
+
+.flame-outer {
+  bottom: 26px;
+  width: 34px;
+  height: 50px;
+  background: radial-gradient(ellipse at 50% 80%, #c84010 0%, #e06010 40%, #e0a020 80%, transparent 100%);
+  opacity: 0.85;
+}
+
+.flame-mid {
+  bottom: 26px;
+  width: 22px;
+  height: 38px;
+  background: radial-gradient(ellipse at 50% 80%, #e05010 0%, #e08020 50%, #f0c040 90%, transparent 100%);
+  opacity: 0.9;
+}
+
+.flame-inner {
+  bottom: 26px;
+  width: 12px;
+  height: 26px;
+  background: radial-gradient(ellipse at 50% 80%, #fff8e0 0%, #f0e080 60%, transparent 100%);
+  opacity: 0.95;
+}
+
+.torch-body {
+  position: absolute;
+  bottom: 0;
+  width: 14px;
+  height: 32px;
+  background: linear-gradient(to bottom, #6b3a1f, #4a2510);
+  border-radius: 2px 2px 5px 5px;
+}
+
+@keyframes flameOuter {
+  from { transform: scaleX(1) scaleY(1) translateY(0); opacity: 0.85; }
+  to   { transform: scaleX(0.9) scaleY(1.08) translateY(-2px); opacity: 0.7; }
+}
+@keyframes flameMid {
+  from { transform: scaleX(1) scaleY(1) translateX(0); }
+  to   { transform: scaleX(1.1) scaleY(0.95) translateX(1px); }
+}
+@keyframes flameInner {
+  from { transform: scaleY(1) translateY(0); }
+  to   { transform: scaleY(1.15) translateY(-3px); }
+}
+
+.torch-flame.dim-flame .flame-outer {
+  background: radial-gradient(ellipse at 50% 80%, #602008 0%, #903010 40%, #804010 80%, transparent 100%);
+}
+.torch-flame.dim-flame .flame-mid {
+  background: radial-gradient(ellipse at 50% 80%, #702010 0%, #803010 50%, #904020 90%, transparent 100%);
+}
+.torch-flame.dim-flame .flame-inner {
+  background: radial-gradient(ellipse at 50% 80%, #c09050 0%, #906040 60%, transparent 100%);
+}
+
+.torch-countdown {
+  font-family: 'Montserrat', monospace;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #e8d8b0;
+  letter-spacing: 0.06em;
+  text-shadow: 0 0 16px rgba(200, 150, 50, 0.7),
+               0 2px 6px rgba(0,0,0,0.9);
+  font-variant-numeric: tabular-nums;
+  min-width: 5ch;
+  text-align: center;
+}
+
+.torch-countdown.countdown-low {
+  color: #e04020;
+  text-shadow: 0 0 18px rgba(220, 40, 20, 0.9),
+               0 2px 6px rgba(0,0,0,0.9);
+  animation: countdownBlink 1s step-end infinite;
+}
+
+@keyframes countdownBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.45; }
+}
+
+.torch-paused-label,
+.torch-out-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.torch-paused-label { color: #888; opacity: 0.8; }
+
+.torch-out-label {
+  color: #e04020;
+  animation: countdownBlink 0.8s step-end infinite;
+}
+
+/* ── Magical Crystal Ball ── */
+
+.player-torch.magical.low {
+  animation: crystalPulseAlert 2s ease-in-out infinite;
+}
+
+@keyframes crystalPulseAlert {
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(180, 180, 220, 0.4)); }
+  50%       { filter: drop-shadow(0 0 28px rgba(140, 100, 200, 0.9)); }
+}
+
+.crystal-wrap {
+  position: relative;
+  width: 56px;
+  height: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  transition: filter 1.2s ease;
+}
+
+.crystal-ball {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 35%,
+    rgba(220, 220, 255, 0.3) 0%,
+    rgba(160, 160, 200, 0.15) 40%,
+    rgba(80, 80, 120, 0.1) 70%,
+    rgba(40, 40, 60, 0.05) 100%
+  );
+  border: 2px solid rgba(180, 180, 220, 0.25);
+}
+
+/* Outer glow that radiates beyond the ball */
+.crystal-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(220, 220, 255, 0.5) 0%,
+    rgba(180, 180, 240, 0.25) 30%,
+    rgba(140, 140, 220, 0.1) 55%,
+    transparent 70%
+  );
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.crystal-ball.active .crystal-glow {
+  animation: crystalPulse 3s ease-in-out infinite;
+}
+
+@keyframes crystalPulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.3);
+  }
+}
+
+/* Bright core in the centre */
+.crystal-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(210, 210, 255, 0.6) 40%,
+    transparent 100%
+  );
+  box-shadow: 0 0 10px rgba(220, 220, 255, 0.4);
+  opacity: 0.5;
+}
+
+.crystal-ball.active .crystal-core {
+  animation: corePulse 3s ease-in-out infinite;
+}
+
+@keyframes corePulse {
+  0%, 100% {
+    opacity: 0.6;
+    box-shadow: 0 0 8px rgba(220, 220, 255, 0.5),
+                0 0 16px rgba(200, 200, 255, 0.2);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 18px rgba(230, 230, 255, 0.9),
+                0 0 36px rgba(200, 200, 255, 0.5),
+                0 0 54px rgba(180, 180, 240, 0.2);
+  }
+}
+
+.crystal-highlight {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  width: 10px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: rotate(-30deg);
+}
+
+.crystal-base {
+  width: 24px;
+  height: 10px;
+  background: linear-gradient(to bottom, #8080a0, #606080);
+  border-radius: 2px 2px 6px 6px;
+  margin-top: -2px;
+}
+
+.crystal-ball.dim-crystal {
+  border-color: rgba(120, 120, 160, 0.2);
+}
+
+.crystal-ball.dim-crystal .crystal-glow {
+  background: radial-gradient(
+    circle at center,
+    rgba(160, 160, 200, 0.4) 0%,
+    rgba(120, 120, 160, 0.2) 40%,
+    transparent 70%
+  );
+}
+
+.crystal-ball.dim-crystal .crystal-core {
+  background: radial-gradient(
+    circle at center,
+    rgba(180, 180, 220, 0.6) 0%,
+    rgba(140, 140, 180, 0.3) 50%,
+    transparent 100%
+  );
+}
+
+.torch-countdown.countdown-magical {
+  color: #c8c8e8;
+  text-shadow: 0 0 16px rgba(180, 180, 240, 0.7),
+               0 2px 6px rgba(0,0,0,0.9);
+}
+
+.torch-countdown.countdown-magical.countdown-low {
+  color: #a060c0;
+  text-shadow: 0 0 18px rgba(160, 80, 200, 0.9),
+               0 2px 6px rgba(0,0,0,0.9);
+}
+
+/* ── Darkness Overlay (Extinguished) ── */
+
+.darkness-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: darknessFadeIn 1.5s ease-out forwards;
+}
+
+@keyframes darknessFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.darkness-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.3) 30%,
+    rgba(0, 0, 0, 0.8) 60%,
+    #000 100%
+  );
+  animation: vignettePulse 4s ease-in-out infinite;
+}
+
+@keyframes vignettePulse {
+  0%, 100% {
+    background: radial-gradient(
+      ellipse at center,
+      rgba(10, 0, 0, 0.2) 0%,
+      rgba(0, 0, 0, 0.5) 25%,
+      rgba(0, 0, 0, 0.9) 50%,
+      #000 100%
+    );
+  }
+  50% {
+    background: radial-gradient(
+      ellipse at center,
+      rgba(15, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0.6) 20%,
+      #000 45%,
+      #000 100%
+    );
+  }
+}
+
+.darkness-text {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 5vh;
+  padding: 0 8vw;
+  max-width: 100vw;
+}
+
+.darkness-line {
+  font-family: 'JSL Blackletter', serif;
+  color: #c8c8c8;
+  text-shadow:
+    0 0 30px rgba(80, 0, 0, 0.6),
+    0 0 60px rgba(40, 0, 0, 0.3);
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.darkness-line-1 {
+  font-size: 6.5vw;
+  animation: lineReveal 1.5s ease-out 1.5s forwards;
+}
+
+.darkness-line-2 {
+  font-size: 5vw;
+  color: #999;
+  animation: lineReveal 1.5s ease-out 3.5s forwards;
+}
+
+.darkness-line-3 {
+  font-size: 5.5vw;
+  color: #8b2020;
+  text-shadow:
+    0 0 40px rgba(139, 32, 32, 0.8),
+    0 0 80px rgba(100, 0, 0, 0.4),
+    0 0 120px rgba(60, 0, 0, 0.2);
+  animation: lineReveal 2s ease-out 5.5s forwards, threatPulse 3s ease-in-out 7.5s infinite;
+}
+
+@keyframes lineReveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes threatPulse {
+  0%, 100% {
+    text-shadow:
+      0 0 40px rgba(139, 32, 32, 0.8),
+      0 0 80px rgba(100, 0, 0, 0.4),
+      0 0 120px rgba(60, 0, 0, 0.2);
+    opacity: 1;
+  }
+  50% {
+    text-shadow:
+      0 0 60px rgba(180, 40, 40, 1),
+      0 0 100px rgba(139, 32, 32, 0.7),
+      0 0 160px rgba(80, 0, 0, 0.4);
+    opacity: 0.85;
+  }
+}

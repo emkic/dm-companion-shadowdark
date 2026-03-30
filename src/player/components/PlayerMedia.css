@@ -1,0 +1,24 @@
+.player-media {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: #000;
+}
+
+.player-media-empty {
+  background: #000;
+}
+
+.player-media-img,
+.player-media-video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  animation: mediaFadeIn 0.5s ease;
+}
+
+@keyframes mediaFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}

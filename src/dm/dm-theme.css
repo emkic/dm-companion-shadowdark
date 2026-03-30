@@ -1,0 +1,140 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0a0a0a;
+  --bg-panel: #111111;
+  --text: #e8e0d0;
+  --accent: #c8a84b;
+  --danger-unsafe: #c8a84b;
+  --danger-risky: #c87820;
+  --danger-deadly: #8b2020;
+  --border: #2a2a2a;
+  --scrollbar: #2a2a2a;
+}
+
+html, body, #root {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #444; }
+
+/* Typography */
+h1, h2, h3 { color: var(--text); }
+
+.panel-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+/* Buttons */
+.btn {
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+}
+.btn-primary:hover:not(:disabled) {
+  background: #d9b85c;
+}
+
+.btn-secondary {
+  background: rgba(200, 168, 75, 0.15);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.btn-secondary:hover:not(:disabled) {
+  background: rgba(200, 168, 75, 0.25);
+}
+
+.btn-accent {
+  background: rgba(200, 120, 32, 0.2);
+  color: #e09040;
+  border-color: var(--danger-risky);
+}
+.btn-accent:hover:not(:disabled) {
+  background: rgba(200, 120, 32, 0.35);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border);
+}
+.btn-ghost:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn-small {
+  padding: 4px 10px;
+  font-size: 0.78rem;
+}
+
+.btn-danger {
+  background: rgba(139, 32, 32, 0.2);
+  color: #c87070;
+  border-color: var(--danger-deadly);
+}
+.btn-danger:hover:not(:disabled) {
+  background: rgba(139, 32, 32, 0.4);
+}
+
+/* Form inputs */
+.form-input, .form-select {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  padding: 5px 8px;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.form-input:focus, .form-select:focus {
+  border-color: var(--accent);
+}
+
+.form-select {
+  cursor: pointer;
+}
+
+select option {
+  background: var(--bg-panel);
+  color: var(--text);
+}
