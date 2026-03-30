@@ -25,6 +25,7 @@ The app runs two windows simultaneously:
 
 - **DM Window** — A private control panel on your main monitor where you manage all game state
 - **Player Window** — A fullscreen, borderless display on a second monitor (projector, TV, or external screen) that shows only what you want the players to see
+- **Display selector** — Choose which monitor the player window appears on via a dropdown in the DM header. Refresh button to re-detect monitors on the fly.
 
 All changes on the DM side are broadcast to the player screen in real time.
 
@@ -51,6 +52,7 @@ Three lighting modes to match the in-game situation:
 - **Torch** — A 60-minute countdown timer. The player screen shows a pixel-art torch flame that dims as time runs out. Warning at 25% remaining. DM can start, pause, reset, and adjust time in 1 or 5 minute increments.
 - **Magical Light** — Same timer behavior as torch, but the player screen shows a crystal ball with a soft pulsing white glow instead of a flame.
 - **Natural Light** — Daylight mode with no timer. The torch/crystal ball widget is hidden from the player screen entirely.
+- **Hide timer from players** — Toggle to hide the countdown from the player screen while keeping the flame/crystal visual. The timer keeps running on the DM screen.
 
 ### Torch Extinguish
 
@@ -62,7 +64,7 @@ The DM can extinguish the torch (or magical light) at any time. When extinguishe
 >
 > *The living darkness closes in on you.*
 
-The final line pulses in crimson red. The DM can relight at any time to return to normal.
+The final line pulses in crimson red. The DM can relight at any time to return to normal. When the torch timer reaches zero, the darkness overlay triggers automatically.
 
 ### Location Display
 
