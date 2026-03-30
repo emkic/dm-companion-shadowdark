@@ -66,7 +66,7 @@ export function useTorch(): UseTorchReturn {
   }, [])
 
   const relight = useCallback(() => {
-    setTorch(prev => prev.timeLeft > 0 ? { ...prev, isExtinguished: false } : prev)
+    setTorch(prev => prev.timeLeft > 0 ? { ...prev, isRunning: true, isExtinguished: false } : prev)
   }, [])
 
   const setLightMode = useCallback((mode: LightMode) => {
