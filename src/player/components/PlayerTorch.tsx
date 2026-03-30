@@ -64,14 +64,18 @@ export function PlayerTorch({ torch }: Props) {
           </div>
         </div>
       )}
-      <div className={`torch-countdown ${isMagical ? 'countdown-magical' : ''} ${lowAlert ? 'countdown-low' : ''}`}>
-        {formatTime(torch.timeLeft)}
-      </div>
-      {!torch.isRunning && torch.timeLeft > 0 && (
-        <div className="torch-paused-label">PAUSED</div>
-      )}
-      {torch.timeLeft === 0 && (
-        <div className="torch-out-label">TORCH OUT</div>
+      {!torch.hideTimerFromPlayer && (
+        <>
+          <div className={`torch-countdown ${isMagical ? 'countdown-magical' : ''} ${lowAlert ? 'countdown-low' : ''}`}>
+            {formatTime(torch.timeLeft)}
+          </div>
+          {!torch.isRunning && torch.timeLeft > 0 && (
+            <div className="torch-paused-label">PAUSED</div>
+          )}
+          {torch.timeLeft === 0 && (
+            <div className="torch-out-label">TORCH OUT</div>
+          )}
+        </>
       )}
     </div>
   )

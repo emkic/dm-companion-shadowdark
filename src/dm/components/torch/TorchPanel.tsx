@@ -10,7 +10,7 @@ function formatTime(seconds: number): string {
 
 interface Props extends UseTorchReturn {}
 
-export function TorchPanel({ torch, lowAlert, start, stop, reset, adjustMinutes, extinguish, relight, setLightMode }: Props) {
+export function TorchPanel({ torch, lowAlert, start, stop, reset, adjustMinutes, extinguish, relight, setLightMode, toggleHideTimer }: Props) {
   const [customMinutes, setCustomMinutes] = useState('1')
   const hasTimer = torch.lightMode === 'torch' || torch.lightMode === 'magical'
 
@@ -53,6 +53,14 @@ export function TorchPanel({ torch, lowAlert, start, stop, reset, adjustMinutes,
               {formatTime(torch.timeLeft)}
             </div>
           </div>
+
+          <button
+            className={`btn btn-small ${torch.hideTimerFromPlayer ? 'btn-accent' : 'btn-ghost'}`}
+            onClick={toggleHideTimer}
+            title={torch.hideTimerFromPlayer ? 'Timer is hidden from players' : 'Timer is visible to players'}
+          >
+            {torch.hideTimerFromPlayer ? '🙈 Timer Hidden from Players' : '👁 Timer Visible to Players'}
+          </button>
 
           <div className="torch-controls">
             {!torch.isRunning ? (

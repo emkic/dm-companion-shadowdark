@@ -9,6 +9,7 @@ export interface TorchState {
   isRunning: boolean
   isExtinguished: boolean
   lightMode: LightMode
+  hideTimerFromPlayer: boolean
 }
 
 export interface Combatant {

@@ -12,6 +12,7 @@ export interface UseTorchReturn {
   extinguish: () => void
   relight: () => void
   setLightMode: (mode: LightMode) => void
+  toggleHideTimer: () => void
   setTorchState: (state: TorchState) => void
 }
 
@@ -20,7 +21,8 @@ export function useTorch(): UseTorchReturn {
     timeLeft: DEFAULT_TORCH_SECONDS,
     isRunning: false,
     isExtinguished: false,
-    lightMode: 'torch'
+    lightMode: 'torch',
+    hideTimerFromPlayer: false
   })
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
@@ -35,8 +37,8 @@ export function useTorch(): UseTorchReturn {
     if (torch.isRunning) {
       intervalRef.current = setInterval(() => {
         setTorch(prev => {
-          if (prev.timeLeft <= 0) {
-            return { ...prev, timeLeft: 0, isRunning: false }
+          if (prev.timeLeft <= 1) {
+            return { ...prev, timeLeft: 0, isRunning: false, isExtinguished: true }
           }
           return { ...prev, timeLeft: prev.timeLeft - 1 }
         })
@@ -56,7 +58,7 @@ export function useTorch(): UseTorchReturn {
   }, [])
 
   const reset = useCallback(() => {
-    setTorch(prev => ({ timeLeft: DEFAULT_TORCH_SECONDS, isRunning: false, isExtinguished: false, lightMode: prev.lightMode }))
+    setTorch(prev => ({ timeLeft: DEFAULT_TORCH_SECONDS, isRunning: false, isExtinguished: false, lightMode: prev.lightMode, hideTimerFromPlayer: prev.hideTimerFromPlayer }))
   }, [])
 
   const extinguish = useCallback(() => {
@@ -83,11 +85,15 @@ export function useTorch(): UseTorchReturn {
     }))
   }, [])
 
+  const toggleHideTimer = useCallback(() => {
+    setTorch(prev => ({ ...prev, hideTimerFromPlayer: !prev.hideTimerFromPlayer }))
+  }, [])
+
   const setTorchState = useCallback((state: TorchState) => {
     setTorch({ ...state, isRunning: false }) // always restore as paused
   }, [])
 
   const lowAlert = torch.timeLeft / DEFAULT_TORCH_SECONDS < LOW_TORCH_THRESHOLD
 
-  return { torch, lowAlert, start, stop, reset, adjustMinutes, extinguish, relight, setLightMode, setTorchState }
+  return { torch, lowAlert, start, stop, reset, adjustMinutes, extinguish, relight, setLightMode, toggleHideTimer, setTorchState }
 }
