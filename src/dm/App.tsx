@@ -4,13 +4,11 @@ import { useCombat } from './hooks/useCombat'
 import { useLocation } from './hooks/useLocation'
 import { useMedia } from './hooks/useMedia'
 import { useSession } from './hooks/useSession'
-import { useTravel } from './hooks/useTravel'
 import { TorchPanel } from './components/torch/TorchPanel'
 import { CombatPanel } from './components/combat/CombatPanel'
 import { LocationPanel } from './components/location/LocationPanel'
 import { MediaPanel } from './components/media/MediaPanel'
 import { SessionPanel } from './components/session/SessionPanel'
-import { TravelPanel } from './components/travel/TravelPanel'
 import { DisplaySelector } from './components/display/DisplaySelector'
 import type { AppState } from '@shared/types'
 import './App.css'
@@ -20,16 +18,14 @@ export default function App() {
   const combatHook = useCombat()
   const locationHook = useLocation()
   const mediaHook = useMedia()
-  const travelHook = useTravel()
   const sessionHook = useSession()
 
   const appState: AppState = useMemo(() => ({
     torch: torchHook.torch,
     combat: combatHook.combat,
     location: locationHook.location,
-    media: mediaHook.media,
-    travel: travelHook.travel
-  }), [torchHook.torch, combatHook.combat, locationHook.location, mediaHook.media, travelHook.travel])
+    media: mediaHook.media
+  }), [torchHook.torch, combatHook.combat, locationHook.location, mediaHook.media])
 
   // Broadcast to player window only when state actually changes
   const prevStateRef = useRef<string>('')
@@ -46,8 +42,7 @@ export default function App() {
     combatHook.setCombatState(state.combat)
     locationHook.setLocation(state.location)
     mediaHook.setMedia({ ...state.media, files: state.media.files ?? [] })
-    if (state.travel) travelHook.setTravelState(state.travel)
-  }, [torchHook.setTorchState, combatHook.setCombatState, locationHook.setLocation, mediaHook.setMedia, travelHook.setTravelState])
+  }, [torchHook.setTorchState, combatHook.setCombatState, locationHook.setLocation, mediaHook.setMedia])
 
   return (
     <div className="dm-app">
@@ -64,11 +59,10 @@ export default function App() {
       <main className="dm-main">
         <aside className="dm-sidebar">
           <TorchPanel {...torchHook} />
-          <LocationPanel {...locationHook} />
         </aside>
 
         <section className="dm-center">
-          <TravelPanel {...travelHook} />
+          <LocationPanel {...locationHook} />
           <CombatPanel {...combatHook} />
         </section>
 

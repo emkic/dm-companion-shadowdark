@@ -1,6 +1,16 @@
 import { useState, useCallback } from 'react'
 import { WEATHER_BY_SEASON } from '@shared/constants'
-import type { LocationState, Season, DangerLevel } from '@shared/types'
+import type { LocationState, Season, DangerLevel, ActivityState, TravelMethod } from '@shared/types'
+import { HEXES_PER_DAY } from '@shared/types'
+
+function todayISO(): string {
+  return new Date().toISOString().slice(0, 10)
+}
+
+function getMaxHexes(method: TravelMethod, pushing: boolean): number {
+  const base = HEXES_PER_DAY[method]
+  return pushing ? Math.floor(base * 1.5) : base
+}
 
 const INITIAL_STATE: LocationState = {
   name: '',
@@ -8,7 +18,18 @@ const INITIAL_STATE: LocationState = {
   weather: WEATHER_BY_SEASON.spring[0],
   dangerLevel: 'unsafe',
   imagePath: '',
-  showToPlayer: false
+  showToPlayer: false,
+  activity: 'traveling',
+  date: todayISO(),
+  travelMethod: 'walking',
+  isPushing: false,
+  hexesRemaining: HEXES_PER_DAY.walking,
+  checklist: {
+    rationsConsumed: false,
+    foragingAttempt: false,
+    encounterDay: false,
+    encounterNight: false
+  }
 }
 
 export interface UseLocationReturn {
@@ -19,6 +40,13 @@ export interface UseLocationReturn {
   setDangerLevel: (level: DangerLevel) => void
   setImagePath: (path: string) => void
   toggleShowToPlayer: () => void
+  setActivity: (activity: ActivityState) => void
+  setDate: (date: string) => void
+  setTravelMethod: (method: TravelMethod) => void
+  togglePushing: () => void
+  spendHexes: (count: number) => void
+  toggleChecklist: (key: keyof LocationState['checklist']) => void
+  newDay: () => void
   setLocation: (location: LocationState) => void
 }
 
@@ -53,6 +81,67 @@ export function useLocation(): UseLocationReturn {
     setLocationState(prev => ({ ...prev, showToPlayer: !prev.showToPlayer }))
   }, [])
 
+  const setActivity = useCallback((activity: ActivityState) => {
+    setLocationState(prev => ({ ...prev, activity }))
+  }, [])
+
+  const setDate = useCallback((date: string) => {
+    setLocationState(prev => ({ ...prev, date }))
+  }, [])
+
+  const setTravelMethod = useCallback((method: TravelMethod) => {
+    setLocationState(prev => ({
+      ...prev,
+      travelMethod: method,
+      hexesRemaining: getMaxHexes(method, prev.isPushing)
+    }))
+  }, [])
+
+  const togglePushing = useCallback(() => {
+    setLocationState(prev => {
+      const newPushing = !prev.isPushing
+      return {
+        ...prev,
+        isPushing: newPushing,
+        hexesRemaining: getMaxHexes(prev.travelMethod, newPushing)
+      }
+    })
+  }, [])
+
+  const spendHexes = useCallback((count: number) => {
+    setLocationState(prev => ({
+      ...prev,
+      hexesRemaining: Math.max(0, prev.hexesRemaining - count)
+    }))
+  }, [])
+
+  const toggleChecklist = useCallback((key: keyof LocationState['checklist']) => {
+    setLocationState(prev => ({
+      ...prev,
+      checklist: { ...prev.checklist, [key]: !prev.checklist[key] }
+    }))
+  }, [])
+
+  const newDay = useCallback(() => {
+    setLocationState(prev => {
+      const currentDate = new Date(prev.date + 'T00:00:00')
+      currentDate.setDate(currentDate.getDate() + 1)
+      const nextDate = currentDate.toISOString().slice(0, 10)
+      return {
+        ...prev,
+        date: nextDate,
+        isPushing: false,
+        hexesRemaining: getMaxHexes(prev.travelMethod, false),
+        checklist: {
+          rationsConsumed: false,
+          foragingAttempt: false,
+          encounterDay: false,
+          encounterNight: false
+        }
+      }
+    })
+  }, [])
+
   const setLocation = useCallback((location: LocationState) => {
     setLocationState(location)
   }, [])
@@ -65,6 +154,13 @@ export function useLocation(): UseLocationReturn {
     setDangerLevel,
     setImagePath,
     toggleShowToPlayer,
+    setActivity,
+    setDate,
+    setTravelMethod,
+    togglePushing,
+    spendHexes,
+    toggleChecklist,
+    newDay,
     setLocation
   }
 }

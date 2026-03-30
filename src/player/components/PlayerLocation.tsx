@@ -1,11 +1,22 @@
 import React from 'react'
 import type { LocationState } from '@shared/types'
+import { ACTIVITY_LABELS } from '@shared/types'
 import './PlayerLocation.css'
 
 const DANGER_LABELS: Record<string, string> = {
   unsafe: 'Unsafe',
   risky: 'Risky',
   deadly: 'Deadly'
+}
+
+function formatDate(isoDate: string): string {
+  const date = new Date(isoDate + 'T00:00:00')
+  return date.toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
 }
 
 interface Props {
@@ -25,9 +36,13 @@ export function PlayerLocation({ location }: Props) {
           <span className="location-meta">
             {location.season.charAt(0).toUpperCase() + location.season.slice(1)}
             {location.weather && <> · {location.weather}</>}
+            {location.activity && <> · {ACTIVITY_LABELS[location.activity]}</>}
           </span>
         </div>
         <div className="location-right">
+          {location.date && (
+            <span className="location-date">{formatDate(location.date)}</span>
+          )}
           <span className={`danger-badge danger-${location.dangerLevel}`}>
             {DANGER_LABELS[location.dangerLevel]}
           </span>
