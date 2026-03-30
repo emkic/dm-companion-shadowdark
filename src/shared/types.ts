@@ -56,11 +56,38 @@ export interface AppState {
   combat: CombatState
   location: LocationState
   media: MediaState
+  travel: TravelState
 }
 
 export interface SessionData {
   appState: AppState
   savedAt: number
+}
+
+export type TravelMethod = 'walking' | 'mounted' | 'sailing'
+export type TravelMode = 'wilderness' | 'city'
+
+export const HEXES_PER_DAY: Record<TravelMethod, number> = {
+  walking: 4,
+  mounted: 6,
+  sailing: 8
+}
+
+export interface TravelState {
+  mode: TravelMode
+  date: string              // ISO date string, e.g. "2024-06-15"
+  travelMethod: TravelMethod
+  isPushing: boolean
+  hexesRemaining: number
+  weather: string
+  season: Season
+  checklist: {
+    rationsConsumed: boolean
+    foragingAttempt: boolean
+    encounterDay: boolean
+    encounterNight: boolean
+  }
+  showToPlayer: boolean
 }
 
 export interface DisplayInfo {

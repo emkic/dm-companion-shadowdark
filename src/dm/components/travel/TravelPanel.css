@@ -1,0 +1,148 @@
+.travel-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.travel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.travel-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.mode-toggle {
+  display: flex;
+  gap: 4px;
+}
+
+.travel-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.flex-1 { flex: 1; }
+.flex-2 { flex: 2; }
+
+.full-width { width: 100%; }
+
+/* Hex tracker */
+.hex-tracker {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hex-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hex-count {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent);
+  min-width: 70px;
+}
+
+.hex-count.exhausted {
+  color: var(--danger-deadly);
+}
+
+/* Reminders */
+.travel-reminder {
+  font-size: 0.8rem;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-style: italic;
+}
+
+.pushing-reminder {
+  background: rgba(200, 120, 32, 0.15);
+  border: 1px solid var(--danger-risky);
+  color: #e09040;
+}
+
+.city-reminder {
+  background: rgba(200, 168, 75, 0.1);
+  border: 1px solid var(--border);
+  color: var(--text);
+  opacity: 0.7;
+}
+
+/* Checklist */
+.travel-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.checklist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  transition: background 0.15s;
+}
+
+.checklist-item:hover {
+  background: rgba(200, 168, 75, 0.05);
+}
+
+.checklist-item input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.checklist-item input[type="checkbox"]:checked + span {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.checklist-hint {
+  margin-left: auto;
+  font-size: 0.72rem;
+  opacity: 0.5;
+  font-style: italic;
+}
