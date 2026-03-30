@@ -5,19 +5,22 @@ import type { Season, DangerLevel, ActivityState, TravelMethod } from '@shared/t
 import type { UseLocationReturn } from '../../hooks/useLocation'
 import './LocationPanel.css'
 
-const ACTIVITIES: ActivityState[] = ['traveling', 'crawling', 'resting', 'city']
+const ACTIVITIES: ActivityState[] = ['traveling', 'crawling', 'city']
 const TRAVEL_METHODS: { value: TravelMethod; label: string }[] = [
   { value: 'walking', label: `Walking (${HEXES_PER_DAY.walking}/day)` },
   { value: 'mounted', label: `Mounted (${HEXES_PER_DAY.mounted}/day)` },
   { value: 'sailing', label: `Sailing (${HEXES_PER_DAY.sailing}/day)` }
 ]
 
+const WATCH_LABELS = ['Watch 1', 'Watch 2', 'Watch 3', 'Watch 4']
+
 type Props = UseLocationReturn
 
 export function LocationPanel({
   location, setName, setSeason, setWeather, setDangerLevel, setImagePath,
   toggleShowToPlayer, setActivity, setDate, toggleShowDate, setTravelMethod,
-  togglePushing, spendHexes, toggleChecklist, newDay
+  togglePushing, spendHexes, toggleChecklist, toggleCamping, toggleCampfire,
+  setWatchName, toggleWatchEncounter, newDay
 }: Props) {
   const maxHexes = location.isPushing
     ? Math.floor(HEXES_PER_DAY[location.travelMethod] * 1.5)
@@ -66,30 +69,21 @@ export function LocationPanel({
           </button>
         </div>
         {location.showDate && (
-          <>
-            <div className="field-group">
-              <label className="field-label">Date</label>
-              <input
-                type="date"
-                value={location.date}
-                onChange={e => setDate(e.target.value)}
-                className="form-input"
-              />
-            </div>
-            <div className="field-group field-group-end">
-              <button className="btn btn-primary" onClick={newDay}>
-                New Day
-              </button>
-            </div>
-          </>
-        )}
-        {!location.showDate && (
-          <div className="field-group field-group-end">
-            <button className="btn btn-primary" onClick={newDay}>
-              New Day
-            </button>
+          <div className="field-group">
+            <label className="field-label">Date</label>
+            <input
+              type="date"
+              value={location.date}
+              onChange={e => setDate(e.target.value)}
+              className="form-input"
+            />
           </div>
         )}
+        <div className="field-group field-group-end">
+          <button className="btn btn-primary" onClick={newDay}>
+            New Day
+          </button>
+        </div>
       </div>
 
       {/* Location info row */}
@@ -223,56 +217,118 @@ export function LocationPanel({
               Pushing: +1:6 encounter chance, no foraging allowed
             </div>
           )}
-        </>
-      )}
 
-      {/* Checklist for traveling & resting */}
-      {(location.activity === 'traveling' || location.activity === 'resting') && (
-        <div className="travel-checklist">
-          <label className="field-label">Daily Checklist</label>
-          <div className="checklist-items">
-            <label className="checklist-item">
-              <input
-                type="checkbox"
-                checked={location.checklist.rationsConsumed}
-                onChange={() => toggleChecklist('rationsConsumed')}
-              />
-              <span>Rations consumed?</span>
-              <span className="checklist-hint">1d4 CON dmg if not</span>
-            </label>
-            {location.activity === 'traveling' && !location.isPushing && (
+          {/* Checklist */}
+          <div className="travel-checklist">
+            <label className="field-label">Daily Checklist</label>
+            <div className="checklist-items">
               <label className="checklist-item">
                 <input
                   type="checkbox"
-                  checked={location.checklist.foragingAttempt}
-                  onChange={() => toggleChecklist('foragingAttempt')}
+                  checked={location.checklist.rationsConsumed}
+                  onChange={() => toggleChecklist('rationsConsumed')}
                 />
-                <span>Foraging attempt?</span>
-                <span className="checklist-hint">INT check for 1 ration</span>
+                <span>Rations consumed?</span>
+                <span className="checklist-hint">1d4 CON dmg if not</span>
               </label>
-            )}
-            {location.activity === 'traveling' && (
+              {!location.isPushing && (
+                <label className="checklist-item">
+                  <input
+                    type="checkbox"
+                    checked={location.checklist.foragingAttempt}
+                    onChange={() => toggleChecklist('foragingAttempt')}
+                  />
+                  <span>Foraging attempt?</span>
+                  <span className="checklist-hint">INT check for 1 ration</span>
+                </label>
+              )}
               <label className="checklist-item">
                 <input
                   type="checkbox"
-                  checked={location.checklist.encounterDay}
-                  onChange={() => toggleChecklist('encounterDay')}
+                  checked={location.checklist.encounterDay1}
+                  onChange={() => toggleChecklist('encounterDay1')}
                 />
-                <span>Random encounter — Day</span>
+                <span>Encounter — Day 1</span>
                 <span className="checklist-hint">1:6 chance{location.isPushing ? ' (+1:6 pushing)' : ''}</span>
               </label>
-            )}
-            <label className="checklist-item">
-              <input
-                type="checkbox"
-                checked={location.checklist.encounterNight}
-                onChange={() => toggleChecklist('encounterNight')}
-              />
-              <span>Random encounter — Night</span>
-              <span className="checklist-hint">1:6 chance</span>
-            </label>
+              <label className="checklist-item">
+                <input
+                  type="checkbox"
+                  checked={location.checklist.encounterDay2}
+                  onChange={() => toggleChecklist('encounterDay2')}
+                />
+                <span>Encounter — Day 2</span>
+                <span className="checklist-hint">1:6 chance{location.isPushing ? ' (+1:6 pushing)' : ''}</span>
+              </label>
+              <label className="checklist-item">
+                <input
+                  type="checkbox"
+                  checked={location.checklist.encounterNight1}
+                  onChange={() => toggleChecklist('encounterNight1')}
+                />
+                <span>Encounter — Night 1</span>
+                <span className="checklist-hint">1:6 chance</span>
+              </label>
+              <label className="checklist-item">
+                <input
+                  type="checkbox"
+                  checked={location.checklist.encounterNight2}
+                  onChange={() => toggleChecklist('encounterNight2')}
+                />
+                <span>Encounter — Night 2</span>
+                <span className="checklist-hint">1:6 chance</span>
+              </label>
+            </div>
           </div>
-        </div>
+
+          {/* Camping section */}
+          <div className="camping-section">
+            <div className="camping-header">
+              <button
+                className={`btn btn-small ${location.isCamping ? 'btn-accent' : 'btn-ghost'}`}
+                onClick={toggleCamping}
+              >
+                {location.isCamping ? '🏕 Camping' : '🏕 Make Camp'}
+              </button>
+              {location.isCamping && (
+                <label className="checklist-item campfire-toggle">
+                  <input
+                    type="checkbox"
+                    checked={location.hasCampfire}
+                    onChange={toggleCampfire}
+                  />
+                  <span>🔥 Campfire / Light</span>
+                </label>
+              )}
+            </div>
+
+            {location.isCamping && (
+              <div className="watch-order">
+                <label className="field-label">Watch Order</label>
+                {location.watches.map((watch, i) => (
+                  <div key={i} className="watch-slot">
+                    <span className="watch-label">{WATCH_LABELS[i]}</span>
+                    <input
+                      type="text"
+                      value={watch.name}
+                      onChange={e => setWatchName(i, e.target.value)}
+                      placeholder="Player name..."
+                      className="form-input watch-name-input"
+                    />
+                    <label className="watch-check" title="Encounter?">
+                      <input
+                        type="checkbox"
+                        checked={watch.encounter}
+                        onChange={() => toggleWatchEncounter(i)}
+                      />
+                      <span>Enc</span>
+                    </label>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </>
       )}
 
       {location.activity === 'city' && (

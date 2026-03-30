@@ -303,6 +303,116 @@
                0 2px 6px rgba(0,0,0,0.9);
 }
 
+/* ── Campfire ── */
+
+.campfire-wrap {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.campfire {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.campfire-flame {
+  position: absolute;
+  bottom: 18px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+}
+
+.campfire-flame-1 {
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 40px;
+  background: radial-gradient(ellipse at bottom, #ff6600 0%, #ff3300 40%, transparent 70%);
+  animation: campFlicker1 0.8s ease-in-out infinite alternate;
+}
+
+.campfire-flame-2 {
+  left: 40%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 32px;
+  background: radial-gradient(ellipse at bottom, #ffaa00 0%, #ff6600 50%, transparent 75%);
+  animation: campFlicker2 0.6s ease-in-out infinite alternate;
+}
+
+.campfire-flame-3 {
+  left: 60%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 28px;
+  background: radial-gradient(ellipse at bottom, #ffcc00 0%, #ff8800 50%, transparent 75%);
+  animation: campFlicker3 0.7s ease-in-out infinite alternate;
+}
+
+.campfire-logs {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 14px;
+  background: linear-gradient(to top, #3a2010, #5a3520);
+  border-radius: 3px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.6);
+}
+
+.campfire-logs::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 5px;
+  right: 5px;
+  height: 10px;
+  background: linear-gradient(to top, #4a2a15, #6a4030);
+  border-radius: 3px;
+  transform: rotate(-8deg);
+}
+
+.campfire-glow {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 60px;
+  background: radial-gradient(ellipse at center bottom, rgba(255, 100, 0, 0.3), transparent 70%);
+  pointer-events: none;
+  animation: campGlow 2s ease-in-out infinite alternate;
+}
+
+.campfire.active .campfire-flame {
+  animation-play-state: running;
+}
+
+@keyframes campFlicker1 {
+  from { height: 40px; opacity: 0.9; }
+  to   { height: 46px; opacity: 1; }
+}
+
+@keyframes campFlicker2 {
+  from { height: 32px; opacity: 0.85; }
+  to   { height: 36px; opacity: 1; }
+}
+
+@keyframes campFlicker3 {
+  from { height: 28px; opacity: 0.8; }
+  to   { height: 34px; opacity: 1; }
+}
+
+@keyframes campGlow {
+  from { opacity: 0.6; }
+  to   { opacity: 1; }
+}
+
 /* ── Darkness Overlay (Extinguished) ── */
 
 .darkness-overlay {
@@ -423,4 +533,34 @@
       0 0 160px rgba(80, 0, 0, 0.4);
     opacity: 0.85;
   }
+}
+
+/* ── Campfire Lit Text ── */
+
+.campfire-lit-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: rgba(255, 180, 60, 0.8);
+  text-shadow: 0 0 12px rgba(255, 120, 0, 0.4);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* ── Dark Camp (no campfire) ── */
+
+.camp-dark-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.camp-dark-text p {
+  margin: 0;
 }

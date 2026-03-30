@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { WEATHER_BY_SEASON } from '@shared/constants'
-import type { LocationState, Season, DangerLevel, ActivityState, TravelMethod } from '@shared/types'
+import type { LocationState, Season, DangerLevel, ActivityState, TravelMethod, WatchSlot } from '@shared/types'
 import { HEXES_PER_DAY } from '@shared/types'
 
 function todayISO(): string {
@@ -10,6 +10,15 @@ function todayISO(): string {
 function getMaxHexes(method: TravelMethod, pushing: boolean): number {
   const base = HEXES_PER_DAY[method]
   return pushing ? Math.floor(base * 1.5) : base
+}
+
+function defaultWatches(): [WatchSlot, WatchSlot, WatchSlot, WatchSlot] {
+  return [
+    { name: '', encounter: false, interruption: false },
+    { name: '', encounter: false, interruption: false },
+    { name: '', encounter: false, interruption: false },
+    { name: '', encounter: false, interruption: false }
+  ]
 }
 
 const INITIAL_STATE: LocationState = {
@@ -25,11 +34,16 @@ const INITIAL_STATE: LocationState = {
   travelMethod: 'walking',
   isPushing: false,
   hexesRemaining: HEXES_PER_DAY.walking,
+  isCamping: false,
+  hasCampfire: false,
+  watches: defaultWatches(),
   checklist: {
     rationsConsumed: false,
     foragingAttempt: false,
-    encounterDay: false,
-    encounterNight: false
+    encounterDay1: false,
+    encounterDay2: false,
+    encounterNight1: false,
+    encounterNight2: false
   }
 }
 
@@ -48,6 +62,11 @@ export interface UseLocationReturn {
   togglePushing: () => void
   spendHexes: (count: number) => void
   toggleChecklist: (key: keyof LocationState['checklist']) => void
+  toggleCamping: () => void
+  toggleCampfire: () => void
+  setWatchName: (index: number, name: string) => void
+  toggleWatchEncounter: (index: number) => void
+  toggleWatchInterruption: (index: number) => void
   newDay: () => void
   setLocation: (location: LocationState) => void
 }
@@ -84,7 +103,7 @@ export function useLocation(): UseLocationReturn {
   }, [])
 
   const setActivity = useCallback((activity: ActivityState) => {
-    setLocationState(prev => ({ ...prev, activity }))
+    setLocationState(prev => ({ ...prev, activity, isCamping: false }))
   }, [])
 
   const setDate = useCallback((date: string) => {
@@ -128,6 +147,44 @@ export function useLocation(): UseLocationReturn {
     }))
   }, [])
 
+  const toggleCamping = useCallback(() => {
+    setLocationState(prev => ({
+      ...prev,
+      isCamping: !prev.isCamping,
+      watches: prev.isCamping
+        ? prev.watches
+        : prev.watches.map(w => ({ ...w, encounter: false, interruption: false })) as [WatchSlot, WatchSlot, WatchSlot, WatchSlot]
+    }))
+  }, [])
+
+  const toggleCampfire = useCallback(() => {
+    setLocationState(prev => ({ ...prev, hasCampfire: !prev.hasCampfire }))
+  }, [])
+
+  const setWatchName = useCallback((index: number, name: string) => {
+    setLocationState(prev => {
+      const watches = [...prev.watches] as [WatchSlot, WatchSlot, WatchSlot, WatchSlot]
+      watches[index] = { ...watches[index], name }
+      return { ...prev, watches }
+    })
+  }, [])
+
+  const toggleWatchEncounter = useCallback((index: number) => {
+    setLocationState(prev => {
+      const watches = [...prev.watches] as [WatchSlot, WatchSlot, WatchSlot, WatchSlot]
+      watches[index] = { ...watches[index], encounter: !watches[index].encounter }
+      return { ...prev, watches }
+    })
+  }, [])
+
+  const toggleWatchInterruption = useCallback((index: number) => {
+    setLocationState(prev => {
+      const watches = [...prev.watches] as [WatchSlot, WatchSlot, WatchSlot, WatchSlot]
+      watches[index] = { ...watches[index], interruption: !watches[index].interruption }
+      return { ...prev, watches }
+    })
+  }, [])
+
   const newDay = useCallback(() => {
     setLocationState(prev => {
       const currentDate = new Date(prev.date + 'T00:00:00')
@@ -137,12 +194,17 @@ export function useLocation(): UseLocationReturn {
         ...prev,
         date: nextDate,
         isPushing: false,
+        isCamping: false,
+        hasCampfire: false,
         hexesRemaining: getMaxHexes(prev.travelMethod, false),
+        watches: prev.watches.map(w => ({ ...w, encounter: false, interruption: false })) as [WatchSlot, WatchSlot, WatchSlot, WatchSlot],
         checklist: {
           rationsConsumed: false,
           foragingAttempt: false,
-          encounterDay: false,
-          encounterNight: false
+          encounterDay1: false,
+          encounterDay2: false,
+          encounterNight1: false,
+          encounterNight2: false
         }
       }
     })
@@ -167,6 +229,11 @@ export function useLocation(): UseLocationReturn {
     togglePushing,
     spendHexes,
     toggleChecklist,
+    toggleCamping,
+    toggleCampfire,
+    setWatchName,
+    toggleWatchEncounter,
+    toggleWatchInterruption,
     newDay,
     setLocation
   }

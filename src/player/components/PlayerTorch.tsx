@@ -11,9 +11,11 @@ function formatTime(seconds: number): string {
 
 interface Props {
   torch: TorchState
+  hasCampfire?: boolean
+  isCamping?: boolean
 }
 
-export function PlayerTorch({ torch }: Props) {
+export function PlayerTorch({ torch, hasCampfire, isCamping }: Props) {
   const fraction = DEFAULT_TORCH_SECONDS > 0 ? torch.timeLeft / DEFAULT_TORCH_SECONDS : 0
   const lowAlert = fraction < LOW_TORCH_THRESHOLD
   const critical = torch.timeLeft <= 60
@@ -25,6 +27,36 @@ export function PlayerTorch({ torch }: Props) {
     return null
   }
 
+  // Camping with no campfire — show dark camp text (no darkness overlay)
+  if (isCamping && !hasCampfire) {
+    return (
+      <div className="player-torch">
+        <div className="camp-dark-text">
+          <p>The camp is dark.</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Camping with campfire — show campfire only, no timer
+  if (isCamping && hasCampfire) {
+    return (
+      <div className="player-torch">
+        <div className="campfire-lit-text">Campfire is lit!</div>
+        <div className="campfire-wrap">
+          <div className="campfire active">
+            <div className="campfire-flame campfire-flame-1" />
+            <div className="campfire-flame campfire-flame-2" />
+            <div className="campfire-flame campfire-flame-3" />
+            <div className="campfire-logs" />
+            <div className="campfire-glow" />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Not camping — normal torch/extinguished behavior
   if (torch.isExtinguished) {
     return (
       <div className="darkness-overlay">

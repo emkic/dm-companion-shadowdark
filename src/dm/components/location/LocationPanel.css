@@ -182,3 +182,79 @@
   opacity: 0.5;
   font-style: italic;
 }
+
+/* Camping */
+.camping-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.camping-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.campfire-toggle {
+  border: none !important;
+  padding: 4px 0 !important;
+}
+
+/* Watch order */
+.watch-order {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.watch-slot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.watch-label {
+  font-size: 0.72rem;
+  opacity: 0.6;
+  min-width: 130px;
+  white-space: nowrap;
+}
+
+.watch-name-input {
+  flex: 1;
+  min-width: 80px;
+}
+
+.watch-check {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  white-space: nowrap;
+  opacity: 0.8;
+}
+
+.watch-check input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.watch-check input[type="checkbox"]:checked + span {
+  color: var(--accent);
+}
+
+.watch-hint {
+  font-size: 0.72rem;
+  opacity: 0.5;
+  font-style: italic;
+}

@@ -3,6 +3,7 @@ import { PlayerTorch } from './components/PlayerTorch'
 import { PlayerMedia } from './components/PlayerMedia'
 import { PlayerLocation } from './components/PlayerLocation'
 import { PlayerCombat } from './components/PlayerCombat'
+import { PlayerWatchOrder } from './components/PlayerWatchOrder'
 import type { AppState } from '@shared/types'
 import { DEFAULT_TORCH_SECONDS, WEATHER_BY_SEASON } from '@shared/constants'
 
@@ -22,7 +23,15 @@ const INITIAL_STATE: AppState = {
     travelMethod: 'walking',
     isPushing: false,
     hexesRemaining: 4,
-    checklist: { rationsConsumed: false, foragingAttempt: false, encounterDay: false, encounterNight: false }
+    isCamping: false,
+    hasCampfire: false,
+    watches: [
+      { name: '', encounter: false, interruption: false },
+      { name: '', encounter: false, interruption: false },
+      { name: '', encounter: false, interruption: false },
+      { name: '', encounter: false, interruption: false }
+    ],
+    checklist: { rationsConsumed: false, foragingAttempt: false, encounterDay1: false, encounterDay2: false, encounterNight1: false, encounterNight2: false }
   },
   media: { currentFile: null, fileType: null, isShowing: false, folderPath: '', files: [] }
 }
@@ -41,7 +50,8 @@ export default function App() {
     <div className="player-app">
       <PlayerMedia media={state.media} location={state.location} />
       <PlayerCombat combat={state.combat} />
-      <PlayerTorch torch={state.torch} />
+      <PlayerTorch torch={state.torch} isCamping={state.location.isCamping} hasCampfire={state.location.isCamping && state.location.hasCampfire} />
+      <PlayerWatchOrder location={state.location} />
       <PlayerLocation location={state.location} />
     </div>
   )

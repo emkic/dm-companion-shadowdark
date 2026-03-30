@@ -34,7 +34,7 @@ export interface CombatState {
   combatants: Combatant[]
 }
 
-export type ActivityState = 'traveling' | 'crawling' | 'resting' | 'city'
+export type ActivityState = 'traveling' | 'crawling' | 'city'
 export type TravelMethod = 'walking' | 'mounted' | 'sailing'
 
 export const HEXES_PER_DAY: Record<TravelMethod, number> = {
@@ -46,8 +46,13 @@ export const HEXES_PER_DAY: Record<TravelMethod, number> = {
 export const ACTIVITY_LABELS: Record<ActivityState, string> = {
   traveling: 'Traveling',
   crawling: 'Dungeon Crawling',
-  resting: 'Resting',
   city: 'In City / Village'
+}
+
+export interface WatchSlot {
+  name: string
+  encounter: boolean
+  interruption: boolean
 }
 
 export interface LocationState {
@@ -63,11 +68,16 @@ export interface LocationState {
   travelMethod: TravelMethod
   isPushing: boolean
   hexesRemaining: number
+  isCamping: boolean
+  hasCampfire: boolean
+  watches: [WatchSlot, WatchSlot, WatchSlot, WatchSlot]
   checklist: {
     rationsConsumed: boolean
     foragingAttempt: boolean
-    encounterDay: boolean
-    encounterNight: boolean
+    encounterDay1: boolean
+    encounterDay2: boolean
+    encounterNight1: boolean
+    encounterNight2: boolean
   }
 }
 
