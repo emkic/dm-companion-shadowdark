@@ -62,7 +62,7 @@ export function registerIpcHandlers(): void {
 
   ipcMain.handle(IpcChannel.READ_MEDIA_FOLDER, (_event, folderPath: string) => {
     try {
-      const entries = fs.readdirSync(folderPath)
+      const entries = fs.readdirSync(folderPath, { recursive: true }) as string[]
       return entries.filter(entry => {
         const ext = path.extname(entry).toLowerCase()
         return IMAGE_EXTS.has(ext) || VIDEO_EXTS.has(ext)
