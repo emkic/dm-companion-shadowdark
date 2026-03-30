@@ -66,6 +66,20 @@ The DM can extinguish the torch (or magical light) at any time. When extinguishe
 
 The final line pulses in crimson red. The DM can relight at any time to return to normal. When the torch timer reaches zero, the darkness overlay triggers automatically.
 
+### Hex Crawling & Travel
+
+Full travel and rest tracking based on the hex crawling rules from **Shadowdark Zine 4: River of Night** (page 26):
+
+- **Three activity modes** — Traveling, Dungeon Crawling, or In City/Village. Each mode shows relevant controls.
+- **Travel method** — Walking (4 hex/day), Mounted (6 hex/day), or Sailing (8 hex/day)
+- **Hex tracker** — Track hexes remaining per day with buttons for normal (-1) and difficult terrain (-2). Pushing mode gives 1.5x hexes.
+- **Daily checklist** — Rations consumed, foraging attempt (when not pushing), and 4 random encounter checks (2 day, 2 night)
+- **Camping system** — Toggle camping within the traveling state. Includes:
+  - **Campfire toggle** — When lit, the player screen shows an animated campfire with "Campfire is lit!" text. When off, shows "The camp is dark."
+  - **Watch order** — 4 watch slots with player names and encounter checkboxes. Watch order displays as an overlay on the player screen.
+- **Date tracking** — Optional date display on the player screen with a New Day button that resets checklist, hexes, and camping state
+- **Session persistence** — All travel state saves and loads with sessions
+
 ### Location Display
 
 Show the current location on the player screen:
@@ -137,6 +151,8 @@ The output will be in the `dist/` folder:
 
 ## Future Plans
 
-- Ambient audio/music player (local files, YouTube, or Spotify integration)
+- Multiple torch timers for tracking different party members' light sources
+- Torch dimming effect on the player screen as time runs low
+- Ambient audio/music player
 - More visual effects for the player screen
 - Feedback and feature suggestions welcome — open an issue on GitHub!
