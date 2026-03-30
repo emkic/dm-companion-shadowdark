@@ -4,6 +4,8 @@ A dual-screen desktop app for running [Shadowdark RPG](https://www.thearcanelibr
 
 Built with Electron, React, and TypeScript.
 
+Published under the Shadowdark RPG Third-Party License and is not affiliated with The Arcane Library, LLC.
+
 ## Download
 
 **[Download the latest release](https://github.com/emkic/shadowdark-dm-app/releases/latest)**
