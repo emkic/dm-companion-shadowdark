@@ -2,7 +2,14 @@
 
 A dual-screen desktop app for running [Shadowdark RPG](https://www.thearcanelibrary.com/pages/shadowdark) sessions. The DM controls everything from a private panel while players see only what you choose on a separate fullscreen display.
 
-Built with Electron, React, and TypeScript. Available as a portable exe (no install required).
+Built with Electron, React, and TypeScript.
+
+## Download
+
+**[Download the latest release](https://github.com/emkic/shadowdark-dm-app/releases/latest)**
+
+- **ShadowdarkDM-Portable.exe** — Just download and run. No install needed.
+- **Shadowdark DM Setup 1.0.0.exe** — Installer (per-user, no admin required).
 
 ---
 
