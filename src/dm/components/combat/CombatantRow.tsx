@@ -41,6 +41,7 @@ export function CombatantRow({
   const [editingHP, setEditingHP] = useState(false)
   const [hpInput, setHpInput] = useState(String(c.currentHP))
   const [deathRollInput, setDeathRollInput] = useState('')
+  const [deathTimerInput, setDeathTimerInput] = useState('')
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [reviveHP, setReviveHP] = useState('1')
 
@@ -187,13 +188,38 @@ export function CombatantRow({
 
       {c.awaitingDeathTimer && (
         <div className="death-timer-prompt">
-          <span className="death-prompt-text">{c.name} is dying! Roll d4 for death timer:</span>
-          <div className="death-actions">
-            {[1, 2, 3, 4].map(n => (
-              <button key={n} className="btn btn-small btn-danger" onClick={() => setDeathTimer(c.id, n)}>
-                {n} round{n > 1 ? 's' : ''}
-              </button>
-            ))}
+          <span className="death-prompt-text">{c.name} is dying! Rounds until dead (1d4 + CON):</span>
+          <div className="death-roll-row">
+            <input
+              type="number"
+              min={1}
+              placeholder="Rounds"
+              value={deathTimerInput}
+              onChange={e => setDeathTimerInput(e.target.value)}
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  const val = parseInt(deathTimerInput)
+                  if (!isNaN(val) && val >= 1) {
+                    setDeathTimer(c.id, val)
+                    setDeathTimerInput('')
+                  }
+                }
+              }}
+              className="death-roll-input"
+              autoFocus
+            />
+            <button
+              className="btn btn-small btn-danger"
+              onClick={() => {
+                const val = parseInt(deathTimerInput)
+                if (!isNaN(val) && val >= 1) {
+                  setDeathTimer(c.id, val)
+                  setDeathTimerInput('')
+                }
+              }}
+            >
+              Set
+            </button>
           </div>
         </div>
       )}
