@@ -1,4 +1,4 @@
-import { app, BrowserWindow, protocol } from 'electron'
+import { app, BrowserWindow, protocol, powerSaveBlocker } from 'electron'
 import { join } from 'path'
 import * as fs from 'fs'
 import { getPlayerDisplayBounds } from './utils/display'
@@ -85,6 +85,7 @@ function registerMediaProtocol(): void {
 }
 
 app.whenReady().then(() => {
+  powerSaveBlocker.start('prevent-display-sleep')
   registerMediaProtocol()
   registerIpcHandlers()
   createWindows()
