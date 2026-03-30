@@ -9,6 +9,7 @@ import { CombatPanel } from './components/combat/CombatPanel'
 import { LocationPanel } from './components/location/LocationPanel'
 import { MediaPanel } from './components/media/MediaPanel'
 import { SessionPanel } from './components/session/SessionPanel'
+import { DisplaySelector } from './components/display/DisplaySelector'
 import type { AppState } from '@shared/types'
 import './App.css'
 
@@ -47,6 +48,7 @@ export default function App() {
     <div className="dm-app">
       <header className="dm-header">
         <h1 className="app-title">Shadowdark DM</h1>
+        <DisplaySelector />
         <SessionPanel
           {...sessionHook}
           currentState={appState}

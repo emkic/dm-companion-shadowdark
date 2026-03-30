@@ -7,5 +7,7 @@ export const IpcChannel = {
   DELETE_SESSION: 'session:delete',
   OPEN_FOLDER_DIALOG: 'dialog:open-folder',
   OPEN_IMAGE_DIALOG: 'dialog:open-image',
-  READ_MEDIA_FOLDER: 'media:read-folder'
+  READ_MEDIA_FOLDER: 'media:read-folder',
+  GET_DISPLAYS: 'display:get-all',
+  MOVE_PLAYER_TO_DISPLAY: 'display:move-player'
 } as const

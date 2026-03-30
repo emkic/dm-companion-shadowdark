@@ -1,4 +1,4 @@
-import type { AppState, SessionData } from './types'
+import type { AppState, SessionData, DisplayInfo } from './types'
 
 declare global {
   interface Window {
@@ -11,6 +11,8 @@ declare global {
       openFolderDialog: () => Promise<string | null>
       readMediaFolder: (folderPath: string) => Promise<string[]>
       openImageDialog: () => Promise<string | null>
+      getDisplays: () => Promise<DisplayInfo[]>
+      movePlayerToDisplay: (displayId: number) => Promise<boolean>
     }
     playerAPI: {
       onStateUpdate: (callback: (state: AppState) => void) => () => void

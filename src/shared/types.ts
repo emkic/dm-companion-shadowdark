@@ -61,3 +61,11 @@ export interface SessionData {
   appState: AppState
   savedAt: number
 }
+
+export interface DisplayInfo {
+  id: number
+  label: string
+  width: number
+  height: number
+  isPrimary: boolean
+}

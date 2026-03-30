@@ -3,7 +3,8 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { IpcChannel } from '../../src/shared/ipcChannels'
 import { saveSession, loadSession, listSessions, deleteSession } from '../store/store'
-import { broadcastToPlayer } from './state-bridge'
+import { broadcastToPlayer, movePlayerToDisplay } from './state-bridge'
+import { getAllDisplays } from '../utils/display'
 import type { AppState } from '../../src/shared/types'
 
 const IMAGE_EXTS = new Set(['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp'])
@@ -49,6 +50,14 @@ export function registerIpcHandlers(): void {
       ]
     })
     return result.canceled ? null : result.filePaths[0]
+  })
+
+  ipcMain.handle(IpcChannel.GET_DISPLAYS, () => {
+    return getAllDisplays()
+  })
+
+  ipcMain.handle(IpcChannel.MOVE_PLAYER_TO_DISPLAY, (_event, displayId: number) => {
+    return movePlayerToDisplay(displayId)
   })
 
   ipcMain.handle(IpcChannel.READ_MEDIA_FOLDER, (_event, folderPath: string) => {

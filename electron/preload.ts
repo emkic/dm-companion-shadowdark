@@ -10,7 +10,9 @@ const CH = {
   DELETE_SESSION: 'session:delete',
   OPEN_FOLDER_DIALOG: 'dialog:open-folder',
   OPEN_IMAGE_DIALOG: 'dialog:open-image',
-  READ_MEDIA_FOLDER: 'media:read-folder'
+  READ_MEDIA_FOLDER: 'media:read-folder',
+  GET_DISPLAYS: 'display:get-all',
+  MOVE_PLAYER_TO_DISPLAY: 'display:move-player'
 }
 
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -30,5 +32,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   readMediaFolder: (folderPath: string) =>
     ipcRenderer.invoke(CH.READ_MEDIA_FOLDER, folderPath),
   openImageDialog: () =>
-    ipcRenderer.invoke(CH.OPEN_IMAGE_DIALOG)
+    ipcRenderer.invoke(CH.OPEN_IMAGE_DIALOG),
+  getDisplays: () =>
+    ipcRenderer.invoke(CH.GET_DISPLAYS),
+  movePlayerToDisplay: (displayId: number) =>
+    ipcRenderer.invoke(CH.MOVE_PLAYER_TO_DISPLAY, displayId)
 })
