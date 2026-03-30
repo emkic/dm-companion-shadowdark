@@ -11,7 +11,9 @@ Published under the Shadowdark RPG Third-Party License and is not affiliated wit
 **[Download the latest release](https://github.com/emkic/shadowdark-dm-app/releases/latest)**
 
 - **ShadowdarkDM-Portable.exe** — Just download and run. No install needed.
-- **Shadowdark DM Setup 1.0.0.exe** — Installer (per-user, no admin required).
+- **Shadowdark DM Setup.exe** — Installer (per-user, no admin required).
+
+> **Note:** Windows SmartScreen may show a warning when you first run the app because it is not code-signed. Click **"More info"** then **"Run anyway"** to proceed. This is normal for unsigned apps and only happens once per downloaded file.
 
 ---
 
