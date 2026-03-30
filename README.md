@@ -37,6 +37,7 @@ Full initiative and combat management visible to both DM and players:
   3. Natural 20 = player awakens at 1 HP
   4. Timer expires = permanent death
 - **Emoji identifiers** for each combatant so players can quickly tell who is who
+- **Duplicate combatant** — quickly copy a combatant to add multiples of the same monster
 - Monsters are automatically removed from the tracker when combat ends
 
 ### Light Source System
@@ -76,6 +77,10 @@ Browse a local folder and display images or videos fullscreen on the player scre
 ### Session Save/Load
 
 Save the entire app state (combat, torch, location, media) as a named session. Load it back later to pick up exactly where you left off. Overwrite existing sessions with current state, or delete old ones.
+
+### Sleep Prevention
+
+The app automatically keeps your PC and display awake while running, so you never get interrupted by a screen timeout mid-session.
 
 ---
 
