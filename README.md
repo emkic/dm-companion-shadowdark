@@ -126,3 +126,11 @@ The output will be in the `dist/` folder:
 - **electron-store** — Session persistence
 - **@dnd-kit** — Drag-and-drop for combat initiative
 - **JSL Blackletter** — Official Shadowdark font on the player display
+
+---
+
+## Future Plans
+
+- Ambient audio/music player (local files, YouTube, or Spotify integration)
+- More visual effects for the player screen
+- Feedback and feature suggestions welcome — open an issue on GitHub!
