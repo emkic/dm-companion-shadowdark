@@ -23,6 +23,7 @@ interface Props {
   rollDeathSave: UseCombatReturn['rollDeathSave']
   setEmoji: UseCombatReturn['setEmoji']
   reviveCombatant: UseCombatReturn['reviveCombatant']
+  duplicateCombatant: UseCombatReturn['duplicateCombatant']
 }
 
 export function CombatantRow({
@@ -35,7 +36,8 @@ export function CombatantRow({
   setDeathTimer,
   rollDeathSave,
   setEmoji,
-  reviveCombatant
+  reviveCombatant,
+  duplicateCombatant
 }: Props) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: c.id, disabled: c.isDead })
   const [editingHP, setEditingHP] = useState(false)
@@ -145,13 +147,22 @@ export function CombatantRow({
         </div>
 
         {!c.isDead && (
-          <button
-            className="btn btn-danger btn-tiny"
-            onClick={() => removeCombatant(c.id)}
-            title="Remove"
-          >
-            &#x2715;
-          </button>
+          <>
+            <button
+              className="btn btn-ghost btn-tiny"
+              onClick={() => duplicateCombatant(c.id)}
+              title="Duplicate"
+            >
+              &#x2398;
+            </button>
+            <button
+              className="btn btn-danger btn-tiny"
+              onClick={() => removeCombatant(c.id)}
+              title="Remove"
+            >
+              &#x2715;
+            </button>
+          </>
         )}
 
         {c.isDead && (

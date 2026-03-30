@@ -39,6 +39,7 @@ export interface UseCombatReturn {
   setDeathTimer: (id: string, rounds: number) => void
   rollDeathSave: (id: string, roll: number) => void
   reviveCombatant: (id: string, hp: number) => void
+  duplicateCombatant: (id: string) => void
 }
 
 export function useCombat(): UseCombatReturn {
@@ -250,6 +251,23 @@ export function useCombat(): UseCombatReturn {
     }))
   }, [])
 
+  const duplicateCombatant = useCallback((id: string) => {
+    setCombat(prev => {
+      const source = prev.combatants.find(c => c.id === id)
+      if (!source) return prev
+      const copy: Combatant = {
+        ...source,
+        id: generateId(),
+        ...newCombatantDefaults(),
+        currentHP: source.maxHP
+      }
+      const idx = prev.combatants.indexOf(source)
+      const newCombatants = [...prev.combatants]
+      newCombatants.splice(idx + 1, 0, copy)
+      return { ...prev, combatants: newCombatants }
+    })
+  }, [])
+
   const setCombatState = useCallback((state: CombatState) => {
     setCombat(state)
   }, [])
@@ -270,6 +288,7 @@ export function useCombat(): UseCombatReturn {
     endCombat,
     setDeathTimer,
     rollDeathSave,
-    reviveCombatant
+    reviveCombatant,
+    duplicateCombatant
   }
 }
