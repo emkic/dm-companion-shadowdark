@@ -18,6 +18,7 @@ const INITIAL_STATE: AppState = {
     showToPlayer: false,
     activity: 'traveling',
     date: new Date().toISOString().slice(0, 10),
+    showDate: false,
     travelMethod: 'walking',
     isPushing: false,
     hexesRemaining: 4,

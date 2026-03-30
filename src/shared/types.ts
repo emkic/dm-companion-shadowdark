@@ -59,6 +59,7 @@ export interface LocationState {
   showToPlayer: boolean
   activity: ActivityState
   date: string
+  showDate: boolean
   travelMethod: TravelMethod
   isPushing: boolean
   hexesRemaining: number

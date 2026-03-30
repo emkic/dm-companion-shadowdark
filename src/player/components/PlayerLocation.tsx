@@ -40,7 +40,7 @@ export function PlayerLocation({ location }: Props) {
           </span>
         </div>
         <div className="location-right">
-          {location.date && (
+          {location.showDate && location.date && (
             <span className="location-date">{formatDate(location.date)}</span>
           )}
           <span className={`danger-badge danger-${location.dangerLevel}`}>

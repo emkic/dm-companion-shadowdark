@@ -16,8 +16,8 @@ type Props = UseLocationReturn
 
 export function LocationPanel({
   location, setName, setSeason, setWeather, setDangerLevel, setImagePath,
-  toggleShowToPlayer, setActivity, setDate, setTravelMethod, togglePushing,
-  spendHexes, toggleChecklist, newDay
+  toggleShowToPlayer, setActivity, setDate, toggleShowDate, setTravelMethod,
+  togglePushing, spendHexes, toggleChecklist, newDay
 }: Props) {
   const maxHexes = location.isPushing
     ? Math.floor(HEXES_PER_DAY[location.travelMethod] * 1.5)
@@ -58,19 +58,38 @@ export function LocationPanel({
       {/* Date & New Day */}
       <div className="field-row">
         <div className="field-group">
-          <label className="field-label">Date</label>
-          <input
-            type="date"
-            value={location.date}
-            onChange={e => setDate(e.target.value)}
-            className="form-input"
-          />
-        </div>
-        <div className="field-group field-group-end">
-          <button className="btn btn-primary" onClick={newDay}>
-            New Day
+          <button
+            className={`btn btn-small ${location.showDate ? 'btn-primary' : 'btn-ghost'}`}
+            onClick={toggleShowDate}
+          >
+            {location.showDate ? '📅 Date On' : '📅 Date Off'}
           </button>
         </div>
+        {location.showDate && (
+          <>
+            <div className="field-group">
+              <label className="field-label">Date</label>
+              <input
+                type="date"
+                value={location.date}
+                onChange={e => setDate(e.target.value)}
+                className="form-input"
+              />
+            </div>
+            <div className="field-group field-group-end">
+              <button className="btn btn-primary" onClick={newDay}>
+                New Day
+              </button>
+            </div>
+          </>
+        )}
+        {!location.showDate && (
+          <div className="field-group field-group-end">
+            <button className="btn btn-primary" onClick={newDay}>
+              New Day
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Location info row */}

@@ -21,6 +21,7 @@ const INITIAL_STATE: LocationState = {
   showToPlayer: false,
   activity: 'traveling',
   date: todayISO(),
+  showDate: false,
   travelMethod: 'walking',
   isPushing: false,
   hexesRemaining: HEXES_PER_DAY.walking,
@@ -42,6 +43,7 @@ export interface UseLocationReturn {
   toggleShowToPlayer: () => void
   setActivity: (activity: ActivityState) => void
   setDate: (date: string) => void
+  toggleShowDate: () => void
   setTravelMethod: (method: TravelMethod) => void
   togglePushing: () => void
   spendHexes: (count: number) => void
@@ -87,6 +89,10 @@ export function useLocation(): UseLocationReturn {
 
   const setDate = useCallback((date: string) => {
     setLocationState(prev => ({ ...prev, date }))
+  }, [])
+
+  const toggleShowDate = useCallback(() => {
+    setLocationState(prev => ({ ...prev, showDate: !prev.showDate }))
   }, [])
 
   const setTravelMethod = useCallback((method: TravelMethod) => {
@@ -156,6 +162,7 @@ export function useLocation(): UseLocationReturn {
     toggleShowToPlayer,
     setActivity,
     setDate,
+    toggleShowDate,
     setTravelMethod,
     togglePushing,
     spendHexes,
