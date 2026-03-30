@@ -85,22 +85,20 @@ export function TorchPanel({ torch, lowAlert, start, stop, reset, adjustMinutes,
           </div>
 
           <div className="torch-adjust">
-            <button className="btn btn-small" onClick={() => adjustMinutes(-5)}>-5m</button>
-            <button className="btn btn-small" onClick={() => adjustMinutes(-1)}>-1m</button>
-            <div className="custom-adjust">
-              <input
-                type="number"
-                min="1"
-                max="60"
-                value={customMinutes}
-                onChange={e => setCustomMinutes(e.target.value)}
-                className="minutes-input"
-              />
-              <button className="btn btn-small" onClick={() => adjustMinutes(parseInt(customMinutes) || 1)}>
-                +{customMinutes}m
-              </button>
-            </div>
-            <button className="btn btn-small" onClick={() => adjustMinutes(5)}>+5m</button>
+            <button className="btn btn-small" onClick={() => adjustMinutes(-(parseInt(customMinutes) || 1))}>
+              -{customMinutes}m
+            </button>
+            <input
+              type="number"
+              min="1"
+              max="60"
+              value={customMinutes}
+              onChange={e => setCustomMinutes(e.target.value)}
+              className="minutes-input"
+            />
+            <button className="btn btn-small" onClick={() => adjustMinutes(parseInt(customMinutes) || 1)}>
+              +{customMinutes}m
+            </button>
           </div>
 
           {lowAlert && (
