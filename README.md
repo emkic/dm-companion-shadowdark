@@ -15,6 +15,9 @@ Published under the Shadowdark RPG Third-Party License and is not affiliated wit
 
 > **Note:** Windows SmartScreen may show a warning when you first run the app because it is not code-signed. Click **"More info"** then **"Run anyway"** to proceed. This is normal for unsigned apps and only happens once per downloaded file.
 
+<img width="2547" height="1439" alt="image" src="https://github.com/user-attachments/assets/1cd7159a-1b48-4662-9a41-ab615160adfa" />
+<img width="2067" height="1308" alt="image" src="https://github.com/user-attachments/assets/7d6d3289-4721-401a-81dd-3d1c215d8d22" />
+
 ---
 
 ## Features
