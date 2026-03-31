@@ -29,12 +29,22 @@ The app runs two windows simultaneously:
 
 All changes on the DM side are broadcast to the player screen in real time.
 
+### DM Panel Layout
+
+The DM panel uses a tabbed interface for quick access to everything:
+
+- **Persistent sidebar** — Torch/light controls and location info are always visible on the left
+- **Tabbed main area** — Switch between Combat, Travel, and Media tabs. Each tab gets full width.
+- **Tab badges** — Combat tab shows the current round, Travel tab shows hexes remaining, so you always know the state at a glance
+- **Keyboard shortcuts** — Press 1/2/3 to switch tabs, Space to start/pause the torch timer
+- **Session management** — Save/load sessions via a modal dialog (💾 Sessions button in header)
+
 ### Combat Tracker
 
 Full initiative and combat management visible to both DM and players:
 
 - **Initiative order** with drag-and-drop reordering or auto-sort by initiative value
-- **HP tracking** with +/- buttons and click-to-edit for direct input
+- **HP tracking** with +5/+1/-1/-5 buttons and click-to-edit for direct input
 - **Health estimates** shown to players instead of exact HP numbers: Uninjured, Injured, Bloodied, Near Death, Dying, Dead — each color-coded
 - **Shadowdark death mechanic** — when a player hits 0 HP:
   1. DM rolls a d4 to set the death timer (rounds until permanent death)
@@ -73,10 +83,11 @@ Full travel and rest tracking based on the hex crawling rules from **Shadowdark 
 - **Three activity modes** — Traveling, Dungeon Crawling, or In City/Village. Each mode shows relevant controls.
 - **Travel method** — Walking (4 hex/day), Mounted (6 hex/day), or Sailing (8 hex/day)
 - **Hex tracker** — Track hexes remaining per day with buttons for normal (-1) and difficult terrain (-2). Pushing mode gives 1.5x hexes.
-- **Daily checklist** — Rations consumed, foraging attempt (when not pushing), and 4 random encounter checks (2 day, 2 night)
+- **Daily checklist** — Weather roll, rations consumed, foraging attempt (when not pushing), and 4 random encounter checks (2 day, 2 night)
+- **Weather hex reference** — Built-in weather hex flower image (by u/KorbohneD) accessible from the sidebar for quick weather rolls
 - **Camping system** — Toggle camping within the traveling state. Includes:
   - **Campfire toggle** — When lit, the player screen shows an animated campfire with "Campfire is lit!" text. When off, shows "The camp is dark."
-  - **Watch order** — 4 watch slots with player names and encounter checkboxes. Watch order displays as an overlay on the player screen.
+  - **Watch order** — 4 watch slots with player names and encounter checkboxes, drag-and-drop reordering. Watch order displays as an overlay on the player screen.
 - **Date tracking** — Optional date display on the player screen with a New Day button that resets checklist, hexes, and camping state
 - **Session persistence** — All travel state saves and loads with sessions
 
@@ -92,7 +103,7 @@ Show the current location on the player screen:
 
 ### Media Panel
 
-Browse a local folder and display images or videos fullscreen on the player screen. Supports common formats (jpg, png, gif, webm, mp4, etc). Useful for showing maps, artwork, handouts, or ambient scenes.
+Browse a local folder and display images or videos fullscreen on the player screen. Supports common formats (jpg, png, gif, webm, mp4, etc). Multi-column thumbnail grid for easy browsing. Useful for showing maps, artwork, handouts, or ambient scenes.
 
 ### Session Save/Load
 
@@ -144,7 +155,7 @@ The output will be in the `dist/` folder:
 - **TypeScript** — Type safety
 - **Vite** — Build tool
 - **electron-store** — Session persistence
-- **@dnd-kit** — Drag-and-drop for combat initiative
+- **@dnd-kit** — Drag-and-drop for combat initiative and watch order
 - **JSL Blackletter** — Official Shadowdark font on the player display
 
 ---

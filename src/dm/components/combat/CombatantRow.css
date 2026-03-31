@@ -152,28 +152,38 @@
 }
 
 .hp-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
 }
 
-.btn-tiny {
+.btn-hp {
   background: var(--bg-panel);
   border: 1px solid var(--border);
   color: var(--text);
   cursor: pointer;
-  font-size: 0.7rem;
-  width: 18px;
-  height: 13px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  min-width: 28px;
+  height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 2px;
-  padding: 0;
-  line-height: 1;
+  border-radius: 3px;
+  padding: 0 3px;
 }
 
-.btn-tiny:hover { border-color: var(--accent); color: var(--accent); }
+.btn-hp:hover { border-color: var(--accent); color: var(--accent); }
+
+.btn-tiny {
+  padding: 2px 6px !important;
+  font-size: 0.78rem !important;
+  min-width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .estimate-badge {
   font-size: 0.72rem;

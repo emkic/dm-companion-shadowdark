@@ -38,6 +38,7 @@ const INITIAL_STATE: LocationState = {
   hasCampfire: false,
   watches: defaultWatches(),
   checklist: {
+    weatherRolled: false,
     rationsConsumed: false,
     foragingAttempt: false,
     encounterDay1: false,
@@ -67,6 +68,7 @@ export interface UseLocationReturn {
   setWatchName: (index: number, name: string) => void
   toggleWatchEncounter: (index: number) => void
   toggleWatchInterruption: (index: number) => void
+  reorderWatches: (newOrder: [WatchSlot, WatchSlot, WatchSlot, WatchSlot]) => void
   newDay: () => void
   setLocation: (location: LocationState) => void
 }
@@ -199,6 +201,7 @@ export function useLocation(): UseLocationReturn {
         hexesRemaining: getMaxHexes(prev.travelMethod, false),
         watches: prev.watches.map(w => ({ ...w, encounter: false, interruption: false })) as [WatchSlot, WatchSlot, WatchSlot, WatchSlot],
         checklist: {
+          weatherRolled: false,
           rationsConsumed: false,
           foragingAttempt: false,
           encounterDay1: false,
@@ -208,6 +211,10 @@ export function useLocation(): UseLocationReturn {
         }
       }
     })
+  }, [])
+
+  const reorderWatches = useCallback((newOrder: [WatchSlot, WatchSlot, WatchSlot, WatchSlot]) => {
+    setLocationState(prev => ({ ...prev, watches: newOrder }))
   }, [])
 
   const setLocation = useCallback((location: LocationState) => {
@@ -234,6 +241,7 @@ export function useLocation(): UseLocationReturn {
     setWatchName,
     toggleWatchEncounter,
     toggleWatchInterruption,
+    reorderWatches,
     newDay,
     setLocation
   }

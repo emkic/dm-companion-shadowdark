@@ -72,6 +72,7 @@ export interface LocationState {
   hasCampfire: boolean
   watches: [WatchSlot, WatchSlot, WatchSlot, WatchSlot]
   checklist: {
+    weatherRolled: boolean
     rationsConsumed: boolean
     foragingAttempt: boolean
     encounterDay1: boolean

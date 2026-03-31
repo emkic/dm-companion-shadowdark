@@ -116,8 +116,10 @@ export function CombatantRow({
 
         <div className="hp-cell">
           <div className="hp-buttons">
-            <button className="btn-tiny" onClick={() => updateHP(c.id, 1)} title="+1 HP">+</button>
-            <button className="btn-tiny" onClick={() => updateHP(c.id, -1)} title="-1 HP">-</button>
+            <button className="btn-hp" onClick={() => updateHP(c.id, 5)} title="+5 HP">+5</button>
+            <button className="btn-hp" onClick={() => updateHP(c.id, 1)} title="+1 HP">+1</button>
+            <button className="btn-hp" onClick={() => updateHP(c.id, -1)} title="-1 HP">-1</button>
+            <button className="btn-hp" onClick={() => updateHP(c.id, -5)} title="-5 HP">-5</button>
           </div>
           {editingHP ? (
             <input

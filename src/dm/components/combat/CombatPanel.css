@@ -1,8 +1,4 @@
 .combat-panel {
-  background: var(--bg-panel);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
