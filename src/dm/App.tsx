@@ -117,7 +117,7 @@ export default function App() {
   return (
     <div className="dm-app">
       <header className="dm-header">
-        <h1 className="app-title">Shadowdark DM</h1>
+        <h1 className="app-title">DM Companion</h1>
         <DisplaySelector />
         <button
           className="btn btn-ghost btn-small"

@@ -1,4 +1,4 @@
-# Shadowdark DM Companion
+# DM Companion for Shadowdark
 
 A dual-screen desktop app for running [Shadowdark RPG](https://www.thearcanelibrary.com/pages/shadowdark) sessions. The DM controls everything from a private panel while players see only what you choose on a separate fullscreen display.
 
@@ -10,8 +10,8 @@ Published under the Shadowdark RPG Third-Party License and is not affiliated wit
 
 **[Download the latest release](https://github.com/emkic/shadowdark-dm-app/releases/latest)**
 
-- **ShadowdarkDM-Portable.exe** — Just download and run. No install needed.
-- **Shadowdark DM Setup.exe** — Installer (per-user, no admin required).
+- **DMCompanion-Portable.exe** — Just download and run. No install needed.
+- **DM Companion for Shadowdark Setup.exe** — Installer (per-user, no admin required).
 
 > **Note:** Windows SmartScreen may show a warning when you first run the app because it is not code-signed. Click **"More info"** then **"Run anyway"** to proceed. This is normal for unsigned apps and only happens once per downloaded file.
 
@@ -149,8 +149,8 @@ npx electron-builder --win
 
 The output will be in the `dist/` folder:
 
-- `ShadowdarkDM-Portable.exe` — Single portable exe, just copy and run
-- `Shadowdark DM Setup 1.0.0.exe` — Installer (per-user, no admin required)
+- `DMCompanion-Portable.exe` — Single portable exe, just copy and run
+- `DM Companion for Shadowdark Setup 1.0.0.exe` — Installer (per-user, no admin required)
 
 ---
 
@@ -162,7 +162,7 @@ The output will be in the `dist/` folder:
 - **Vite** — Build tool
 - **electron-store** — Session persistence
 - **@dnd-kit** — Drag-and-drop for combat initiative and watch order
-- **JSL Blackletter** — Official Shadowdark font on the player display
+- **JSL Blackletter** — Used on the player display to give it that familiar feel
 
 ---
 

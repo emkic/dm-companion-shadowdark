@@ -1,7 +1,7 @@
 {
   "name": "shadowdark-dm-app",
   "version": "1.5.0",
-  "description": "Shadowdark RPG DM Companion App",
+  "description": "DM Companion App for Shadowdark RPG",
   "main": "out/main/index.js",
   "scripts": {
     "dev": "electron-vite dev",
@@ -30,7 +30,7 @@
   },
   "build": {
     "appId": "com.shadowdark.dm-app",
-    "productName": "Shadowdark DM",
+    "productName": "DM Companion for Shadowdark",
     "win": {
       "target": ["nsis", "portable"],
       "signAndEditExecutable": false
@@ -41,7 +41,7 @@
       "allowToChangeInstallationDirectory": false
     },
     "portable": {
-      "artifactName": "ShadowdarkDM-Portable.exe"
+      "artifactName": "DMCompanion-Portable.exe"
     },
     "directories": {
       "output": "dist"

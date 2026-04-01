@@ -17,7 +17,7 @@ function createWindows(): void {
     height: 900,
     minWidth: 1100,
     minHeight: 700,
-    title: 'Shadowdark DM',
+    title: 'DM Companion for Shadowdark',
     backgroundColor: '#0a0a0a',
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
