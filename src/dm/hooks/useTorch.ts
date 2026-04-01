@@ -1,99 +1,125 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
-import { DEFAULT_TORCH_SECONDS, LOW_TORCH_THRESHOLD } from '@shared/constants'
-import type { TorchState, LightMode } from '@shared/types'
+import { useState, useEffect, useCallback } from 'react'
+import { DEFAULT_TORCH_SECONDS, LOW_TORCH_THRESHOLD, createDefaultTimer } from '@shared/constants'
+import type { TorchState, TimerState, LightMode } from '@shared/types'
 
 export interface UseTorchReturn {
-  torch: TorchState
-  lowAlert: boolean
-  start: () => void
-  stop: () => void
-  reset: () => void
-  adjustMinutes: (delta: number) => void
-  extinguish: () => void
-  relight: () => void
-  setLightMode: (mode: LightMode) => void
-  toggleHideTimer: () => void
+  torchState: TorchState
+  isTimerLow: (id: string) => boolean
+  allExtinguished: boolean
+  addTimer: () => void
+  removeTimer: (id: string) => void
+  renameTimer: (id: string, label: string) => void
+  start: (id: string) => void
+  stop: (id: string) => void
+  reset: (id: string) => void
+  adjustMinutes: (id: string, delta: number) => void
+  extinguish: (id: string) => void
+  relight: (id: string) => void
+  setLightMode: (id: string, mode: LightMode) => void
+  toggleHideTimer: (id: string) => void
   setTorchState: (state: TorchState) => void
 }
 
+function updateTimer(timers: TimerState[], id: string, updater: (t: TimerState) => TimerState): TimerState[] {
+  return timers.map(t => t.id === id ? updater(t) : t)
+}
+
 export function useTorch(): UseTorchReturn {
-  const [torch, setTorch] = useState<TorchState>({
-    timeLeft: DEFAULT_TORCH_SECONDS,
-    isRunning: false,
-    isExtinguished: false,
-    lightMode: 'torch',
-    hideTimerFromPlayer: false
-  })
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const [timers, setTimers] = useState<TimerState[]>([createDefaultTimer()])
 
-  const clearTimer = useCallback(() => {
-    if (intervalRef.current !== null) {
-      clearInterval(intervalRef.current)
-      intervalRef.current = null
-    }
-  }, [])
-
+  // Single interval ticks all running timers
   useEffect(() => {
-    if (torch.isRunning) {
-      intervalRef.current = setInterval(() => {
-        setTorch(prev => {
-          if (prev.timeLeft <= 1) {
-            return { ...prev, timeLeft: 0, isRunning: false, isExtinguished: true }
-          }
-          return { ...prev, timeLeft: prev.timeLeft - 1 }
+    const interval = setInterval(() => {
+      setTimers(prev => {
+        const hasRunning = prev.some(t => t.isRunning)
+        if (!hasRunning) return prev
+        return prev.map(t => {
+          if (!t.isRunning || t.timeLeft <= 0) return t
+          if (t.timeLeft <= 1) return { ...t, timeLeft: 0, isRunning: false, isExtinguished: true }
+          return { ...t, timeLeft: t.timeLeft - 1 }
         })
-      }, 1000)
-    } else {
-      clearTimer()
-    }
-    return clearTimer
-  }, [torch.isRunning, clearTimer])
-
-  const start = useCallback(() => {
-    setTorch(prev => prev.timeLeft > 0 ? { ...prev, isRunning: true, isExtinguished: false } : prev)
+      })
+    }, 1000)
+    return () => clearInterval(interval)
   }, [])
 
-  const stop = useCallback(() => {
-    setTorch(prev => ({ ...prev, isRunning: false }))
+  const isTimerLow = useCallback((id: string): boolean => {
+    const timer = timers.find(t => t.id === id)
+    if (!timer) return false
+    return timer.timeLeft / DEFAULT_TORCH_SECONDS < LOW_TORCH_THRESHOLD
+  }, [timers])
+
+  const nonNaturalTimers = timers.filter(t => t.lightMode !== 'natural')
+  const allExtinguished = nonNaturalTimers.length > 0 && nonNaturalTimers.every(t => t.isExtinguished)
+
+  const addTimer = useCallback(() => {
+    setTimers(prev => [...prev, createDefaultTimer()])
   }, [])
 
-  const reset = useCallback(() => {
-    setTorch(prev => ({ timeLeft: DEFAULT_TORCH_SECONDS, isRunning: false, isExtinguished: false, lightMode: prev.lightMode, hideTimerFromPlayer: prev.hideTimerFromPlayer }))
+  const removeTimer = useCallback((id: string) => {
+    setTimers(prev => prev.length <= 1 ? prev : prev.filter(t => t.id !== id))
   }, [])
 
-  const extinguish = useCallback(() => {
-    setTorch(prev => ({ ...prev, isRunning: false, isExtinguished: true }))
+  const renameTimer = useCallback((id: string, label: string) => {
+    setTimers(prev => updateTimer(prev, id, t => ({ ...t, label })))
   }, [])
 
-  const relight = useCallback(() => {
-    setTorch(prev => prev.timeLeft > 0 ? { ...prev, isRunning: true, isExtinguished: false } : prev)
+  const start = useCallback((id: string) => {
+    setTimers(prev => updateTimer(prev, id, t =>
+      t.timeLeft > 0 ? { ...t, isRunning: true, isExtinguished: false } : t
+    ))
   }, [])
 
-  const setLightMode = useCallback((mode: LightMode) => {
-    setTorch(prev => ({
-      ...prev,
+  const stop = useCallback((id: string) => {
+    setTimers(prev => updateTimer(prev, id, t => ({ ...t, isRunning: false })))
+  }, [])
+
+  const reset = useCallback((id: string) => {
+    setTimers(prev => updateTimer(prev, id, t => ({
+      ...t, timeLeft: DEFAULT_TORCH_SECONDS, isRunning: false, isExtinguished: false
+    })))
+  }, [])
+
+  const adjustMinutes = useCallback((id: string, delta: number) => {
+    setTimers(prev => updateTimer(prev, id, t => ({
+      ...t, timeLeft: Math.max(0, t.timeLeft + delta * 60)
+    })))
+  }, [])
+
+  const extinguish = useCallback((id: string) => {
+    setTimers(prev => updateTimer(prev, id, t => ({ ...t, isRunning: false, isExtinguished: true })))
+  }, [])
+
+  const relight = useCallback((id: string) => {
+    setTimers(prev => updateTimer(prev, id, t =>
+      t.timeLeft > 0 ? { ...t, isRunning: true, isExtinguished: false } : t
+    ))
+  }, [])
+
+  const setLightMode = useCallback((id: string, mode: LightMode) => {
+    setTimers(prev => updateTimer(prev, id, t => ({
+      ...t,
       lightMode: mode,
-      isRunning: mode === 'natural' ? false : prev.isRunning,
-      isExtinguished: mode === 'natural' ? false : prev.isExtinguished
-    }))
+      isRunning: mode === 'natural' ? false : t.isRunning,
+      isExtinguished: mode === 'natural' ? false : t.isExtinguished
+    })))
   }, [])
 
-  const adjustMinutes = useCallback((delta: number) => {
-    setTorch(prev => ({
-      ...prev,
-      timeLeft: Math.max(0, prev.timeLeft + delta * 60)
-    }))
-  }, [])
-
-  const toggleHideTimer = useCallback(() => {
-    setTorch(prev => ({ ...prev, hideTimerFromPlayer: !prev.hideTimerFromPlayer }))
+  const toggleHideTimer = useCallback((id: string) => {
+    setTimers(prev => updateTimer(prev, id, t => ({ ...t, hideTimerFromPlayer: !t.hideTimerFromPlayer })))
   }, [])
 
   const setTorchState = useCallback((state: TorchState) => {
-    setTorch({ ...state, isRunning: false }) // always restore as paused
+    setTimers(state.timers.map(t => ({ ...t, isRunning: false })))
   }, [])
 
-  const lowAlert = torch.timeLeft / DEFAULT_TORCH_SECONDS < LOW_TORCH_THRESHOLD
+  const torchState: TorchState = { timers }
 
-  return { torch, lowAlert, start, stop, reset, adjustMinutes, extinguish, relight, setLightMode, toggleHideTimer, setTorchState }
+  return {
+    torchState, isTimerLow, allExtinguished,
+    addTimer, removeTimer, renameTimer,
+    start, stop, reset, adjustMinutes,
+    extinguish, relight, setLightMode, toggleHideTimer,
+    setTorchState
+  }
 }

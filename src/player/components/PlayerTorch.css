@@ -1,15 +1,26 @@
-.player-torch {
+/* ── Multi-timer container ── */
+
+.player-torches {
   position: fixed;
   top: 28px;
   right: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 24px;
   z-index: 100;
 }
 
-.player-torch.low {
+/* ── Individual timer item ── */
+
+.player-torch-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.player-torch-item.low {
   animation: torchPulse 2s ease-in-out infinite;
 }
 
@@ -21,8 +32,8 @@
 /* Torch flame */
 .torch-flame-wrap {
   position: relative;
-  width: 56px;
-  height: 90px;
+  width: 48px;
+  height: 76px;
 }
 
 .torch-flame {
@@ -45,25 +56,25 @@
 }
 
 .flame-outer {
-  bottom: 26px;
-  width: 34px;
-  height: 50px;
+  bottom: 22px;
+  width: 28px;
+  height: 42px;
   background: radial-gradient(ellipse at 50% 80%, #c84010 0%, #e06010 40%, #e0a020 80%, transparent 100%);
   opacity: 0.85;
 }
 
 .flame-mid {
-  bottom: 26px;
-  width: 22px;
-  height: 38px;
+  bottom: 22px;
+  width: 18px;
+  height: 32px;
   background: radial-gradient(ellipse at 50% 80%, #e05010 0%, #e08020 50%, #f0c040 90%, transparent 100%);
   opacity: 0.9;
 }
 
 .flame-inner {
-  bottom: 26px;
-  width: 12px;
-  height: 26px;
+  bottom: 22px;
+  width: 10px;
+  height: 22px;
   background: radial-gradient(ellipse at 50% 80%, #fff8e0 0%, #f0e080 60%, transparent 100%);
   opacity: 0.95;
 }
@@ -71,8 +82,8 @@
 .torch-body {
   position: absolute;
   bottom: 0;
-  width: 14px;
-  height: 32px;
+  width: 12px;
+  height: 28px;
   background: linear-gradient(to bottom, #6b3a1f, #4a2510);
   border-radius: 2px 2px 5px 5px;
 }
@@ -100,9 +111,11 @@
   background: radial-gradient(ellipse at 50% 80%, #c09050 0%, #906040 60%, transparent 100%);
 }
 
+/* ── Countdown ── */
+
 .torch-countdown {
   font-family: 'Montserrat', monospace;
-  font-size: 3rem;
+  font-size: 2.2rem;
   font-weight: 700;
   color: #e8d8b0;
   letter-spacing: 0.06em;
@@ -128,7 +141,7 @@
 .torch-paused-label,
 .torch-out-label {
   font-family: 'Montserrat', sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -141,9 +154,28 @@
   animation: countdownBlink 0.8s step-end infinite;
 }
 
+/* ── Timer Label (character name) ── */
+
+.timer-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(232, 216, 176, 0.8);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  max-width: 280px;
+  word-wrap: break-word;
+}
+
+.timer-label-magical {
+  color: rgba(200, 200, 232, 0.8);
+}
+
 /* ── Magical Crystal Ball ── */
 
-.player-torch.magical.low {
+.player-torch-item.magical.low {
   animation: crystalPulseAlert 2s ease-in-out infinite;
 }
 
@@ -154,8 +186,8 @@
 
 .crystal-wrap {
   position: relative;
-  width: 56px;
-  height: 90px;
+  width: 48px;
+  height: 76px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -165,8 +197,8 @@
 
 .crystal-ball {
   position: relative;
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: radial-gradient(
     circle at 35% 35%,
@@ -178,13 +210,12 @@
   border: 2px solid rgba(180, 180, 220, 0.25);
 }
 
-/* Outer glow that radiates beyond the ball */
 .crystal-glow {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 80px;
-  height: 80px;
+  width: 68px;
+  height: 68px;
   transform: translate(-50%, -50%);
   border-radius: 50%;
   background: radial-gradient(
@@ -213,13 +244,12 @@
   }
 }
 
-/* Bright core in the centre */
 .crystal-core {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   transform: translate(-50%, -50%);
   border-radius: 50%;
   background: radial-gradient(
@@ -252,18 +282,18 @@
 
 .crystal-highlight {
   position: absolute;
-  top: 8px;
-  left: 12px;
-  width: 10px;
-  height: 6px;
+  top: 7px;
+  left: 10px;
+  width: 9px;
+  height: 5px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.5);
   transform: rotate(-30deg);
 }
 
 .crystal-base {
-  width: 24px;
-  height: 10px;
+  width: 20px;
+  height: 8px;
   background: linear-gradient(to bottom, #8080a0, #606080);
   border-radius: 2px 2px 6px 6px;
   margin-top: -2px;
@@ -413,7 +443,7 @@
   to   { opacity: 1; }
 }
 
-/* ── Darkness Overlay (Extinguished) ── */
+/* ── Darkness Overlay (All Extinguished) ── */
 
 .darkness-overlay {
   position: fixed;

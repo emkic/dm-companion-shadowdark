@@ -60,12 +60,15 @@ Full initiative and combat management visible to both DM and players:
 
 ### Light Source System
 
-Three lighting modes to match the in-game situation:
+Track multiple independent light sources simultaneously — perfect for split parties or individual character torches.
 
-- **Torch** — A 60-minute countdown timer. The player screen shows a pixel-art torch flame that dims as time runs out. Warning at 25% remaining. DM can start, pause, reset, and adjust time in 1 or 5 minute increments.
+- **Multiple timers** — Add as many torch timers as you need. Each has its own countdown, mode, and controls. All visible on both DM and player screens.
+- **Editable names** — Label each timer with character names (e.g. "Grondur & Arwin", "Mort & Mirren") so everyone knows whose torch is whose.
+- **Torch** — A 60-minute countdown timer. The player screen shows a pixel-art torch flame that dims as time runs out. Warning at 25% remaining. DM can start, pause, reset, and adjust time in custom minute increments.
 - **Magical Light** — Same timer behavior as torch, but the player screen shows a crystal ball with a soft pulsing white glow instead of a flame.
 - **Natural Light** — Daylight mode with no timer. The torch/crystal ball widget is hidden from the player screen entirely.
-- **Hide timer from players** — Toggle to hide the countdown from the player screen while keeping the flame/crystal visual. The timer keeps running on the DM screen.
+- **Per-timer modes** — Each timer can independently be set to Torch, Magical, or Natural. One character can carry a torch while another has magical light.
+- **Hide timer from players** — Toggle per timer to hide the countdown from the player screen while keeping the flame/crystal visual. The timer keeps running on the DM screen.
 
 ### Torch Extinguish
 
@@ -165,8 +168,6 @@ The output will be in the `dist/` folder:
 
 ## Future Plans
 
-- Multiple torch timers for tracking different party members' light sources
-- Torch dimming effect on the player screen as time runs low
 - Ambient audio/music player
 - More visual effects for the player screen
 - Feedback and feature suggestions welcome — open an issue on GitHub!

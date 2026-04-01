@@ -4,12 +4,18 @@ export type HealthEstimate = 'Uninjured' | 'Injured' | 'Bloodied' | 'Near Death'
 
 export type LightMode = 'torch' | 'natural' | 'magical'
 
-export interface TorchState {
+export interface TimerState {
+  id: string
+  label: string
+  lightMode: LightMode
   timeLeft: number   // seconds
   isRunning: boolean
   isExtinguished: boolean
-  lightMode: LightMode
   hideTimerFromPlayer: boolean
+}
+
+export interface TorchState {
+  timers: TimerState[]
 }
 
 export interface Combatant {

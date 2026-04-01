@@ -13,6 +13,7 @@ import { SessionModal } from './components/session/SessionModal'
 import { DisplaySelector } from './components/display/DisplaySelector'
 import { TabBar, type TabDef } from './components/tabs/TabBar'
 import type { AppState } from '@shared/types'
+import { createDefaultTimer } from '@shared/constants'
 import './App.css'
 
 type TabId = 'combat' | 'travel' | 'media'
@@ -28,11 +29,11 @@ export default function App() {
   const [sessionModalOpen, setSessionModalOpen] = useState(false)
 
   const appState: AppState = useMemo(() => ({
-    torch: torchHook.torch,
+    torch: torchHook.torchState,
     combat: combatHook.combat,
     location: locationHook.location,
     media: mediaHook.media
-  }), [torchHook.torch, combatHook.combat, locationHook.location, mediaHook.media])
+  }), [torchHook.torchState, combatHook.combat, locationHook.location, mediaHook.media])
 
   // Broadcast to player window only when state actually changes
   const prevStateRef = useRef<string>('')
@@ -45,7 +46,21 @@ export default function App() {
   }, [appState])
 
   const handleLoadSession = useCallback((state: AppState) => {
-    torchHook.setTorchState(state.torch)
+    // Backward compatibility: old saves have flat TorchState, new saves have { timers: [...] }
+    if ('timers' in state.torch && Array.isArray((state.torch as any).timers)) {
+      torchHook.setTorchState(state.torch)
+    } else {
+      const old = state.torch as any
+      torchHook.setTorchState({
+        timers: [{
+          ...createDefaultTimer(),
+          lightMode: old.lightMode ?? 'torch',
+          timeLeft: old.timeLeft ?? 3600,
+          isExtinguished: old.isExtinguished ?? false,
+          hideTimerFromPlayer: old.hideTimerFromPlayer ?? false
+        }]
+      })
+    }
     combatHook.setCombatState(state.combat)
     locationHook.setLocation(state.location)
     mediaHook.setMedia({ ...state.media, files: state.media.files ?? [] })
@@ -61,17 +76,19 @@ export default function App() {
         case '1': setActiveTab('combat'); break
         case '2': setActiveTab('travel'); break
         case '3': setActiveTab('media'); break
-        case ' ':
+        case ' ': {
           e.preventDefault()
-          if (torchHook.torch.lightMode === 'natural') break
-          if (torchHook.torch.isRunning) torchHook.stop()
-          else torchHook.start()
+          const firstTimer = torchHook.torchState.timers.find(t => t.lightMode !== 'natural')
+          if (!firstTimer) break
+          if (firstTimer.isRunning) torchHook.stop(firstTimer.id)
+          else torchHook.start(firstTimer.id)
           break
+        }
       }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [torchHook.torch.isRunning, torchHook.torch.lightMode, torchHook.start, torchHook.stop])
+  }, [torchHook.torchState.timers, torchHook.start, torchHook.stop])
 
   // Tab definitions with badges
   const tabs: TabDef[] = useMemo(() => [
@@ -112,7 +129,7 @@ export default function App() {
 
       <main className="dm-main">
         <aside className="dm-sidebar">
-          <TorchPanel {...torchHook} />
+          <TorchPanel torchHook={torchHook} />
           <LocationSidebar
             location={locationHook.location}
             setName={locationHook.setName}

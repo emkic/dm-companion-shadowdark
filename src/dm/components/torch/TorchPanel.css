@@ -3,10 +3,35 @@
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 16px;
+}
+
+.torch-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.torch-panel-header .panel-title {
+  margin: 0;
+}
+
+/* ── Timer Card ── */
+
+.timer-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 8px;
   transition: border-color 0.5s ease;
 }
 
-.torch-panel.low-alert {
+.timer-card:last-child {
+  margin-bottom: 0;
+}
+
+.timer-card.low-alert {
   border-color: var(--danger-deadly);
   box-shadow: 0 0 12px rgba(139, 32, 32, 0.4);
   animation: lowPulse 2s ease-in-out infinite;
@@ -17,15 +42,62 @@
   50% { box-shadow: 0 0 20px rgba(139, 32, 32, 0.7); }
 }
 
+.timer-card-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.timer-name-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 4px 6px;
+  transition: border-color 0.2s;
+}
+
+.timer-name-input:hover {
+  border-color: var(--border);
+}
+
+.timer-name-input:focus {
+  border-color: var(--accent);
+  outline: none;
+  background: var(--bg-panel);
+}
+
+.timer-remove {
+  font-size: 0.75rem;
+  padding: 2px 6px !important;
+  min-width: unset;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.timer-remove:hover {
+  opacity: 1;
+  color: var(--danger-deadly);
+}
+
+/* ── Torch Display (within card) ── */
+
 .torch-display {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 12px 0;
+  margin: 8px 0;
 }
 
 .torch-icon {
-  font-size: 2rem;
+  font-size: 1.6rem;
   transition: filter 0.5s ease;
 }
 
@@ -52,7 +124,7 @@
 }
 
 .torch-time {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   font-family: monospace;
   color: var(--accent);
@@ -71,8 +143,9 @@
 
 .torch-controls {
   display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: 6px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
 }
 
 .torch-adjust {
@@ -80,12 +153,6 @@
   gap: 6px;
   align-items: center;
   flex-wrap: wrap;
-}
-
-.custom-adjust {
-  display: flex;
-  gap: 4px;
-  align-items: center;
 }
 
 .minutes-input {
@@ -100,7 +167,7 @@
 }
 
 .torch-warning {
-  margin-top: 10px;
+  margin-top: 8px;
   color: var(--danger-deadly);
   font-size: 0.85rem;
   font-weight: 600;
@@ -109,13 +176,18 @@
 
 .light-mode-toggle {
   display: flex;
-  gap: 6px;
-  margin-bottom: 12px;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.light-mode-toggle .btn {
+  font-size: 0.75rem;
+  padding: 3px 6px;
 }
 
 .natural-light-info {
   color: #b8a060;
   font-size: 0.9rem;
   text-align: center;
-  padding: 16px 0;
+  padding: 12px 0;
 }

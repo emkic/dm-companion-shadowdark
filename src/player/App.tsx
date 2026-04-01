@@ -8,7 +8,7 @@ import type { AppState } from '@shared/types'
 import { DEFAULT_TORCH_SECONDS, WEATHER_BY_SEASON } from '@shared/constants'
 
 const INITIAL_STATE: AppState = {
-  torch: { timeLeft: DEFAULT_TORCH_SECONDS, isRunning: false, isExtinguished: false, lightMode: 'torch', hideTimerFromPlayer: false },
+  torch: { timers: [{ id: 'default', label: 'Torch', lightMode: 'torch', timeLeft: DEFAULT_TORCH_SECONDS, isRunning: false, isExtinguished: false, hideTimerFromPlayer: false }] },
   combat: { isActive: false, round: 1, currentTurnIndex: 0, combatants: [] },
   location: {
     name: '',

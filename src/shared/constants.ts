@@ -1,7 +1,20 @@
-import type { Season, DangerLevel } from './types'
+import type { Season, DangerLevel, TimerState } from './types'
 
 export const DEFAULT_TORCH_SECONDS = 3600   // 60 minutes
 export const LOW_TORCH_THRESHOLD = 0.25     // below 25% = low alert
+
+let timerCounter = 0
+export function createDefaultTimer(): TimerState {
+  return {
+    id: `timer-${Date.now()}-${timerCounter++}`,
+    label: 'Torch',
+    lightMode: 'torch',
+    timeLeft: DEFAULT_TORCH_SECONDS,
+    isRunning: false,
+    isExtinguished: false,
+    hideTimerFromPlayer: false
+  }
+}
 
 export const WEATHER_BY_SEASON: Record<Season, string[]> = {
   spring: [

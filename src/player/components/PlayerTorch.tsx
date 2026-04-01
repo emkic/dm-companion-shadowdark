@@ -1,5 +1,5 @@
 import React from 'react'
-import type { TorchState } from '@shared/types'
+import type { TorchState, TimerState } from '@shared/types'
 import { DEFAULT_TORCH_SECONDS, LOW_TORCH_THRESHOLD } from '@shared/constants'
 import './PlayerTorch.css'
 
@@ -15,49 +15,98 @@ interface Props {
   isCamping?: boolean
 }
 
-export function PlayerTorch({ torch, hasCampfire, isCamping }: Props) {
-  const fraction = DEFAULT_TORCH_SECONDS > 0 ? torch.timeLeft / DEFAULT_TORCH_SECONDS : 0
+function PlayerTimerItem({ timer }: { timer: TimerState }) {
+  const fraction = DEFAULT_TORCH_SECONDS > 0 ? timer.timeLeft / DEFAULT_TORCH_SECONDS : 0
   const lowAlert = fraction < LOW_TORCH_THRESHOLD
-  const critical = torch.timeLeft <= 60
-
   const dimLevel = Math.max(0, Math.min(1, fraction))
   const brightness = 0.2 + dimLevel * 0.8
+  const isMagical = timer.lightMode === 'magical'
 
-  if (torch.lightMode === 'natural') {
-    return null
-  }
+  return (
+    <div className={`player-torch-item ${lowAlert ? 'low' : ''} ${!timer.isRunning ? 'paused' : ''} ${isMagical ? 'magical' : ''}`}>
+      {isMagical ? (
+        <div className="crystal-wrap" style={{ filter: `brightness(${brightness})` }}>
+          <div className={`crystal-ball ${timer.isRunning ? 'active' : ''} ${lowAlert ? 'dim-crystal' : ''}`}>
+            <div className="crystal-glow" />
+            <div className="crystal-core" />
+            <div className="crystal-highlight" />
+          </div>
+          <div className="crystal-base" />
+        </div>
+      ) : (
+        <div className="torch-flame-wrap">
+          <div
+            className={`torch-flame ${timer.isRunning ? 'burning' : ''} ${lowAlert ? 'dim-flame' : ''}`}
+            style={{ filter: `brightness(${brightness})` }}
+          >
+            <div className="flame-layer flame-outer" />
+            <div className="flame-layer flame-mid" />
+            <div className="flame-layer flame-inner" />
+            <div className="torch-body" />
+          </div>
+        </div>
+      )}
+      {!timer.hideTimerFromPlayer && (
+        <>
+          <div className={`torch-countdown ${isMagical ? 'countdown-magical' : ''} ${lowAlert ? 'countdown-low' : ''}`}>
+            {formatTime(timer.timeLeft)}
+          </div>
+          {!timer.isRunning && timer.timeLeft > 0 && (
+            <div className="torch-paused-label">PAUSED</div>
+          )}
+          {timer.timeLeft === 0 && (
+            <div className="torch-out-label">OUT</div>
+          )}
+        </>
+      )}
+      {timer.label && (
+        <div className={`timer-label ${isMagical ? 'timer-label-magical' : ''}`}>{timer.label}</div>
+      )}
+    </div>
+  )
+}
 
-  // Camping with no campfire — show dark camp text (no darkness overlay)
+export function PlayerTorch({ torch, hasCampfire, isCamping }: Props) {
+  const timers = torch.timers ?? []
+  const nonNaturalTimers = timers.filter(t => t.lightMode !== 'natural')
+  const allExtinguished = nonNaturalTimers.length > 0 && nonNaturalTimers.every(t => t.isExtinguished)
+  const visibleTimers = nonNaturalTimers.filter(t => !t.isExtinguished)
+
+  // Camping with no campfire — show dark camp text
   if (isCamping && !hasCampfire) {
     return (
-      <div className="player-torch">
-        <div className="camp-dark-text">
-          <p>The camp is dark.</p>
-        </div>
-      </div>
-    )
-  }
-
-  // Camping with campfire — show campfire only, no timer
-  if (isCamping && hasCampfire) {
-    return (
-      <div className="player-torch">
-        <div className="campfire-lit-text">Campfire is lit!</div>
-        <div className="campfire-wrap">
-          <div className="campfire active">
-            <div className="campfire-flame campfire-flame-1" />
-            <div className="campfire-flame campfire-flame-2" />
-            <div className="campfire-flame campfire-flame-3" />
-            <div className="campfire-logs" />
-            <div className="campfire-glow" />
+      <div className="player-torches">
+        <div className="player-torch-item">
+          <div className="camp-dark-text">
+            <p>The camp is dark.</p>
           </div>
         </div>
       </div>
     )
   }
 
-  // Not camping — normal torch/extinguished behavior
-  if (torch.isExtinguished) {
+  // Camping with campfire — show campfire only
+  if (isCamping && hasCampfire) {
+    return (
+      <div className="player-torches">
+        <div className="player-torch-item">
+          <div className="campfire-lit-text">Campfire is lit!</div>
+          <div className="campfire-wrap">
+            <div className="campfire active">
+              <div className="campfire-flame campfire-flame-1" />
+              <div className="campfire-flame campfire-flame-2" />
+              <div className="campfire-flame campfire-flame-3" />
+              <div className="campfire-logs" />
+              <div className="campfire-glow" />
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // All torches extinguished — darkness overlay
+  if (allExtinguished) {
     return (
       <div className="darkness-overlay">
         <div className="darkness-vignette" />
@@ -70,45 +119,14 @@ export function PlayerTorch({ torch, hasCampfire, isCamping }: Props) {
     )
   }
 
-  const isMagical = torch.lightMode === 'magical'
+  // No visible timers (all natural or none)
+  if (visibleTimers.length === 0) return null
 
   return (
-    <div className={`player-torch ${lowAlert ? 'low' : ''} ${critical ? 'critical' : ''} ${!torch.isRunning ? 'paused' : ''} ${isMagical ? 'magical' : ''}`}>
-      {isMagical ? (
-        <div className="crystal-wrap" style={{ filter: `brightness(${brightness})` }}>
-          <div className={`crystal-ball ${torch.isRunning ? 'active' : ''} ${lowAlert ? 'dim-crystal' : ''}`}>
-            <div className="crystal-glow" />
-            <div className="crystal-core" />
-            <div className="crystal-highlight" />
-          </div>
-          <div className="crystal-base" />
-        </div>
-      ) : (
-        <div className="torch-flame-wrap">
-          <div
-            className={`torch-flame ${torch.isRunning ? 'burning' : ''} ${lowAlert ? 'dim-flame' : ''}`}
-            style={{ filter: `brightness(${brightness})` }}
-          >
-            <div className="flame-layer flame-outer" />
-            <div className="flame-layer flame-mid" />
-            <div className="flame-layer flame-inner" />
-            <div className="torch-body" />
-          </div>
-        </div>
-      )}
-      {!torch.hideTimerFromPlayer && (
-        <>
-          <div className={`torch-countdown ${isMagical ? 'countdown-magical' : ''} ${lowAlert ? 'countdown-low' : ''}`}>
-            {formatTime(torch.timeLeft)}
-          </div>
-          {!torch.isRunning && torch.timeLeft > 0 && (
-            <div className="torch-paused-label">PAUSED</div>
-          )}
-          {torch.timeLeft === 0 && (
-            <div className="torch-out-label">TORCH OUT</div>
-          )}
-        </>
-      )}
+    <div className="player-torches">
+      {visibleTimers.map(timer => (
+        <PlayerTimerItem key={timer.id} timer={timer} />
+      ))}
     </div>
   )
 }
