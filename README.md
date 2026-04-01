@@ -8,7 +8,7 @@ Published under the Shadowdark RPG Third-Party License and is not affiliated wit
 
 ## Download
 
-**[Download the latest release](https://github.com/emkic/shadowdark-dm-app/releases/latest)**
+**[Download the latest release](https://github.com/emkic/dm-companion-shadowdark/releases/latest)**
 
 - **DMCompanion-Portable.exe** — Just download and run. No install needed.
 - **DM Companion for Shadowdark Setup.exe** — Installer (per-user, no admin required).
@@ -130,8 +130,8 @@ The app automatically keeps your PC and display awake while running, so you neve
 ### Install and Run
 
 ```bash
-git clone https://github.com/emkic/shadowdark-dm-app.git
-cd shadowdark-dm-app
+git clone https://github.com/emkic/dm-companion-shadowdark.git
+cd dm-companion-shadowdark
 npm install
 npm run dev
 ```
