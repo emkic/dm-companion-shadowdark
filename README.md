@@ -84,6 +84,9 @@ The final line pulses in crimson red. The DM can relight at any time to return t
 
 ### Hex Crawling & Travel
 
+<img width="1630" height="1097" alt="image" src="https://github.com/user-attachments/assets/be50d232-7cbb-4395-9e07-2977e8c2dddd" />
+
+
 Full travel and rest tracking based on the hex crawling rules from **Shadowdark Zine 4: River of Night** (page 26):
 
 - **Three activity modes** — Traveling, Dungeon Crawling, or In City/Village. Each mode shows relevant controls.
@@ -114,6 +117,9 @@ Browse a local folder and display images or videos fullscreen on the player scre
 ### Ambiance Player
 
 Set the mood for your session with background music and soundscapes — switch between moods with a single click, no alt-tabbing required.
+
+<img width="2059" height="1332" alt="image" src="https://github.com/user-attachments/assets/ed434f11-9f6b-4ad0-a19d-afdfd34b3c84" />
+
 
 - **Mood presets** — Ship with 7 defaults (Combat, Suspense, Dungeon, Town, Forest, Tavern, Mystery). Create as many custom moods as you like.
 - **Two audio sources per mood** — YouTube playlists/videos, or local audio files (MP3, WAV, OGG, FLAC, M4A, and more).
