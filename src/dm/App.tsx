@@ -4,6 +4,7 @@ import { useCombat } from './hooks/useCombat'
 import { useLocation } from './hooks/useLocation'
 import { useMedia } from './hooks/useMedia'
 import { useSession } from './hooks/useSession'
+import { useAmbiance } from './hooks/useAmbiance'
 import { TorchPanel } from './components/torch/TorchPanel'
 import { LocationSidebar } from './components/location/LocationSidebar'
 import { CombatPanel } from './components/combat/CombatPanel'
@@ -12,6 +13,8 @@ import { MediaPanel } from './components/media/MediaPanel'
 import { SessionModal } from './components/session/SessionModal'
 import { DisplaySelector } from './components/display/DisplaySelector'
 import { TabBar, type TabDef } from './components/tabs/TabBar'
+import { YouTubeEmbed } from './components/ambiance/YouTubeEmbed'
+import { MiniPlayerBar } from './components/ambiance/MiniPlayerBar'
 import type { AppState } from '@shared/types'
 import { createDefaultTimer } from '@shared/constants'
 import './App.css'
@@ -24,6 +27,7 @@ export default function App() {
   const locationHook = useLocation()
   const mediaHook = useMedia()
   const sessionHook = useSession()
+  const ambianceHook = useAmbiance()
 
   const [activeTab, setActiveTab] = useState<TabId>('combat')
   const [sessionModalOpen, setSessionModalOpen] = useState(false)
@@ -110,12 +114,15 @@ export default function App() {
       id: 'media',
       label: 'Media',
       icon: '🖼',
-      badge: mediaHook.media.isShowing ? '1' : null,
+      badge: mediaHook.media.isShowing
+        ? (ambianceHook.ambiance.isPlaying ? '🖼🎵' : '1')
+        : (ambianceHook.ambiance.isPlaying ? '🎵' : null),
     }
-  ], [combatHook.combat.isActive, combatHook.combat.round, locationHook.location.activity, locationHook.location.hexesRemaining, mediaHook.media.isShowing])
+  ], [combatHook.combat.isActive, combatHook.combat.round, locationHook.location.activity, locationHook.location.hexesRemaining, mediaHook.media.isShowing, ambianceHook.ambiance.isPlaying])
 
   return (
     <div className="dm-app">
+      <YouTubeEmbed containerRef={ambianceHook.playerContainerRef} />
       <header className="dm-header">
         <h1 className="app-title">DM Companion</h1>
         <DisplaySelector />
@@ -163,10 +170,12 @@ export default function App() {
                 reorderWatches={locationHook.reorderWatches}
               />
             )}
-            {activeTab === 'media' && <MediaPanel {...mediaHook} />}
+            {activeTab === 'media' && <MediaPanel {...mediaHook} ambianceHook={ambianceHook} />}
           </div>
         </div>
       </main>
+
+      <MiniPlayerBar ambianceHook={ambianceHook} />
 
       {sessionModalOpen && (
         <SessionModal

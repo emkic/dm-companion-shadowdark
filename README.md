@@ -111,6 +111,20 @@ Show the current location on the player screen:
 
 Browse a local folder and display images or videos fullscreen on the player screen. Supports common formats (jpg, png, gif, webm, mp4, etc). Multi-column thumbnail grid for easy browsing. Useful for showing maps, artwork, handouts, or ambient scenes.
 
+### Ambiance Player
+
+Set the mood for your session with background music and soundscapes — switch between moods with a single click, no alt-tabbing required.
+
+- **Mood presets** — Ship with 7 defaults (Combat, Suspense, Dungeon, Town, Forest, Tavern, Mystery). Create as many custom moods as you like.
+- **Two audio sources per mood** — YouTube playlists/videos, or local audio files (MP3, WAV, OGG, FLAC, M4A, and more).
+- **Tracklist** — When playing local files, a full tracklist appears so you can see and jump between tracks.
+- **Mini-player bar** — Always visible at the bottom of the DM panel. Play/pause, skip, volume, and favorited mood shortcuts — all without switching tabs.
+- **Favorites** — Star any mood to pin it as a one-click shortcut in the mini-player bar.
+- **Crossfade** — Smooth 400ms fade when switching between moods so transitions never feel jarring.
+- **Per-mood volume + shuffle** — Each mood has its own volume level and shuffle toggle. A master volume slider controls overall loudness.
+- **Mood editor** — Full modal editor to customize mood names, colors, audio source, files/URLs, volume, shuffle, and favorite status.
+- **Volume persisted** — Master volume is saved across sessions so you don't have to adjust it every time.
+
 ### Session Save/Load
 
 Save the entire app state (combat, torch, location, media) as a named session. Load it back later to pick up exactly where you left off. Overwrite existing sessions with current state, or delete old ones.
@@ -168,6 +182,19 @@ The output will be in the `dist/` folder:
 
 ## Future Plans
 
-- Ambient audio/music player
 - More visual effects for the player screen
 - Feedback and feature suggestions welcome — open an issue on GitHub!
+
+---
+
+## Calling All Music Creators
+
+Are you a musician or sound designer with some kickass ambient tracks, battle themes, or atmospheric soundscapes? **I'd love to hear from you.**
+
+This project is fully open source, and I'm looking for contributors who want to help build a library of music and soundscapes that DMs can use right out of the box. Tracks that work best are:
+
+- **Long-running** — 10+ minute tracks or seamless loops, so the DM doesn't have to keep switching songs mid-session
+- **Loopable** — Ambient soundscapes, tavern noise, dungeon drips, forest atmosphere, combat tension — anything that can play on repeat without feeling repetitive
+- **Mood-appropriate** — Think dark dungeons, tense combat, peaceful towns, eerie mystery, crackling campfires
+
+If you want your music featured in the app and credited as a contributor, don't hesitate to reach out! Open an issue, submit a PR, or contact me directly. Let's build something great for the TTRPG community together.

@@ -9,5 +9,10 @@ export const IpcChannel = {
   OPEN_IMAGE_DIALOG: 'dialog:open-image',
   READ_MEDIA_FOLDER: 'media:read-folder',
   GET_DISPLAYS: 'display:get-all',
-  MOVE_PLAYER_TO_DISPLAY: 'display:move-player'
+  MOVE_PLAYER_TO_DISPLAY: 'display:move-player',
+  LOAD_MOOD_PRESETS: 'ambiance:load-presets',
+  SAVE_MOOD_PRESETS: 'ambiance:save-presets',
+  LOAD_AMBIANCE_VOLUME: 'ambiance:load-volume',
+  SAVE_AMBIANCE_VOLUME: 'ambiance:save-volume',
+  OPEN_AUDIO_DIALOG: 'dialog:open-audio'
 } as const

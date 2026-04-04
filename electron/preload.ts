@@ -12,7 +12,12 @@ const CH = {
   OPEN_IMAGE_DIALOG: 'dialog:open-image',
   READ_MEDIA_FOLDER: 'media:read-folder',
   GET_DISPLAYS: 'display:get-all',
-  MOVE_PLAYER_TO_DISPLAY: 'display:move-player'
+  MOVE_PLAYER_TO_DISPLAY: 'display:move-player',
+  LOAD_MOOD_PRESETS: 'ambiance:load-presets',
+  SAVE_MOOD_PRESETS: 'ambiance:save-presets',
+  LOAD_AMBIANCE_VOLUME: 'ambiance:load-volume',
+  SAVE_AMBIANCE_VOLUME: 'ambiance:save-volume',
+  OPEN_AUDIO_DIALOG: 'dialog:open-audio'
 }
 
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -36,5 +41,15 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getDisplays: () =>
     ipcRenderer.invoke(CH.GET_DISPLAYS),
   movePlayerToDisplay: (displayId: number) =>
-    ipcRenderer.invoke(CH.MOVE_PLAYER_TO_DISPLAY, displayId)
+    ipcRenderer.invoke(CH.MOVE_PLAYER_TO_DISPLAY, displayId),
+  loadMoodPresets: () =>
+    ipcRenderer.invoke(CH.LOAD_MOOD_PRESETS),
+  saveMoodPresets: (presets: unknown[]) =>
+    ipcRenderer.invoke(CH.SAVE_MOOD_PRESETS, presets),
+  loadAmbianceVolume: () =>
+    ipcRenderer.invoke(CH.LOAD_AMBIANCE_VOLUME),
+  saveAmbianceVolume: (volume: number) =>
+    ipcRenderer.invoke(CH.SAVE_AMBIANCE_VOLUME, volume),
+  openAudioDialog: () =>
+    ipcRenderer.invoke(CH.OPEN_AUDIO_DIALOG)
 })

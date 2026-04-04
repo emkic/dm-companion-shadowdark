@@ -2,13 +2,14 @@ import { ipcMain, dialog } from 'electron'
 import * as fs from 'fs'
 import * as path from 'path'
 import { IpcChannel } from '../../src/shared/ipcChannels'
-import { saveSession, loadSession, listSessions, deleteSession } from '../store/store'
+import { saveSession, loadSession, listSessions, deleteSession, loadMoodPresets, saveMoodPresets, loadAmbianceVolume, saveAmbianceVolume } from '../store/store'
 import { broadcastToPlayer, movePlayerToDisplay } from './state-bridge'
 import { getAllDisplays } from '../utils/display'
-import type { AppState } from '../../src/shared/types'
+import type { AppState, MoodPreset } from '../../src/shared/types'
 
 const IMAGE_EXTS = new Set(['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp'])
 const VIDEO_EXTS = new Set(['.mp4', '.webm', '.mov', '.mkv'])
+const AUDIO_EXTS = new Set(['.mp3', '.wav', '.ogg', '.flac', '.m4a', '.aac', '.wma', '.webm'])
 
 export function registerIpcHandlers(): void {
   ipcMain.on(IpcChannel.BROADCAST_STATE, (_event, state: AppState) => {
@@ -58,6 +59,33 @@ export function registerIpcHandlers(): void {
 
   ipcMain.handle(IpcChannel.MOVE_PLAYER_TO_DISPLAY, (_event, displayId: number) => {
     return movePlayerToDisplay(displayId)
+  })
+
+  ipcMain.handle(IpcChannel.LOAD_MOOD_PRESETS, () => {
+    return loadMoodPresets()
+  })
+
+  ipcMain.handle(IpcChannel.SAVE_MOOD_PRESETS, (_event, presets: MoodPreset[]) => {
+    saveMoodPresets(presets)
+  })
+
+  ipcMain.handle(IpcChannel.LOAD_AMBIANCE_VOLUME, () => {
+    return loadAmbianceVolume()
+  })
+
+  ipcMain.handle(IpcChannel.SAVE_AMBIANCE_VOLUME, (_event, volume: number) => {
+    saveAmbianceVolume(volume)
+  })
+
+  ipcMain.handle(IpcChannel.OPEN_AUDIO_DIALOG, async (event) => {
+    const win = require('electron').BrowserWindow.fromWebContents(event.sender)
+    const result = await dialog.showOpenDialog(win!, {
+      properties: ['openFile', 'multiSelections'],
+      filters: [
+        { name: 'Audio Files', extensions: ['mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac', 'wma', 'webm'] }
+      ]
+    })
+    return result.canceled ? [] : result.filePaths
   })
 
   ipcMain.handle(IpcChannel.READ_MEDIA_FOLDER, (_event, folderPath: string) => {

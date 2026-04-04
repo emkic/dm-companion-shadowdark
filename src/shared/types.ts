@@ -115,3 +115,25 @@ export interface DisplayInfo {
   height: number
   isPrimary: boolean
 }
+
+// Ambiance / Music
+export type AmbianceSource = 'youtube' | 'local'
+
+export interface MoodPreset {
+  id: string
+  name: string            // e.g. "Combat", "Dungeon"
+  color: string           // hex color for the mood button
+  source: AmbianceSource  // 'youtube' or 'local' audio files
+  youtubeUrl: string      // YouTube playlist or video URL (when source = 'youtube')
+  audioFiles: string[]    // local audio file paths (when source = 'local')
+  volume: number          // 0–100
+  shuffle: boolean
+  favorite: boolean       // show as shortcut in mini-player bar
+}
+
+export interface AmbianceState {
+  isPlaying: boolean
+  currentMoodId: string | null
+  currentTrackTitle: string
+  volume: number      // 0–100 master volume
+}

@@ -17,10 +17,11 @@
 }
 
 .app-title {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-family: 'JSL Blackletter', serif;
+  font-size: 1.9rem;
+  font-weight: 400;
   color: var(--accent);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   white-space: nowrap;
 }
 

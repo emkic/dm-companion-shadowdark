@@ -1,0 +1,201 @@
+.ambiance-player {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ambiance-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ambiance-now-playing {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  background: rgba(200, 168, 75, 0.1);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  font-size: 0.82rem;
+  color: var(--text);
+  min-width: 0;
+}
+
+.ambiance-mood-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ambiance-track-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ambiance-mood-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ambiance-mood-item {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.ambiance-fav-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.75rem;
+  color: var(--text);
+  opacity: 0.3;
+  padding: 0 2px;
+  transition: opacity 0.15s, color 0.15s;
+}
+
+.ambiance-fav-btn:hover {
+  opacity: 0.7;
+}
+
+.ambiance-fav-btn.favorited {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.ambiance-mood-btn {
+  padding: 5px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ambiance-mood-btn:hover:not(.unconfigured) {
+  border-color: var(--mood-color, var(--accent));
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ambiance-mood-btn.active {
+  border-width: 2px;
+  font-weight: 600;
+  box-shadow: 0 0 8px color-mix(in srgb, var(--mood-color, var(--accent)) 40%, transparent);
+}
+
+.ambiance-mood-btn.unconfigured {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.ambiance-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ambiance-control-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.ambiance-volume {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  max-width: 220px;
+}
+
+.ambiance-volume-icon {
+  font-size: 0.85rem;
+}
+
+.ambiance-volume-slider {
+  flex: 1;
+  accent-color: var(--accent);
+  height: 4px;
+}
+
+.ambiance-volume-value {
+  font-size: 0.75rem;
+  color: var(--text);
+  opacity: 0.6;
+  width: 24px;
+  text-align: right;
+}
+
+/* Tracklist */
+.ambiance-tracklist {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ambiance-tracklist-header {
+  font-size: 0.75rem;
+  color: var(--text);
+  opacity: 0.5;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ambiance-tracklist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.ambiance-tracklist-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text);
+  font-size: 0.8rem;
+  text-align: left;
+  transition: all 0.12s;
+}
+
+.ambiance-tracklist-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ambiance-tracklist-item.active {
+  font-weight: 600;
+}
+
+.ambiance-tracklist-index {
+  width: 18px;
+  text-align: right;
+  opacity: 0.4;
+  font-size: 0.72rem;
+  flex-shrink: 0;
+}
+
+.ambiance-tracklist-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ambiance-tracklist-playing {
+  font-size: 0.65rem;
+  opacity: 0.7;
+  flex-shrink: 0;
+}

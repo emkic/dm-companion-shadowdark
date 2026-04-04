@@ -131,3 +131,8 @@
   font-style: italic;
   font-size: 0.85rem;
 }
+
+.media-divider {
+  border-top: 1px solid var(--border);
+  margin: 4px 0;
+}

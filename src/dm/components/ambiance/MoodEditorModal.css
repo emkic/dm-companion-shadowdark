@@ -1,0 +1,210 @@
+.mood-editor-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.mood-editor {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  width: 520px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.mood-editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.mood-editor-list {
+  overflow-y: auto;
+  flex: 1;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mood-editor-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.mood-editor-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mood-editor-color {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 4px;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+}
+
+.mood-editor-name {
+  flex: 1;
+  font-weight: 600;
+}
+
+.mood-editor-url {
+  flex: 1;
+  font-size: 0.78rem;
+}
+
+.mood-editor-settings {
+  font-size: 0.78rem;
+  color: var(--text);
+  opacity: 0.8;
+  gap: 16px;
+}
+
+.mood-editor-setting {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.mood-editor-volume {
+  width: 80px;
+  accent-color: var(--accent);
+}
+
+.mood-editor-vol-value {
+  width: 24px;
+  text-align: right;
+  font-size: 0.75rem;
+}
+
+/* Source toggle */
+.mood-editor-source-row {
+  gap: 10px;
+}
+
+.mood-editor-source-label {
+  font-size: 0.78rem;
+  color: var(--text);
+  opacity: 0.7;
+}
+
+.mood-editor-source-toggle {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.mood-source-btn {
+  padding: 3px 10px;
+  font-size: 0.75rem;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.15s;
+}
+
+.mood-source-btn.active {
+  background: var(--accent);
+  color: #fff;
+  opacity: 1;
+}
+
+.mood-source-btn:hover:not(.active) {
+  opacity: 0.9;
+  background: var(--border);
+}
+
+/* Local audio file list */
+.mood-editor-files-section {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.mood-editor-file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.mood-editor-file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 3px 8px;
+  background: var(--bg-panel);
+  border-radius: 3px;
+  font-size: 0.75rem;
+}
+
+.mood-editor-file-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text);
+  opacity: 0.85;
+}
+
+.mood-editor-file-remove {
+  border: none;
+  background: transparent;
+  color: var(--text);
+  opacity: 0.5;
+  cursor: pointer;
+  font-size: 0.7rem;
+  padding: 0 2px;
+}
+
+.mood-editor-file-remove:hover {
+  opacity: 1;
+  color: var(--danger, #c84040);
+}
+
+.mood-editor-hint {
+  font-size: 0.75rem;
+  color: var(--text);
+  opacity: 0.5;
+  font-style: italic;
+}
+
+.mood-editor-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+}
+
+.mood-editor-footer-right {
+  display: flex;
+  gap: 8px;
+}

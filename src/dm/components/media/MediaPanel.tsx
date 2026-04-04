@@ -1,5 +1,7 @@
 import React from 'react'
 import type { UseMediaReturn } from '../../hooks/useMedia'
+import type { UseAmbianceReturn } from '../../hooks/useAmbiance'
+import { AmbiancePlayer } from '../ambiance/AmbiancePlayer'
 import './MediaPanel.css'
 
 function getFileName(filePath: string): string {
@@ -11,9 +13,9 @@ function isVideo(filePath: string): boolean {
   return ['mp4', 'webm', 'mov', 'mkv'].includes(ext)
 }
 
-type Props = UseMediaReturn
+type Props = UseMediaReturn & { ambianceHook: UseAmbianceReturn }
 
-export function MediaPanel({ media, openFolder, showFile, hideMedia }: Props) {
+export function MediaPanel({ media, openFolder, showFile, hideMedia, ambianceHook }: Props) {
   return (
     <div className="media-panel">
       <div className="media-header">
@@ -79,6 +81,10 @@ export function MediaPanel({ media, openFolder, showFile, hideMedia }: Props) {
           </div>
         )}
       </div>
+
+      <div className="media-divider" />
+
+      <AmbiancePlayer ambianceHook={ambianceHook} />
     </div>
   )
 }
