@@ -7,7 +7,8 @@
     "dev": "electron-vite dev",
     "build": "electron-vite build",
     "preview": "electron-vite preview",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "package": "electron-vite build && electron-builder --win"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",
@@ -42,6 +43,11 @@
     },
     "portable": {
       "artifactName": "DMCompanion-Portable.exe"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "category": "public.app-category.games",
+      "artifactName": "DMCompanion-${version}-mac.${ext}"
     },
     "directories": {
       "output": "dist"
