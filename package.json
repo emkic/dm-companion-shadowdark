@@ -45,7 +45,7 @@
       "artifactName": "DMCompanion-Portable.exe"
     },
     "mac": {
-      "target": ["dmg"],
+      "target": ["zip"],
       "category": "public.app-category.games",
       "artifactName": "DMCompanion-${version}-mac.${ext}"
     },
