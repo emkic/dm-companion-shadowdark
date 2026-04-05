@@ -25,25 +25,20 @@ function PlayerTimerItem({ timer }: { timer: TimerState }) {
   return (
     <div className={`player-torch-item ${lowAlert ? 'low' : ''} ${!timer.isRunning ? 'paused' : ''} ${isMagical ? 'magical' : ''}`}>
       {isMagical ? (
-        <div className="crystal-wrap" style={{ filter: `brightness(${brightness})` }}>
-          <div className={`crystal-ball ${timer.isRunning ? 'active' : ''} ${lowAlert ? 'dim-crystal' : ''}`}>
-            <div className="crystal-glow" />
-            <div className="crystal-core" />
-            <div className="crystal-highlight" />
-          </div>
-          <div className="crystal-base" />
+        <div className="sprite-magical-wrap">
+          <div className={`sprite-magical-glow ${lowAlert ? 'dim' : ''}`} />
+          <div
+            className={`sprite-fire sprite-magical ${!timer.isRunning ? 'paused' : ''} ${lowAlert ? 'dim' : ''}`}
+            style={{ filter: `hue-rotate(180deg) brightness(${brightness * 1.3}) saturate(1.4) drop-shadow(0 0 16px rgba(140, 180, 255, ${brightness * 0.5}))` }}
+          />
         </div>
       ) : (
-        <div className="torch-flame-wrap">
+        <div className="sprite-torch-wrap">
+          <div className={`sprite-torch-glow ${lowAlert ? 'dim' : ''}`} />
           <div
-            className={`torch-flame ${timer.isRunning ? 'burning' : ''} ${lowAlert ? 'dim-flame' : ''}`}
+            className={`sprite-fire sprite-torch ${!timer.isRunning ? 'paused' : ''} ${lowAlert ? 'dim' : ''}`}
             style={{ filter: `brightness(${brightness})` }}
-          >
-            <div className="flame-layer flame-outer" />
-            <div className="flame-layer flame-mid" />
-            <div className="flame-layer flame-inner" />
-            <div className="torch-body" />
-          </div>
+          />
         </div>
       )}
       {!timer.hideTimerFromPlayer && (
@@ -91,14 +86,9 @@ export function PlayerTorch({ torch, hasCampfire, isCamping }: Props) {
       <div className="player-torches">
         <div className="player-torch-item">
           <div className="campfire-lit-text">Campfire is lit!</div>
-          <div className="campfire-wrap">
-            <div className="campfire active">
-              <div className="campfire-flame campfire-flame-1" />
-              <div className="campfire-flame campfire-flame-2" />
-              <div className="campfire-flame campfire-flame-3" />
-              <div className="campfire-logs" />
-              <div className="campfire-glow" />
-            </div>
+          <div className="sprite-campfire-wrap">
+            <div className="sprite-fire sprite-campfire" />
+            <div className="sprite-campfire-glow" />
           </div>
         </div>
       </div>

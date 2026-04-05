@@ -2,12 +2,12 @@
 
 .player-torches {
   position: fixed;
-  top: 28px;
+  top: 16px;
   right: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 0px;
   z-index: 100;
 }
 
@@ -17,7 +17,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 0;
 }
 
 .player-torch-item.low {
@@ -29,91 +29,195 @@
   50%       { filter: drop-shadow(0 0 28px rgba(200, 40, 10, 0.9)); }
 }
 
-/* Torch flame */
-.torch-flame-wrap {
-  position: relative;
-  width: 48px;
-  height: 76px;
-}
+/* ── Sprite animation (shared) ── */
 
-.torch-flame {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
+.sprite-fire {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  background-image: url('../../assets/vfx_fire_vol_3/sprite_sheets_96x96/vfx_fire_vol_3-Sheet.png');
+  background-repeat: no-repeat;
   transition: filter 1.2s ease;
 }
 
-.torch-flame.burning .flame-outer { animation: flameOuter 0.4s ease-in-out infinite alternate; }
-.torch-flame.burning .flame-mid   { animation: flameMid   0.3s ease-in-out infinite alternate; }
-.torch-flame.burning .flame-inner { animation: flameInner 0.25s ease-in-out infinite alternate; }
+/* ── Torch (row 1 / vfx_5, 9 frames) ── */
 
-.flame-layer {
+.sprite-torch-wrap {
+  position: relative;
+  width: 192px;   /* 96 * 2 */
+  height: 192px;  /* 96 * 2 */
+}
+
+.sprite-torch-glow {
   position: absolute;
-  border-radius: 50% 50% 30% 30%;
+  top: 15%;
+  left: 50%;
+  width: 160px;
+  height: 160px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 140, 30, 0.35) 0%,
+    rgba(255, 100, 0, 0.15) 35%,
+    rgba(200, 60, 0, 0.05) 55%,
+    transparent 70%
+  );
+  pointer-events: none;
+  animation: torchGlowPulse 3s ease-in-out infinite;
 }
 
-.flame-outer {
-  bottom: 22px;
-  width: 28px;
-  height: 42px;
-  background: radial-gradient(ellipse at 50% 80%, #c84010 0%, #e06010 40%, #e0a020 80%, transparent 100%);
-  opacity: 0.85;
+.sprite-torch-glow.dim {
+  animation: none;
+  opacity: 0.3;
 }
 
-.flame-mid {
-  bottom: 22px;
-  width: 18px;
-  height: 32px;
-  background: radial-gradient(ellipse at 50% 80%, #e05010 0%, #e08020 50%, #f0c040 90%, transparent 100%);
-  opacity: 0.9;
+@keyframes torchGlowPulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.2);
+  }
 }
 
-.flame-inner {
-  bottom: 22px;
-  width: 10px;
-  height: 22px;
-  background: radial-gradient(ellipse at 50% 80%, #fff8e0 0%, #f0e080 60%, transparent 100%);
-  opacity: 0.95;
+.sprite-torch {
+  width: 192px;
+  height: 192px;
+  background-size: 2304px 960px;  /* 1152*2, 480*2 */
+  background-position: 0 0;       /* row 1 */
+  animation: playTorch 0.8s steps(9) infinite;
 }
 
-.torch-body {
+.sprite-torch.paused {
+  animation-play-state: paused;
+}
+
+.sprite-torch.dim {
+  filter: brightness(0.5) saturate(0.6);
+}
+
+@keyframes playTorch {
+  to { background-position: -1728px 0; }  /* 9 * 192 */
+}
+
+/* ── Magical Light (torch row 4, recolored) ── */
+
+.player-torch-item.magical.low {
+  animation: magicalPulse 2s ease-in-out infinite;
+}
+
+@keyframes magicalPulse {
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(180, 180, 220, 0.4)); }
+  50%       { filter: drop-shadow(0 0 28px rgba(140, 100, 200, 0.9)); }
+}
+
+.sprite-magical-wrap {
+  position: relative;
+  width: 192px;
+  height: 192px;
+}
+
+.sprite-magical-glow {
   position: absolute;
-  bottom: 0;
-  width: 12px;
-  height: 28px;
-  background: linear-gradient(to bottom, #6b3a1f, #4a2510);
-  border-radius: 2px 2px 5px 5px;
+  top: 10%;
+  left: 50%;
+  width: 140px;
+  height: 140px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(140, 180, 255, 0.4) 0%,
+    rgba(100, 140, 240, 0.2) 30%,
+    rgba(80, 120, 220, 0.08) 55%,
+    transparent 70%
+  );
+  pointer-events: none;
+  animation: magicalGlowPulse 3s ease-in-out infinite;
 }
 
-@keyframes flameOuter {
-  from { transform: scaleX(1) scaleY(1) translateY(0); opacity: 0.85; }
-  to   { transform: scaleX(0.9) scaleY(1.08) translateY(-2px); opacity: 0.7; }
-}
-@keyframes flameMid {
-  from { transform: scaleX(1) scaleY(1) translateX(0); }
-  to   { transform: scaleX(1.1) scaleY(0.95) translateX(1px); }
-}
-@keyframes flameInner {
-  from { transform: scaleY(1) translateY(0); }
-  to   { transform: scaleY(1.15) translateY(-3px); }
+.sprite-magical-glow.dim {
+  animation: none;
+  opacity: 0.3;
 }
 
-.torch-flame.dim-flame .flame-outer {
-  background: radial-gradient(ellipse at 50% 80%, #602008 0%, #903010 40%, #804010 80%, transparent 100%);
+@keyframes magicalGlowPulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.3);
+  }
 }
-.torch-flame.dim-flame .flame-mid {
-  background: radial-gradient(ellipse at 50% 80%, #702010 0%, #803010 50%, #904020 90%, transparent 100%);
+
+.sprite-magical {
+  position: relative;
+  z-index: 1;
+  width: 192px;
+  height: 192px;
+  background-size: 2304px 960px;
+  background-position: 0 0;          /* row 1, same as torch */
+  animation: playTorch 0.8s steps(9) infinite;
+  filter: hue-rotate(180deg) brightness(1.3) saturate(1.4)
+          drop-shadow(0 0 16px rgba(140, 180, 255, 0.5));
 }
-.torch-flame.dim-flame .flame-inner {
-  background: radial-gradient(ellipse at 50% 80%, #c09050 0%, #906040 60%, transparent 100%);
+
+.sprite-magical.paused {
+  animation-play-state: paused;
+}
+
+.sprite-magical.dim {
+  filter: hue-rotate(180deg) brightness(0.6) saturate(0.5)
+          drop-shadow(0 0 8px rgba(140, 180, 255, 0.2));
+}
+
+/* ── Campfire (row 3, 10 frames) ── */
+
+.sprite-campfire-wrap {
+  position: relative;
+  width: 240px;   /* 96 * 2.5 */
+  height: 240px;  /* 96 * 2.5 */
+}
+
+.sprite-campfire {
+  width: 240px;
+  height: 240px;
+  background-size: 2880px 1200px;  /* 1152*2.5, 480*2.5 */
+  background-position: 0 -480px;    /* row 3: 192*2.5 = 480 */
+  animation: playCampfire 0.9s steps(10) infinite;
+}
+
+@keyframes playCampfire {
+  to { background-position: -2400px -480px; }  /* 10 * 240 */
+}
+
+.sprite-campfire-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(255, 120, 20, 0.3) 0%, rgba(255, 80, 0, 0.1) 40%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  animation: campGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes campGlow {
+  from { opacity: 0.6; }
+  to   { opacity: 1; }
 }
 
 /* ── Countdown ── */
 
 .torch-countdown {
+  margin-top: -30px;
   font-family: 'Montserrat', monospace;
   font-size: 2.2rem;
   font-weight: 700;
@@ -173,154 +277,6 @@
   color: rgba(200, 200, 232, 0.8);
 }
 
-/* ── Magical Crystal Ball ── */
-
-.player-torch-item.magical.low {
-  animation: crystalPulseAlert 2s ease-in-out infinite;
-}
-
-@keyframes crystalPulseAlert {
-  0%, 100% { filter: drop-shadow(0 0 10px rgba(180, 180, 220, 0.4)); }
-  50%       { filter: drop-shadow(0 0 28px rgba(140, 100, 200, 0.9)); }
-}
-
-.crystal-wrap {
-  position: relative;
-  width: 48px;
-  height: 76px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  transition: filter 1.2s ease;
-}
-
-.crystal-ball {
-  position: relative;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 35% 35%,
-    rgba(220, 220, 255, 0.3) 0%,
-    rgba(160, 160, 200, 0.15) 40%,
-    rgba(80, 80, 120, 0.1) 70%,
-    rgba(40, 40, 60, 0.05) 100%
-  );
-  border: 2px solid rgba(180, 180, 220, 0.25);
-}
-
-.crystal-glow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 68px;
-  height: 68px;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at center,
-    rgba(220, 220, 255, 0.5) 0%,
-    rgba(180, 180, 240, 0.25) 30%,
-    rgba(140, 140, 220, 0.1) 55%,
-    transparent 70%
-  );
-  opacity: 0.3;
-  pointer-events: none;
-}
-
-.crystal-ball.active .crystal-glow {
-  animation: crystalPulse 3s ease-in-out infinite;
-}
-
-@keyframes crystalPulse {
-  0%, 100% {
-    opacity: 0.4;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.3);
-  }
-}
-
-.crystal-core {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 16px;
-  height: 16px;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(210, 210, 255, 0.6) 40%,
-    transparent 100%
-  );
-  box-shadow: 0 0 10px rgba(220, 220, 255, 0.4);
-  opacity: 0.5;
-}
-
-.crystal-ball.active .crystal-core {
-  animation: corePulse 3s ease-in-out infinite;
-}
-
-@keyframes corePulse {
-  0%, 100% {
-    opacity: 0.6;
-    box-shadow: 0 0 8px rgba(220, 220, 255, 0.5),
-                0 0 16px rgba(200, 200, 255, 0.2);
-  }
-  50% {
-    opacity: 1;
-    box-shadow: 0 0 18px rgba(230, 230, 255, 0.9),
-                0 0 36px rgba(200, 200, 255, 0.5),
-                0 0 54px rgba(180, 180, 240, 0.2);
-  }
-}
-
-.crystal-highlight {
-  position: absolute;
-  top: 7px;
-  left: 10px;
-  width: 9px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
-  transform: rotate(-30deg);
-}
-
-.crystal-base {
-  width: 20px;
-  height: 8px;
-  background: linear-gradient(to bottom, #8080a0, #606080);
-  border-radius: 2px 2px 6px 6px;
-  margin-top: -2px;
-}
-
-.crystal-ball.dim-crystal {
-  border-color: rgba(120, 120, 160, 0.2);
-}
-
-.crystal-ball.dim-crystal .crystal-glow {
-  background: radial-gradient(
-    circle at center,
-    rgba(160, 160, 200, 0.4) 0%,
-    rgba(120, 120, 160, 0.2) 40%,
-    transparent 70%
-  );
-}
-
-.crystal-ball.dim-crystal .crystal-core {
-  background: radial-gradient(
-    circle at center,
-    rgba(180, 180, 220, 0.6) 0%,
-    rgba(140, 140, 180, 0.3) 50%,
-    transparent 100%
-  );
-}
-
 .torch-countdown.countdown-magical {
   color: #c8c8e8;
   text-shadow: 0 0 16px rgba(180, 180, 240, 0.7),
@@ -331,116 +287,6 @@
   color: #a060c0;
   text-shadow: 0 0 18px rgba(160, 80, 200, 0.9),
                0 2px 6px rgba(0,0,0,0.9);
-}
-
-/* ── Campfire ── */
-
-.campfire-wrap {
-  position: relative;
-  width: 80px;
-  height: 80px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-
-.campfire {
-  position: relative;
-  width: 80px;
-  height: 80px;
-}
-
-.campfire-flame {
-  position: absolute;
-  bottom: 18px;
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-}
-
-.campfire-flame-1 {
-  left: 50%;
-  transform: translateX(-50%);
-  width: 28px;
-  height: 40px;
-  background: radial-gradient(ellipse at bottom, #ff6600 0%, #ff3300 40%, transparent 70%);
-  animation: campFlicker1 0.8s ease-in-out infinite alternate;
-}
-
-.campfire-flame-2 {
-  left: 40%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 32px;
-  background: radial-gradient(ellipse at bottom, #ffaa00 0%, #ff6600 50%, transparent 75%);
-  animation: campFlicker2 0.6s ease-in-out infinite alternate;
-}
-
-.campfire-flame-3 {
-  left: 60%;
-  transform: translateX(-50%);
-  width: 18px;
-  height: 28px;
-  background: radial-gradient(ellipse at bottom, #ffcc00 0%, #ff8800 50%, transparent 75%);
-  animation: campFlicker3 0.7s ease-in-out infinite alternate;
-}
-
-.campfire-logs {
-  position: absolute;
-  bottom: 6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 50px;
-  height: 14px;
-  background: linear-gradient(to top, #3a2010, #5a3520);
-  border-radius: 3px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.6);
-}
-
-.campfire-logs::before {
-  content: '';
-  position: absolute;
-  top: -3px;
-  left: 5px;
-  right: 5px;
-  height: 10px;
-  background: linear-gradient(to top, #4a2a15, #6a4030);
-  border-radius: 3px;
-  transform: rotate(-8deg);
-}
-
-.campfire-glow {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
-  height: 60px;
-  background: radial-gradient(ellipse at center bottom, rgba(255, 100, 0, 0.3), transparent 70%);
-  pointer-events: none;
-  animation: campGlow 2s ease-in-out infinite alternate;
-}
-
-.campfire.active .campfire-flame {
-  animation-play-state: running;
-}
-
-@keyframes campFlicker1 {
-  from { height: 40px; opacity: 0.9; }
-  to   { height: 46px; opacity: 1; }
-}
-
-@keyframes campFlicker2 {
-  from { height: 32px; opacity: 0.85; }
-  to   { height: 36px; opacity: 1; }
-}
-
-@keyframes campFlicker3 {
-  from { height: 28px; opacity: 0.8; }
-  to   { height: 34px; opacity: 1; }
-}
-
-@keyframes campGlow {
-  from { opacity: 0.6; }
-  to   { opacity: 1; }
 }
 
 /* ── Darkness Overlay (All Extinguished) ── */
