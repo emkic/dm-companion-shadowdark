@@ -183,6 +183,7 @@ The output will be in the `dist/` folder. macOS builds are handled automatically
 - **electron-store** — Session persistence
 - **@dnd-kit** — Drag-and-drop for combat initiative and watch order
 - **JSL Blackletter** — Used on the player display to give it that familiar feel
+- **[VFX Fire Vol 3](https://kiddolink.itch.io/vfx-fire-vol-3-pixel-art-effects)** — Pixel art fire sprites by [kiddolink](https://kiddolink.itch.io/) used for torch, campfire, and magical light animations
 
 ---
 
