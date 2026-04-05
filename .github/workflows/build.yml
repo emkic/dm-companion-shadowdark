@@ -15,7 +15,7 @@ jobs:
         include:
           - os: windows-latest
             platform: win
-          - os: macos-latest
+          - os: macos-13
             platform: mac
 
     runs-on: ${{ matrix.os }}
@@ -37,7 +37,7 @@ jobs:
         run: npm run build
 
       - name: Package for ${{ matrix.platform }}
-        run: npx electron-builder --${{ matrix.platform }}
+        run: npx electron-builder --${{ matrix.platform }} --publish never
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
