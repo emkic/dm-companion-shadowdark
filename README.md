@@ -10,10 +10,16 @@ Published under the Shadowdark RPG Third-Party License and is not affiliated wit
 
 **[Download the latest release](https://github.com/emkic/dm-companion-shadowdark/releases/latest)**
 
+### Windows
+- **DM Companion for Shadowdark Setup.exe** — Installer (per-user, no admin required)
 - **DMCompanion-Portable.exe** — Just download and run. No install needed.
-- **DM Companion for Shadowdark Setup.exe** — Installer (per-user, no admin required).
 
 > **Note:** Windows SmartScreen may show a warning when you first run the app because it is not code-signed. Click **"More info"** then **"Run anyway"** to proceed. This is normal for unsigned apps and only happens once per downloaded file.
+
+### macOS
+- **DMCompanion-mac.zip** — Unzip and drag to Applications.
+
+> **Note:** macOS Gatekeeper may block the app because it is not notarized. Right-click the app, select **"Open"**, then click **"Open"** in the dialog. This is only needed the first time.
 
 <img width="2547" height="1439" alt="image" src="https://github.com/user-attachments/assets/1cd7159a-1b48-4662-9a41-ab615160adfa" />
 <img width="2067" height="1308" alt="image" src="https://github.com/user-attachments/assets/7d6d3289-4721-401a-81dd-3d1c215d8d22" />
@@ -158,19 +164,13 @@ npm run dev
 
 The DM window opens on your primary monitor. If a second monitor is connected, the player window opens fullscreen on it.
 
-### Build Portable Exe
-
-To build a standalone portable exe that runs on any Windows PC with no install:
+### Build Locally (Windows)
 
 ```bash
-npm run build
-npx electron-builder --win
+npm run package
 ```
 
-The output will be in the `dist/` folder:
-
-- `DMCompanion-Portable.exe` — Single portable exe, just copy and run
-- `DM Companion for Shadowdark Setup 1.0.0.exe` — Installer (per-user, no admin required)
+The output will be in the `dist/` folder. macOS builds are handled automatically by GitHub Actions when a version tag is pushed.
 
 ---
 
