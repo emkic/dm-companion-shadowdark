@@ -40,7 +40,27 @@ export interface CombatState {
   combatants: Combatant[]
 }
 
-export type ActivityState = 'traveling' | 'crawling' | 'city'
+export interface EncounterCheckEntry {
+  round: number
+  checked: boolean   // was this round an encounter-check round?
+  encounter: boolean // did the DM mark an encounter?
+}
+
+export interface CrawlingTurnSlot {
+  name: string
+}
+
+export interface CrawlingState {
+  isActive: boolean
+  round: number
+  currentTurnIndex: number
+  turnOrder: CrawlingTurnSlot[]
+  inTotalDarkness: boolean
+  encounterLog: EncounterCheckEntry[]
+  encounterFlash: boolean  // triggers the player-screen encounter flash
+}
+
+export type ActivityState = 'traveling' | 'city'
 export type TravelMethod = 'walking' | 'mounted' | 'sailing'
 
 export const HEXES_PER_DAY: Record<TravelMethod, number> = {
@@ -51,7 +71,6 @@ export const HEXES_PER_DAY: Record<TravelMethod, number> = {
 
 export const ACTIVITY_LABELS: Record<ActivityState, string> = {
   traveling: 'Traveling',
-  crawling: 'Dungeon Crawling',
   city: 'In City / Village'
 }
 
@@ -99,6 +118,7 @@ export interface MediaState {
 export interface AppState {
   torch: TorchState
   combat: CombatState
+  crawling: CrawlingState
   location: LocationState
   media: MediaState
 }

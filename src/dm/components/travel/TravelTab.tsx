@@ -20,7 +20,7 @@ import { HEXES_PER_DAY, ACTIVITY_LABELS } from '@shared/types'
 import type { LocationState, ActivityState, TravelMethod, WatchSlot } from '@shared/types'
 import './TravelTab.css'
 
-const ACTIVITIES: ActivityState[] = ['traveling', 'crawling', 'city']
+const ACTIVITIES: ActivityState[] = ['traveling', 'city']
 const TRAVEL_METHODS: { value: TravelMethod; label: string }[] = [
   { value: 'walking', label: `Walking (${HEXES_PER_DAY.walking}/day)` },
   { value: 'mounted', label: `Mounted (${HEXES_PER_DAY.mounted}/day)` },

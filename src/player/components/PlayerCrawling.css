@@ -1,0 +1,188 @@
+/* ── Encounter Flash Overlay ── */
+
+.encounter-flash-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: encounterFadeIn 0.8s ease-out forwards;
+}
+
+@keyframes encounterFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.encounter-flash-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(60, 20, 0, 0.3) 0%,
+    rgba(20, 5, 0, 0.6) 30%,
+    rgba(0, 0, 0, 0.9) 60%,
+    #000 100%
+  );
+  animation: encounterVignettePulse 3s ease-in-out infinite;
+}
+
+@keyframes encounterVignettePulse {
+  0%, 100% {
+    background: radial-gradient(
+      ellipse at center,
+      rgba(60, 20, 0, 0.3) 0%,
+      rgba(20, 5, 0, 0.6) 30%,
+      rgba(0, 0, 0, 0.9) 60%,
+      #000 100%
+    );
+  }
+  50% {
+    background: radial-gradient(
+      ellipse at center,
+      rgba(80, 30, 0, 0.2) 0%,
+      rgba(30, 8, 0, 0.7) 25%,
+      #000 50%,
+      #000 100%
+    );
+  }
+}
+
+.encounter-flash-text {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 5vh;
+  padding: 0 8vw;
+  max-width: 100vw;
+}
+
+.encounter-flash-line {
+  font-family: 'JSL Blackletter', serif;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.encounter-flash-line-1 {
+  font-size: 8vw;
+  color: #e8a030;
+  text-shadow:
+    0 0 40px rgba(200, 112, 32, 0.9),
+    0 0 80px rgba(180, 80, 0, 0.5),
+    0 0 120px rgba(120, 40, 0, 0.3);
+  animation: lineReveal 1s ease-out 0.5s forwards, encounterTitlePulse 2.5s ease-in-out 1.5s infinite;
+}
+
+.encounter-flash-line-2 {
+  font-size: 4.5vw;
+  color: #999;
+  text-shadow:
+    0 0 30px rgba(80, 0, 0, 0.6),
+    0 0 60px rgba(40, 0, 0, 0.3);
+  animation: lineReveal 1.5s ease-out 2s forwards;
+}
+
+@keyframes lineReveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes encounterTitlePulse {
+  0%, 100% {
+    text-shadow:
+      0 0 40px rgba(200, 112, 32, 0.9),
+      0 0 80px rgba(180, 80, 0, 0.5),
+      0 0 120px rgba(120, 40, 0, 0.3);
+    opacity: 1;
+  }
+  50% {
+    text-shadow:
+      0 0 60px rgba(230, 140, 40, 1),
+      0 0 100px rgba(200, 100, 0, 0.7),
+      0 0 160px rgba(150, 60, 0, 0.4);
+    opacity: 0.9;
+  }
+}
+
+/* ── Turn Order Display (player window) ── */
+
+.player-crawling {
+  position: fixed;
+  top: 32px;
+  left: 40px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 480px;
+}
+
+.pcr-header {
+  margin-bottom: 4px;
+}
+
+.pcr-round {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.pcr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pcr-slot {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  background: rgba(0, 0, 0, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  backdrop-filter: blur(6px);
+  transition: border-color 0.3s, background 0.3s;
+}
+
+.pcr-slot.pcr-active {
+  border-color: rgba(200, 168, 75, 0.6);
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.pcr-number {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: rgba(200, 168, 75, 0.7);
+  white-space: nowrap;
+  min-width: 20px;
+}
+
+.pcr-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+.pcr-slot.pcr-active .pcr-name {
+  color: rgba(200, 168, 75, 1);
+}

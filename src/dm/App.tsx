@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { useTorch } from './hooks/useTorch'
 import { useCombat } from './hooks/useCombat'
+import { useCrawling } from './hooks/useCrawling'
 import { useLocation } from './hooks/useLocation'
 import { useMedia } from './hooks/useMedia'
 import { useSession } from './hooks/useSession'
@@ -8,6 +9,7 @@ import { useAmbiance } from './hooks/useAmbiance'
 import { TorchPanel } from './components/torch/TorchPanel'
 import { LocationSidebar } from './components/location/LocationSidebar'
 import { CombatPanel } from './components/combat/CombatPanel'
+import { CrawlingPanel } from './components/crawling/CrawlingPanel'
 import { TravelTab } from './components/travel/TravelTab'
 import { MediaPanel } from './components/media/MediaPanel'
 import { SessionModal } from './components/session/SessionModal'
@@ -19,11 +21,12 @@ import type { AppState } from '@shared/types'
 import { createDefaultTimer } from '@shared/constants'
 import './App.css'
 
-type TabId = 'combat' | 'travel' | 'media'
+type TabId = 'combat' | 'crawling' | 'travel' | 'media'
 
 export default function App() {
   const torchHook = useTorch()
   const combatHook = useCombat()
+  const crawlingHook = useCrawling()
   const locationHook = useLocation()
   const mediaHook = useMedia()
   const sessionHook = useSession()
@@ -35,9 +38,10 @@ export default function App() {
   const appState: AppState = useMemo(() => ({
     torch: torchHook.torchState,
     combat: combatHook.combat,
+    crawling: crawlingHook.crawling,
     location: locationHook.location,
     media: mediaHook.media
-  }), [torchHook.torchState, combatHook.combat, locationHook.location, mediaHook.media])
+  }), [torchHook.torchState, combatHook.combat, crawlingHook.crawling, locationHook.location, mediaHook.media])
 
   // Broadcast to player window only when state actually changes
   const prevStateRef = useRef<string>('')
@@ -66,9 +70,25 @@ export default function App() {
       })
     }
     combatHook.setCombatState(state.combat)
+    if (state.crawling) {
+      crawlingHook.setCrawlingState(state.crawling)
+    }
     locationHook.setLocation(state.location)
     mediaHook.setMedia({ ...state.media, files: state.media.files ?? [] })
-  }, [torchHook.setTorchState, combatHook.setCombatState, locationHook.setLocation, mediaHook.setMedia])
+  }, [torchHook.setTorchState, combatHook.setCombatState, crawlingHook.setCrawlingState, locationHook.setLocation, mediaHook.setMedia])
+
+  // When combat starts, dismiss the encounter flash (crawl pauses during combat)
+  // When combat ends, switch back to crawling tab if a crawl is active
+  const prevCombatActive = useRef(combatHook.combat.isActive)
+  useEffect(() => {
+    if (combatHook.combat.isActive && crawlingHook.crawling.encounterFlash) {
+      crawlingHook.dismissEncounterFlash()
+    }
+    if (!combatHook.combat.isActive && prevCombatActive.current && crawlingHook.crawling.isActive) {
+      setActiveTab('crawling')
+    }
+    prevCombatActive.current = combatHook.combat.isActive
+  }, [combatHook.combat.isActive])
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -78,8 +98,9 @@ export default function App() {
 
       switch (e.key) {
         case '1': setActiveTab('combat'); break
-        case '2': setActiveTab('travel'); break
-        case '3': setActiveTab('media'); break
+        case '2': setActiveTab('crawling'); break
+        case '3': setActiveTab('travel'); break
+        case '4': setActiveTab('media'); break
         case ' ': {
           e.preventDefault()
           const firstTimer = torchHook.torchState.timers.find(t => t.lightMode !== 'natural')
@@ -104,6 +125,13 @@ export default function App() {
       badgeColor: combatHook.combat.isActive ? '#c87070' : undefined,
     },
     {
+      id: 'crawling',
+      label: 'Crawling',
+      icon: '🕯',
+      badge: crawlingHook.crawling.isActive ? `R${crawlingHook.crawling.round}` : null,
+      badgeColor: crawlingHook.crawling.isActive ? '#b8a060' : undefined,
+    },
+    {
       id: 'travel',
       label: 'Travel',
       icon: '🗺',
@@ -118,7 +146,7 @@ export default function App() {
         ? (ambianceHook.ambiance.isPlaying ? '🖼🎵' : '1')
         : (ambianceHook.ambiance.isPlaying ? '🎵' : null),
     }
-  ], [combatHook.combat.isActive, combatHook.combat.round, locationHook.location.activity, locationHook.location.hexesRemaining, mediaHook.media.isShowing, ambianceHook.ambiance.isPlaying])
+  ], [combatHook.combat.isActive, combatHook.combat.round, crawlingHook.crawling.isActive, crawlingHook.crawling.round, locationHook.location.activity, locationHook.location.hexesRemaining, mediaHook.media.isShowing, ambianceHook.ambiance.isPlaying])
 
   return (
     <div className="dm-app">
@@ -154,6 +182,12 @@ export default function App() {
           <TabBar tabs={tabs} activeTab={activeTab} onTabChange={id => setActiveTab(id as TabId)} />
           <div className="tab-panel">
             {activeTab === 'combat' && <CombatPanel {...combatHook} />}
+            {activeTab === 'crawling' && (
+              <CrawlingPanel
+                crawlingHook={crawlingHook}
+                dangerLevel={locationHook.location.dangerLevel}
+              />
+            )}
             {activeTab === 'travel' && (
               <TravelTab
                 location={locationHook.location}

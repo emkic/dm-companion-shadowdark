@@ -5,7 +5,7 @@ import type { Season, DangerLevel, ActivityState, TravelMethod } from '@shared/t
 import type { UseLocationReturn } from '../../hooks/useLocation'
 import './LocationPanel.css'
 
-const ACTIVITIES: ActivityState[] = ['traveling', 'crawling', 'city']
+const ACTIVITIES: ActivityState[] = ['traveling', 'city']
 const TRAVEL_METHODS: { value: TravelMethod; label: string }[] = [
   { value: 'walking', label: `Walking (${HEXES_PER_DAY.walking}/day)` },
   { value: 'mounted', label: `Mounted (${HEXES_PER_DAY.mounted}/day)` },
