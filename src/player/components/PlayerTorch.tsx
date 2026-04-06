@@ -18,7 +18,9 @@ interface Props {
 function PlayerTimerItem({ timer }: { timer: TimerState }) {
   const fraction = DEFAULT_TORCH_SECONDS > 0 ? timer.timeLeft / DEFAULT_TORCH_SECONDS : 0
   const lowAlert = fraction < LOW_TORCH_THRESHOLD
-  const dimLevel = Math.max(0, Math.min(1, fraction))
+  // Stay at full brightness until the last 10 minutes, then ramp down
+  const DIM_START = 600 / DEFAULT_TORCH_SECONDS // 10 minutes
+  const dimLevel = fraction > DIM_START ? 1 : Math.max(0, fraction / DIM_START)
   const brightness = 0.2 + dimLevel * 0.8
   const isMagical = timer.lightMode === 'magical'
 

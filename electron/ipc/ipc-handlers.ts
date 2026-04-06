@@ -9,7 +9,6 @@ import type { AppState, MoodPreset } from '../../src/shared/types'
 
 const IMAGE_EXTS = new Set(['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp'])
 const VIDEO_EXTS = new Set(['.mp4', '.webm', '.mov', '.mkv'])
-const AUDIO_EXTS = new Set(['.mp3', '.wav', '.ogg', '.flac', '.m4a', '.aac', '.wma', '.webm'])
 
 export function registerIpcHandlers(): void {
   ipcMain.on(IpcChannel.BROADCAST_STATE, (_event, state: AppState) => {

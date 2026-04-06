@@ -4,3 +4,5 @@ out/
 *.exe
 *.blockmap
 *.yaml
+Thumbs.db
+*.aseprite
