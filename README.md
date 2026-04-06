@@ -43,18 +43,19 @@ All changes on the DM side are broadcast to the player screen in real time.
 The DM panel uses a tabbed interface for quick access to everything:
 
 - **Persistent sidebar** — Torch/light controls and location info are always visible on the left
-- **Tabbed main area** — Switch between Combat, Travel, and Media tabs. Each tab gets full width.
-- **Tab badges** — Combat tab shows the current round, Travel tab shows hexes remaining, so you always know the state at a glance
-- **Keyboard shortcuts** — Press 1/2/3 to switch tabs, Space to start/pause the torch timer
+- **Tabbed main area** — Switch between Combat, Crawling, Travel, and Media tabs. Each tab gets full width.
+- **Tab badges** — Combat tab shows the current round, Crawling tab shows the crawling round, Travel tab shows hexes remaining, so you always know the state at a glance
+- **Keyboard shortcuts** — Press 1/2/3/4 to switch tabs, Space to start/pause the torch timer
 - **Session management** — Save/load sessions via a modal dialog (💾 Sessions button in header)
 
 ### Combat Tracker
 
 Full initiative and combat management visible to both DM and players:
 
-- **Initiative order** with drag-and-drop reordering or auto-sort by initiative value
+- **Initiative order** with drag-and-drop reordering or auto-sort by initiative value. Combatants auto-sort by initiative when combat starts.
 - **HP tracking** with +5/+1/-1/-5 buttons and click-to-edit for direct input
 - **Health estimates** shown to players instead of exact HP numbers: Uninjured, Injured, Bloodied, Near Death, Dying, Dead — each color-coded
+- **Previous turn** — Step back a turn if someone forgot something. Death timers reverse correctly when going back a round.
 - **Shadowdark death mechanic** — when a player hits 0 HP:
   1. DM rolls a d4 to set the death timer (rounds until permanent death)
   2. Each round, the DM can roll a d20 death save
@@ -63,6 +64,16 @@ Full initiative and combat management visible to both DM and players:
 - **Emoji identifiers** for each combatant so players can quickly tell who is who
 - **Duplicate combatant** — quickly copy a combatant to add multiples of the same monster
 - Monsters are automatically removed from the tracker when combat ends
+
+### Crawling Rounds
+
+Track dungeon exploration turn-by-turn with built-in encounter check timing:
+
+- **Turn order** — Add player names and reorder via drag-and-drop before or during a crawl
+- **Round tracking** — Advancing past the last player automatically starts a new round. Player screen shows the current round and whose turn it is.
+- **Encounter checks** — Automatically prompts for a random encounter roll after the last player in the round, based on the area's danger level: every 3 rounds (Unsafe), every 2 rounds (Risky), or every round (Deadly)
+- **Total darkness** — When all torches go out during a crawl, danger level automatically jumps to Deadly (encounter check every round). The player screen shows a dramatic darkness overlay that fades out after a few seconds so the turn order stays visible.
+- **Reference tables** — Starting distance and monster activity tables appear on-screen when an encounter is triggered
 
 ### Light Source System
 
@@ -86,7 +97,7 @@ The DM can extinguish the torch (or magical light) at any time. When extinguishe
 >
 > *The living darkness closes in on you.*
 
-The final line pulses in crimson red. The DM can relight at any time to return to normal. When the torch timer reaches zero, the darkness overlay triggers automatically.
+The final line pulses in crimson red. The DM can relight at any time to return to normal. When the torch timer reaches zero, the darkness overlay triggers automatically. During combat or crawling, the overlay is replaced with a compact "No light — total darkness" banner so the turn order stays visible.
 
 ### Hex Crawling & Travel
 
