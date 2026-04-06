@@ -289,6 +289,28 @@
                0 2px 6px rgba(0,0,0,0.9);
 }
 
+/* ── Darkness Banner (during combat) ── */
+
+.darkness-banner {
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid #440000;
+  justify-content: center;
+}
+
+.darkness-banner-text {
+  color: #cc4444;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  animation: darknessPulse 3s ease-in-out infinite;
+}
+
+@keyframes darknessPulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
 /* ── Darkness Overlay (All Extinguished) ── */
 
 .darkness-overlay {
@@ -300,6 +322,16 @@
   align-items: center;
   justify-content: center;
   animation: darknessFadeIn 1.5s ease-out forwards;
+}
+
+.darkness-overlay.darkness-fading {
+  animation: darknessFadeOut 3s ease-in forwards;
+  pointer-events: none;
+}
+
+@keyframes darknessFadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
 }
 
 @keyframes darknessFadeIn {

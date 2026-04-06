@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import type { TorchState, TimerState } from '@shared/types'
 import { DEFAULT_TORCH_SECONDS, LOW_TORCH_THRESHOLD } from '@shared/constants'
 import './PlayerTorch.css'
@@ -13,7 +13,11 @@ interface Props {
   torch: TorchState
   hasCampfire?: boolean
   isCamping?: boolean
+  combatIsActive?: boolean
+  crawlingIsActive?: boolean
 }
+
+const DARKNESS_OVERLAY_DURATION = 10_000 // 10 seconds before fading out
 
 function PlayerTimerItem({ timer }: { timer: TimerState }) {
   const fraction = DEFAULT_TORCH_SECONDS > 0 ? timer.timeLeft / DEFAULT_TORCH_SECONDS : 0
@@ -63,11 +67,37 @@ function PlayerTimerItem({ timer }: { timer: TimerState }) {
   )
 }
 
-export function PlayerTorch({ torch, hasCampfire, isCamping }: Props) {
+export function PlayerTorch({ torch, hasCampfire, isCamping, combatIsActive, crawlingIsActive }: Props) {
   const timers = torch.timers ?? []
   const nonNaturalTimers = timers.filter(t => t.lightMode !== 'natural')
   const allExtinguished = nonNaturalTimers.length > 0 && nonNaturalTimers.every(t => t.isExtinguished)
   const visibleTimers = nonNaturalTimers.filter(t => !t.isExtinguished)
+
+  // During crawling: show darkness overlay temporarily, then fade out
+  const [showCrawlOverlay, setShowCrawlOverlay] = useState(false)
+  const [fadingOut, setFadingOut] = useState(false)
+  const prevExtinguished = useRef(allExtinguished)
+
+  useEffect(() => {
+    if (allExtinguished && !prevExtinguished.current && crawlingIsActive) {
+      // Torches just went out during a crawl — show temporary overlay
+      setShowCrawlOverlay(true)
+      setFadingOut(false)
+      const fadeTimer = setTimeout(() => setFadingOut(true), DARKNESS_OVERLAY_DURATION)
+      const hideTimer = setTimeout(() => {
+        setShowCrawlOverlay(false)
+        setFadingOut(false)
+      }, DARKNESS_OVERLAY_DURATION + 3000) // 3s fade-out animation
+      prevExtinguished.current = allExtinguished
+      return () => { clearTimeout(fadeTimer); clearTimeout(hideTimer) }
+    }
+    if (!allExtinguished) {
+      // Torch relit — dismiss overlay immediately
+      setShowCrawlOverlay(false)
+      setFadingOut(false)
+    }
+    prevExtinguished.current = allExtinguished
+  }, [allExtinguished, crawlingIsActive])
 
   // Camping with no campfire — show dark camp text
   if (isCamping && !hasCampfire) {
@@ -97,8 +127,9 @@ export function PlayerTorch({ torch, hasCampfire, isCamping }: Props) {
     )
   }
 
-  // All torches extinguished — darkness overlay
-  if (allExtinguished) {
+  // All torches extinguished — full-screen darkness overlay
+  // (not during combat or crawling, where turn order must stay visible)
+  if (allExtinguished && !combatIsActive && !crawlingIsActive) {
     return (
       <div className="darkness-overlay">
         <div className="darkness-vignette" />
@@ -108,6 +139,29 @@ export function PlayerTorch({ torch, hasCampfire, isCamping }: Props) {
           <p className="darkness-line darkness-line-3">The living darkness closes in on you.</p>
         </div>
       </div>
+    )
+  }
+
+  // During combat or crawling with all torches out — compact banner + temporary overlay
+  if (allExtinguished && (combatIsActive || crawlingIsActive)) {
+    return (
+      <>
+        {showCrawlOverlay && (
+          <div className={`darkness-overlay ${fadingOut ? 'darkness-fading' : ''}`}>
+            <div className="darkness-vignette" />
+            <div className="darkness-text">
+              <p className="darkness-line darkness-line-1">There is no light.</p>
+              <p className="darkness-line darkness-line-2">You do not see anything.</p>
+              <p className="darkness-line darkness-line-3">The living darkness closes in on you.</p>
+            </div>
+          </div>
+        )}
+        <div className="player-torches">
+          <div className="player-torch-item darkness-banner">
+            <span className="darkness-banner-text">No light — total darkness</span>
+          </div>
+        </div>
+      </>
     )
   }
 

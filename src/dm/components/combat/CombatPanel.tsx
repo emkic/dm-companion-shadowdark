@@ -22,7 +22,7 @@ import './CombatPanel.css'
 type Props = UseCombatReturn
 
 export function CombatPanel(props: Props) {
-  const { combat, addCombatant, sortByInitiative, reorderCombatants, nextTurn, startCombat, endCombat } = props
+  const { combat, addCombatant, sortByInitiative, reorderCombatants, nextTurn, prevTurn, startCombat, endCombat } = props
 
   const [newName, setNewName] = useState('')
   const [newMaxHP, setNewMaxHP] = useState('10')
@@ -75,6 +75,9 @@ export function CombatPanel(props: Props) {
             </button>
           ) : (
             <>
+              <button className="btn btn-ghost btn-small" onClick={prevTurn}>
+                ← Prev
+              </button>
               <button className="btn btn-accent btn-small" onClick={nextTurn}>
                 Next Turn →
               </button>

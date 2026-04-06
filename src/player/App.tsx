@@ -53,7 +53,7 @@ export default function App() {
       <PlayerMedia media={state.media} location={state.location} />
       <PlayerCrawling crawling={state.crawling} combatIsActive={state.combat.isActive} />
       <PlayerCombat combat={state.combat} />
-      <PlayerTorch torch={state.torch} isCamping={state.location.isCamping} hasCampfire={state.location.isCamping && state.location.hasCampfire} />
+      <PlayerTorch torch={state.torch} isCamping={state.location.isCamping} hasCampfire={state.location.isCamping && state.location.hasCampfire} combatIsActive={state.combat.isActive} crawlingIsActive={state.crawling.isActive} />
       <PlayerWatchOrder location={state.location} />
       <PlayerLocation location={state.location} />
     </div>

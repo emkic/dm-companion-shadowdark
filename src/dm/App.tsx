@@ -71,11 +71,19 @@ export default function App() {
     }
     combatHook.setCombatState(state.combat)
     if (state.crawling) {
-      crawlingHook.setCrawlingState(state.crawling)
+      crawlingHook.setCrawlingState({ pendingEncounterCheck: false, ...state.crawling })
     }
     locationHook.setLocation(state.location)
     mediaHook.setMedia({ ...state.media, files: state.media.files ?? [] })
   }, [torchHook.setTorchState, combatHook.setCombatState, crawlingHook.setCrawlingState, locationHook.setLocation, mediaHook.setMedia])
+
+  // Sync total darkness with torch state: if all torches go out during a crawl,
+  // automatically set inTotalDarkness so danger level jumps to deadly
+  useEffect(() => {
+    if (crawlingHook.crawling.isActive) {
+      crawlingHook.setTotalDarkness(torchHook.allExtinguished)
+    }
+  }, [torchHook.allExtinguished, crawlingHook.crawling.isActive])
 
   // When combat starts, dismiss the encounter flash (crawl pauses during combat)
   // When combat ends, switch back to crawling tab if a crawl is active

@@ -155,14 +155,12 @@ function CrawlSetup({ onStart }: { onStart: (turnOrder: CrawlingTurnSlot[]) => v
 // ── Active crawl: turn display + encounter checks ──
 
 export function CrawlingPanel({ crawlingHook, dangerLevel }: Props) {
-  const { crawling, startCrawl, endCrawl, nextTurn, toggleTotalDarkness, markEncounter, setTurnName, reorderTurns } = crawlingHook
+  const { crawling, startCrawl, endCrawl, nextTurn, toggleTotalDarkness, resolveEncounterCheck, markEncounter, setTurnName, reorderTurns } = crawlingHook
   const effectiveDanger = getEffectiveDanger(dangerLevel, crawling.inTotalDarkness)
   const interval = ENCOUNTER_INTERVAL[effectiveDanger]
 
-  const currentIsCheck = crawling.isActive && isEncounterCheckRound(crawling.round, dangerLevel, crawling.inTotalDarkness)
-
   const roundsUntilCheck = crawling.isActive
-    ? interval - (crawling.round % interval || interval)
+    ? (crawling.pendingEncounterCheck ? 0 : interval - (crawling.round % interval || interval))
     : 0
 
   // Active turn tracking
@@ -207,6 +205,7 @@ export function CrawlingPanel({ crawlingHook, dangerLevel }: Props) {
           <button
             className="btn btn-accent btn-small"
             onClick={() => nextTurn(dangerLevel)}
+            disabled={crawling.pendingEncounterCheck}
           >
             Next Turn →
           </button>
@@ -239,7 +238,7 @@ export function CrawlingPanel({ crawlingHook, dangerLevel }: Props) {
         <div className="crawling-info-item">
           <span className="info-label">Next check in</span>
           <span className="info-value">
-            {currentIsCheck ? 'NOW' : `${roundsUntilCheck} round${roundsUntilCheck > 1 ? 's' : ''}`}
+            {crawling.pendingEncounterCheck ? 'NOW' : `${roundsUntilCheck} round${roundsUntilCheck > 1 ? 's' : ''}`}
           </span>
         </div>
       </div>
@@ -252,25 +251,25 @@ export function CrawlingPanel({ crawlingHook, dangerLevel }: Props) {
         {crawling.inTotalDarkness ? '🌑 Total Darkness (Deadly)' : '🌑 Total Darkness'}
       </button>
 
-      {/* Encounter alert */}
-      {currentIsCheck && (
+      {/* Encounter alert — shown after last player in the round */}
+      {crawling.pendingEncounterCheck && (
         <div className="encounter-alert">
           <div className="encounter-alert-title">⚠ Random Encounter Check!</div>
           <div className="encounter-alert-body">
-            Roll <strong>1d6</strong> — encounter on a <strong>1</strong>
+            Round {crawling.round} complete — Roll <strong>1d6</strong> — encounter on a <strong>1</strong>
           </div>
           <div className="encounter-alert-actions">
             <button
               className="btn btn-danger btn-small"
-              onClick={() => markEncounter(crawling.round, true)}
+              onClick={() => resolveEncounterCheck(true)}
             >
               Encounter!
             </button>
             <button
               className="btn btn-ghost btn-small"
-              onClick={() => nextTurn(dangerLevel)}
+              onClick={() => resolveEncounterCheck(false)}
             >
-              Clear — Next Round
+              No Encounter
             </button>
           </div>
         </div>

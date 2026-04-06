@@ -34,6 +34,7 @@ export interface UseCombatReturn {
   sortByInitiative: () => void
   reorderCombatants: (newOrder: Combatant[]) => void
   nextTurn: () => void
+  prevTurn: () => void
   startCombat: () => void
   endCombat: () => void
   setDeathTimer: (id: string, rounds: number) => void
@@ -149,19 +150,20 @@ export function useCombat(): UseCombatReturn {
     setCombat(prev => {
       if (!prev.isActive || prev.combatants.length === 0) return prev
 
-      // Advance death timers for all dying players
-      const updatedCombatants = prev.combatants.map(c => {
-        if (!c.isDying || c.isDead || c.deathTimer === 0) return c
-        const newElapsed = c.deathRoundsElapsed + 1
-        // Timer expired → permanently dead
-        if (newElapsed >= c.deathTimer) {
-          return { ...c, isDying: false, isDead: true, deathRoundsElapsed: newElapsed }
-        }
-        return { ...c, deathRoundsElapsed: newElapsed }
-      })
-
       const nextIndex = (prev.currentTurnIndex + 1) % prev.combatants.length
       const newRound = nextIndex === 0 ? prev.round + 1 : prev.round
+
+      // Advance death timers only when a new round starts
+      const updatedCombatants = nextIndex === 0
+        ? prev.combatants.map(c => {
+            if (!c.isDying || c.isDead || c.deathTimer === 0) return c
+            const newElapsed = c.deathRoundsElapsed + 1
+            if (newElapsed >= c.deathTimer) {
+              return { ...c, isDying: false, isDead: true, deathRoundsElapsed: newElapsed }
+            }
+            return { ...c, deathRoundsElapsed: newElapsed }
+          })
+        : prev.combatants
 
       return {
         ...prev,
@@ -172,8 +174,42 @@ export function useCombat(): UseCombatReturn {
     })
   }, [])
 
+  const prevTurn = useCallback(() => {
+    setCombat(prev => {
+      if (!prev.isActive || prev.combatants.length === 0) return prev
+      // Don't go before round 1, turn 0
+      if (prev.round <= 1 && prev.currentTurnIndex === 0) return prev
+
+      const prevIndex = prev.currentTurnIndex === 0
+        ? prev.combatants.length - 1
+        : prev.currentTurnIndex - 1
+      const newRound = prev.currentTurnIndex === 0 ? prev.round - 1 : prev.round
+
+      // Reverse death timers when going back a round
+      const updatedCombatants = prev.currentTurnIndex === 0
+        ? prev.combatants.map(c => {
+            if (!c.isDying || c.deathTimer === 0 || c.deathRoundsElapsed <= 0) return c
+            return { ...c, deathRoundsElapsed: c.deathRoundsElapsed - 1 }
+          })
+        : prev.combatants
+
+      return {
+        ...prev,
+        combatants: updatedCombatants,
+        currentTurnIndex: prevIndex,
+        round: newRound
+      }
+    })
+  }, [])
+
   const startCombat = useCallback(() => {
-    setCombat(prev => ({ ...prev, isActive: true, round: 1, currentTurnIndex: 0 }))
+    setCombat(prev => ({
+      ...prev,
+      isActive: true,
+      round: 1,
+      currentTurnIndex: 0,
+      combatants: [...prev.combatants].sort((a, b) => b.initiative - a.initiative)
+    }))
   }, [])
 
   const endCombat = useCallback(() => {
@@ -284,6 +320,7 @@ export function useCombat(): UseCombatReturn {
     sortByInitiative,
     reorderCombatants,
     nextTurn,
+    prevTurn,
     startCombat,
     endCombat,
     setDeathTimer,

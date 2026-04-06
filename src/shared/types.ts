@@ -57,6 +57,7 @@ export interface CrawlingState {
   turnOrder: CrawlingTurnSlot[]
   inTotalDarkness: boolean
   encounterLog: EncounterCheckEntry[]
+  pendingEncounterCheck: boolean  // true = round ended, waiting for DM to resolve encounter check
   encounterFlash: boolean  // triggers the player-screen encounter flash
 }
 

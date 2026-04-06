@@ -7,6 +7,7 @@ const INITIAL_STATE: CrawlingState = {
   currentTurnIndex: 0,
   turnOrder: [],
   inTotalDarkness: false,
+  pendingEncounterCheck: false,
   encounterLog: [],
   encounterFlash: false
 }
@@ -31,6 +32,8 @@ export interface UseCrawlingReturn {
   endCrawl: () => void
   nextTurn: (dangerLevel: DangerLevel) => void
   toggleTotalDarkness: () => void
+  setTotalDarkness: (value: boolean) => void
+  resolveEncounterCheck: (encounter: boolean) => void
   markEncounter: (round: number, encounter: boolean) => void
   dismissEncounterFlash: () => void
   setTurnName: (index: number, name: string) => void
@@ -47,6 +50,7 @@ export function useCrawling(): UseCrawlingReturn {
       currentTurnIndex: 0,
       turnOrder,
       inTotalDarkness: false,
+      pendingEncounterCheck: false,
       encounterLog: [],
       encounterFlash: false
     })
@@ -65,6 +69,7 @@ export function useCrawling(): UseCrawlingReturn {
         return {
           ...prev,
           round: newRound,
+          pendingEncounterCheck: checked,
           encounterFlash: false,
           encounterLog: [
             ...prev.encounterLog,
@@ -80,8 +85,10 @@ export function useCrawling(): UseCrawlingReturn {
         const checked = isEncounterCheckRound(newRound, dangerLevel, prev.inTotalDarkness)
         return {
           ...prev,
-          currentTurnIndex: nextIndex,
+          // Stay on last player until encounter check is resolved
+          currentTurnIndex: checked ? prev.currentTurnIndex : nextIndex,
           round: newRound,
+          pendingEncounterCheck: checked,
           encounterFlash: false,
           encounterLog: [
             ...prev.encounterLog,
@@ -100,6 +107,23 @@ export function useCrawling(): UseCrawlingReturn {
 
   const toggleTotalDarkness = useCallback(() => {
     setCrawling(prev => ({ ...prev, inTotalDarkness: !prev.inTotalDarkness }))
+  }, [])
+
+  const setTotalDarkness = useCallback((value: boolean) => {
+    setCrawling(prev => prev.inTotalDarkness === value ? prev : { ...prev, inTotalDarkness: value })
+  }, [])
+
+  const resolveEncounterCheck = useCallback((encounter: boolean) => {
+    setCrawling(prev => ({
+      ...prev,
+      pendingEncounterCheck: false,
+      // Advance turn to first player now that the check is resolved
+      currentTurnIndex: prev.turnOrder.length > 0 ? 0 : prev.currentTurnIndex,
+      encounterFlash: encounter,
+      encounterLog: prev.encounterLog.map(e =>
+        e.round === prev.round ? { ...e, encounter } : e
+      )
+    }))
   }, [])
 
   const markEncounter = useCallback((round: number, encounter: boolean) => {
@@ -140,6 +164,8 @@ export function useCrawling(): UseCrawlingReturn {
     endCrawl,
     nextTurn,
     toggleTotalDarkness,
+    setTotalDarkness,
+    resolveEncounterCheck,
     markEncounter,
     dismissEncounterFlash,
     setTurnName,
