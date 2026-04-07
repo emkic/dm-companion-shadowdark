@@ -27,13 +27,16 @@
     "electron-builder": "^26.8.2",
     "electron-vite": "^5.0.0",
     "typescript": "^5.3.3",
-    "vite": "^8.0.3"
+    "vite": "^8.0.7"
   },
   "build": {
     "appId": "com.shadowdark.dm-app",
     "productName": "DM Companion for Shadowdark",
     "win": {
-      "target": ["nsis", "portable"],
+      "target": [
+        "nsis",
+        "portable"
+      ],
       "signAndEditExecutable": false
     },
     "nsis": {
@@ -45,7 +48,9 @@
       "artifactName": "DMCompanion-Portable.exe"
     },
     "mac": {
-      "target": ["zip"],
+      "target": [
+        "zip"
+      ],
       "category": "public.app-category.games",
       "artifactName": "DMCompanion-${version}-mac.${ext}"
     },
