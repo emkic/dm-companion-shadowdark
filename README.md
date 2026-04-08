@@ -2,9 +2,20 @@
 
 A dual-screen desktop app for running [Shadowdark RPG](https://www.thearcanelibrary.com/pages/shadowdark) sessions. The DM controls everything from a private panel while players see only what you choose on a separate fullscreen display.
 
-Built with Electron, React, and TypeScript.
+Built with Electron, React, and TypeScript. Available on **Windows**, **macOS**, and **Linux**.
 
 Published under the Shadowdark RPG Third-Party License and is not affiliated with The Arcane Library, LLC.
+
+### At a Glance
+
+- **Dual-screen display** — DM panel on your monitor, fullscreen player view on a projector or TV
+- **Combat tracker** — Drag-drop initiative, HP tracking, health estimates, Shadowdark death mechanic
+- **Crawling rounds** — Turn order, round tracking, encounter checks by danger level
+- **Light source system** — Multiple independent torch timers with pixel-art fire animations and a dramatic darkness overlay
+- **Hex crawling & travel** — Hex tracker, daily checklists, camping with watch order, weather reference
+- **Ambiance player** — YouTube playlists or local audio, mood presets, crossfade, mini-player bar
+- **Media panel** — Display images or videos fullscreen on the player screen
+- **Session save/load** — Pick up exactly where you left off
 
 ## Download
 
@@ -20,6 +31,10 @@ Published under the Shadowdark RPG Third-Party License and is not affiliated wit
 - **DMCompanion-mac.zip** — Unzip and drag to Applications.
 
 > **Note:** macOS Gatekeeper may block the app because it is not notarized. Right-click the app, select **"Open"**, then click **"Open"** in the dialog. This is only needed the first time.
+
+### Linux
+- **DMCompanion-linux.AppImage** — Portable, runs on any distro. Mark as executable and run.
+- **DMCompanion-linux.deb** — Install via `sudo dpkg -i DMCompanion-linux.deb` on Debian/Ubuntu.
 
 <img width="2547" height="1439" alt="image" src="https://github.com/user-attachments/assets/1cd7159a-1b48-4662-9a41-ab615160adfa" />
 <img width="2067" height="1308" alt="image" src="https://github.com/user-attachments/assets/7d6d3289-4721-401a-81dd-3d1c215d8d22" />
@@ -175,13 +190,13 @@ npm run dev
 
 The DM window opens on your primary monitor. If a second monitor is connected, the player window opens fullscreen on it.
 
-### Build Locally (Windows)
+### Build Locally
 
 ```bash
 npm run package
 ```
 
-The output will be in the `dist/` folder. macOS builds are handled automatically by GitHub Actions when a version tag is pushed.
+The output will be in the `dist/` folder. This builds for Windows by default. macOS and Linux builds are handled automatically by GitHub Actions when a version tag is pushed.
 
 ---
 
