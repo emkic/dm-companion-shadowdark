@@ -1,6 +1,6 @@
 {
   "name": "shadowdark-dm-app",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "DM Companion App for Shadowdark RPG",
   "main": "out/main/index.js",
   "scripts": {
@@ -46,6 +46,14 @@
     },
     "portable": {
       "artifactName": "DMCompanion-Portable.exe"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Game",
+      "artifactName": "DMCompanion-${version}-linux.${ext}"
     },
     "mac": {
       "target": [
