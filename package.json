@@ -53,6 +53,7 @@
         "deb"
       ],
       "category": "Game",
+      "maintainer": "emkic",
       "artifactName": "DMCompanion-${version}-linux.${ext}"
     },
     "mac": {
