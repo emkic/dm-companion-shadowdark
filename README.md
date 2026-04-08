@@ -1,6 +1,6 @@
 # DM Companion for Shadowdark
 
-A dual-screen desktop app for running [Shadowdark RPG](https://www.thearcanelibrary.com/pages/shadowdark) sessions. The DM controls everything from a private panel while players see only what you choose on a separate fullscreen display.
+A dual-screen desktop app for running [Shadowdark RPG](https://www.thearcanelibrary.com/pages/shadowdark) sessions. The DM controls everything from a private panel while players see only what you choose on a separate fullscreen display. The purpose of this app is mainly keeping track of things, I have not built in any digital dicerollers, as I prefer to roll dice myself.
 
 Built with Electron, React, and TypeScript. Available on **Windows**, **macOS**, and **Linux**.
 
