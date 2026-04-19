@@ -1,4 +1,4 @@
-import type { AppState, SessionData, DisplayInfo, MoodPreset } from './types'
+import type { AppState, SessionData, DisplayInfo, MoodPreset, Party } from './types'
 
 declare global {
   interface Window {
@@ -18,6 +18,8 @@ declare global {
       loadAmbianceVolume: () => Promise<number>
       saveAmbianceVolume: (volume: number) => Promise<void>
       openAudioDialog: () => Promise<string[]>
+      loadParties: () => Promise<Party[]>
+      saveParties: (parties: Party[]) => Promise<void>
     }
     playerAPI: {
       onStateUpdate: (callback: (state: AppState) => void) => () => void

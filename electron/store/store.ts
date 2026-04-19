@@ -1,10 +1,12 @@
 import Store from 'electron-store'
-import type { AppState, SessionData, MoodPreset } from '../../src/shared/types'
+import type { AppState, SessionData, MoodPreset, RosterPlayer, Party } from '../../src/shared/types'
 
 interface StoreSchema {
   sessions: Record<string, SessionData>
   moodPresets: MoodPreset[]
   ambianceVolume: number
+  roster: RosterPlayer[]  // legacy, migrated to parties on first load
+  parties: Party[]
 }
 
 const DEFAULT_MOOD_PRESETS: MoodPreset[] = [
@@ -30,6 +32,14 @@ const store = new Store<StoreSchema>({
     ambianceVolume: {
       type: 'number',
       default: 70
+    },
+    roster: {
+      type: 'array',
+      default: []
+    },
+    parties: {
+      type: 'array',
+      default: []
     }
   }
 })
@@ -73,4 +83,22 @@ export function loadAmbianceVolume(): number {
 
 export function saveAmbianceVolume(volume: number): void {
   store.set('ambianceVolume', volume)
+}
+
+export function loadParties(): Party[] {
+  let parties = store.get('parties', [])
+
+  // Migrate old flat roster to a party if it exists
+  const oldRoster = store.get('roster', [])
+  if (oldRoster.length > 0 && parties.length === 0) {
+    parties = [{ id: '1', name: 'Party', players: oldRoster }]
+    store.set('parties', parties)
+    store.set('roster', [])
+  }
+
+  return parties
+}
+
+export function saveParties(parties: Party[]): void {
+  store.set('parties', parties)
 }

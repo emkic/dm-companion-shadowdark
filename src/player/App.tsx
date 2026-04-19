@@ -5,6 +5,7 @@ import { PlayerLocation } from './components/PlayerLocation'
 import { PlayerCombat } from './components/PlayerCombat'
 import { PlayerWatchOrder } from './components/PlayerWatchOrder'
 import { PlayerCrawling } from './components/PlayerCrawling'
+import { PlayerAnnouncement } from './components/PlayerAnnouncement'
 import type { AppState } from '@shared/types'
 import { DEFAULT_TORCH_SECONDS, WEATHER_BY_SEASON } from '@shared/constants'
 
@@ -35,7 +36,8 @@ const INITIAL_STATE: AppState = {
     ],
     checklist: { rationsConsumed: false, foragingAttempt: false, encounterDay1: false, encounterDay2: false, encounterNight1: false, encounterNight2: false }
   },
-  media: { currentFile: null, fileType: null, isShowing: false, folderPath: '', files: [] }
+  media: { currentFile: null, fileType: null, isShowing: false, folderPath: '', files: [] },
+  announcement: { text: '', isShowing: false, timer: null }
 }
 
 export default function App() {
@@ -43,7 +45,10 @@ export default function App() {
 
   useEffect(() => {
     const cleanup = window.playerAPI.onStateUpdate((newState: AppState) => {
-      setState(newState)
+      setState({
+        ...newState,
+        announcement: newState.announcement ?? INITIAL_STATE.announcement
+      })
     })
     return cleanup
   }, [])
@@ -56,6 +61,7 @@ export default function App() {
       <PlayerTorch torch={state.torch} isCamping={state.location.isCamping} hasCampfire={state.location.isCamping && state.location.hasCampfire} combatIsActive={state.combat.isActive} crawlingIsActive={state.crawling.isActive} />
       <PlayerWatchOrder location={state.location} />
       <PlayerLocation location={state.location} />
+      <PlayerAnnouncement announcement={state.announcement} />
     </div>
   )
 }

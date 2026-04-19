@@ -17,7 +17,9 @@ const CH = {
   SAVE_MOOD_PRESETS: 'ambiance:save-presets',
   LOAD_AMBIANCE_VOLUME: 'ambiance:load-volume',
   SAVE_AMBIANCE_VOLUME: 'ambiance:save-volume',
-  OPEN_AUDIO_DIALOG: 'dialog:open-audio'
+  OPEN_AUDIO_DIALOG: 'dialog:open-audio',
+  LOAD_PARTIES: 'parties:load',
+  SAVE_PARTIES: 'parties:save'
 }
 
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -51,5 +53,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   saveAmbianceVolume: (volume: number) =>
     ipcRenderer.invoke(CH.SAVE_AMBIANCE_VOLUME, volume),
   openAudioDialog: () =>
-    ipcRenderer.invoke(CH.OPEN_AUDIO_DIALOG)
+    ipcRenderer.invoke(CH.OPEN_AUDIO_DIALOG),
+  loadParties: () =>
+    ipcRenderer.invoke(CH.LOAD_PARTIES),
+  saveParties: (parties: unknown[]) =>
+    ipcRenderer.invoke(CH.SAVE_PARTIES, parties)
 })

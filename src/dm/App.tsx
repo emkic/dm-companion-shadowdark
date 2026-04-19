@@ -6,6 +6,8 @@ import { useLocation } from './hooks/useLocation'
 import { useMedia } from './hooks/useMedia'
 import { useSession } from './hooks/useSession'
 import { useAmbiance } from './hooks/useAmbiance'
+import { useAnnouncement } from './hooks/useAnnouncement'
+import { useRoster } from './hooks/useRoster'
 import { TorchPanel } from './components/torch/TorchPanel'
 import { LocationSidebar } from './components/location/LocationSidebar'
 import { CombatPanel } from './components/combat/CombatPanel'
@@ -15,6 +17,7 @@ import { MediaPanel } from './components/media/MediaPanel'
 import { SessionModal } from './components/session/SessionModal'
 import { DisplaySelector } from './components/display/DisplaySelector'
 import { TabBar, type TabDef } from './components/tabs/TabBar'
+import { AnnouncementControls } from './components/announcement/AnnouncementControls'
 import { YouTubeEmbed } from './components/ambiance/YouTubeEmbed'
 import { MiniPlayerBar } from './components/ambiance/MiniPlayerBar'
 import type { AppState } from '@shared/types'
@@ -31,6 +34,8 @@ export default function App() {
   const mediaHook = useMedia()
   const sessionHook = useSession()
   const ambianceHook = useAmbiance()
+  const announcementHook = useAnnouncement()
+  const rosterHook = useRoster()
 
   const [activeTab, setActiveTab] = useState<TabId>('combat')
   const [sessionModalOpen, setSessionModalOpen] = useState(false)
@@ -40,8 +45,9 @@ export default function App() {
     combat: combatHook.combat,
     crawling: crawlingHook.crawling,
     location: locationHook.location,
-    media: mediaHook.media
-  }), [torchHook.torchState, combatHook.combat, crawlingHook.crawling, locationHook.location, mediaHook.media])
+    media: mediaHook.media,
+    announcement: announcementHook.announcement
+  }), [torchHook.torchState, combatHook.combat, crawlingHook.crawling, locationHook.location, mediaHook.media, announcementHook.announcement])
 
   // Broadcast to player window only when state actually changes
   const prevStateRef = useRef<string>('')
@@ -161,6 +167,7 @@ export default function App() {
       <YouTubeEmbed containerRef={ambianceHook.playerContainerRef} />
       <header className="dm-header">
         <h1 className="app-title">DM Companion</h1>
+        <AnnouncementControls announcementHook={announcementHook} />
         <DisplaySelector />
         <button
           className="btn btn-ghost btn-small"
@@ -189,7 +196,7 @@ export default function App() {
         <div className="dm-content">
           <TabBar tabs={tabs} activeTab={activeTab} onTabChange={id => setActiveTab(id as TabId)} />
           <div className="tab-panel">
-            {activeTab === 'combat' && <CombatPanel {...combatHook} />}
+            {activeTab === 'combat' && <CombatPanel {...combatHook} rosterHook={rosterHook} />}
             {activeTab === 'crawling' && (
               <CrawlingPanel
                 crawlingHook={crawlingHook}

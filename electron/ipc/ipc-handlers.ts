@@ -2,10 +2,10 @@ import { ipcMain, dialog } from 'electron'
 import * as fs from 'fs'
 import * as path from 'path'
 import { IpcChannel } from '../../src/shared/ipcChannels'
-import { saveSession, loadSession, listSessions, deleteSession, loadMoodPresets, saveMoodPresets, loadAmbianceVolume, saveAmbianceVolume } from '../store/store'
+import { saveSession, loadSession, listSessions, deleteSession, loadMoodPresets, saveMoodPresets, loadAmbianceVolume, saveAmbianceVolume, loadParties, saveParties } from '../store/store'
 import { broadcastToPlayer, movePlayerToDisplay } from './state-bridge'
 import { getAllDisplays } from '../utils/display'
-import type { AppState, MoodPreset } from '../../src/shared/types'
+import type { AppState, MoodPreset, Party } from '../../src/shared/types'
 
 const IMAGE_EXTS = new Set(['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp'])
 const VIDEO_EXTS = new Set(['.mp4', '.webm', '.mov', '.mkv'])
@@ -85,6 +85,14 @@ export function registerIpcHandlers(): void {
       ]
     })
     return result.canceled ? [] : result.filePaths
+  })
+
+  ipcMain.handle(IpcChannel.LOAD_PARTIES, () => {
+    return loadParties()
+  })
+
+  ipcMain.handle(IpcChannel.SAVE_PARTIES, (_event, parties: Party[]) => {
+    saveParties(parties)
   })
 
   ipcMain.handle(IpcChannel.READ_MEDIA_FOLDER, (_event, folderPath: string) => {

@@ -116,12 +116,32 @@ export interface MediaState {
   files: string[]
 }
 
+export interface AnnouncementState {
+  text: string
+  isShowing: boolean
+  timer: number | null  // seconds remaining, null = no auto-dismiss
+}
+
+export interface RosterPlayer {
+  id: string
+  name: string
+  maxHP: number
+  emoji: string
+}
+
+export interface Party {
+  id: string
+  name: string
+  players: RosterPlayer[]
+}
+
 export interface AppState {
   torch: TorchState
   combat: CombatState
   crawling: CrawlingState
   location: LocationState
   media: MediaState
+  announcement: AnnouncementState
 }
 
 export interface SessionData {
