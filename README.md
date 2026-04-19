@@ -70,11 +70,11 @@ Full initiative and combat management visible to both DM and players:
 - **Initiative order** with drag-and-drop reordering or auto-sort by initiative value. Combatants auto-sort by initiative when combat starts.
 - **HP tracking** with +5/+1/-1/-5 buttons and click-to-edit for direct input
 - **Health estimates** shown to players instead of exact HP numbers: Uninjured, Injured, Bloodied, Near Death, Dying, Dead — each color-coded
-- **Previous turn** — Step back a turn if someone forgot something. Death timers reverse correctly when going back a round.
+- **Previous turn** — Step back a turn if someone forgot something. Death timers reverse correctly when stepping back.
 - **Shadowdark death mechanic** — when a player hits 0 HP:
-  1. DM rolls a d4 to set the death timer (rounds until permanent death)
-  2. Each round, the DM can roll a d20 death save
-  3. Natural 20 = player awakens at 1 HP
+  1. DM sets the death timer (1d4 + CON rounds until permanent death)
+  2. Timer ticks automatically on the dying player's turn
+  3. If the player rolls a natural 20, click "Nat 20 — Arise!" to revive at 1 HP
   4. Timer expires = permanent death
 - **Emoji identifiers** for each combatant so players can quickly tell who is who
 - **Duplicate combatant** — quickly copy a combatant to add multiples of the same monster

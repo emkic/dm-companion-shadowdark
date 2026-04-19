@@ -1,6 +1,6 @@
 {
   "name": "shadowdark-dm-app",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "DM Companion App for Shadowdark RPG",
   "main": "out/main/index.js",
   "scripts": {
