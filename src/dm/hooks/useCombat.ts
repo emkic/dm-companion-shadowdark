@@ -38,7 +38,7 @@ export interface UseCombatReturn {
   startCombat: () => void
   endCombat: () => void
   setDeathTimer: (id: string, rounds: number) => void
-  rollDeathSave: (id: string, roll: number) => void
+  nat20DeathSave: (id: string) => void
   reviveCombatant: (id: string, hp: number) => void
   duplicateCombatant: (id: string) => void
 }
@@ -238,24 +238,21 @@ export function useCombat(): UseCombatReturn {
     }))
   }, [])
 
-  // DM rolls d20 each round for a dying player. Natural 20 = arise at 1 HP
-  const rollDeathSave = useCallback((id: string, roll: number) => {
+  // Player rolled a natural 20 on death save — arise at 1 HP
+  const nat20DeathSave = useCallback((id: string) => {
     setCombat(prev => ({
       ...prev,
       combatants: prev.combatants.map(c => {
         if (c.id !== id || !c.isDying) return c
-        if (roll === 20) {
-          return {
-            ...c,
-            currentHP: 1,
-            isDying: false,
-            isDead: false,
-            deathTimer: 0,
-            deathRoundsElapsed: 0,
-            awaitingDeathTimer: false
-          }
+        return {
+          ...c,
+          currentHP: 1,
+          isDying: false,
+          isDead: false,
+          deathTimer: 0,
+          deathRoundsElapsed: 0,
+          awaitingDeathTimer: false
         }
-        return c // not a 20, nothing changes — timer still ticking
       })
     }))
   }, [])
@@ -324,7 +321,7 @@ export function useCombat(): UseCombatReturn {
     startCombat,
     endCombat,
     setDeathTimer,
-    rollDeathSave,
+    nat20DeathSave,
     reviveCombatant,
     duplicateCombatant
   }

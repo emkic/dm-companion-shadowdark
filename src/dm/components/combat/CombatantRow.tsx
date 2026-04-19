@@ -20,7 +20,7 @@ interface Props {
   setInitiative: UseCombatReturn['setInitiative']
   removeCombatant: UseCombatReturn['removeCombatant']
   setDeathTimer: UseCombatReturn['setDeathTimer']
-  rollDeathSave: UseCombatReturn['rollDeathSave']
+  nat20DeathSave: UseCombatReturn['nat20DeathSave']
   setEmoji: UseCombatReturn['setEmoji']
   reviveCombatant: UseCombatReturn['reviveCombatant']
   duplicateCombatant: UseCombatReturn['duplicateCombatant']
@@ -34,7 +34,7 @@ export function CombatantRow({
   setInitiative,
   removeCombatant,
   setDeathTimer,
-  rollDeathSave,
+  nat20DeathSave,
   setEmoji,
   reviveCombatant,
   duplicateCombatant
@@ -42,7 +42,6 @@ export function CombatantRow({
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: c.id, disabled: c.isDead })
   const [editingHP, setEditingHP] = useState(false)
   const [hpInput, setHpInput] = useState(String(c.currentHP))
-  const [deathRollInput, setDeathRollInput] = useState('')
   const [deathTimerInput, setDeathTimerInput] = useState('')
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [reviveHP, setReviveHP] = useState('1')
@@ -59,14 +58,6 @@ export function CombatantRow({
     const val = parseInt(hpInput)
     if (!isNaN(val)) setHP(c.id, val)
     setEditingHP(false)
-  }
-
-  function handleDeathSave() {
-    const roll = parseInt(deathRollInput)
-    if (!isNaN(roll) && roll >= 1 && roll <= 20) {
-      rollDeathSave(c.id, roll)
-      setDeathRollInput('')
-    }
   }
 
   function handleRevive() {
@@ -242,20 +233,9 @@ export function CombatantRow({
           <div className="death-timer-info">
             Round {c.deathRoundsElapsed}/{c.deathTimer} — dies after round {c.deathTimer}
           </div>
-          <span className="death-prompt-text">Death save (natural 20 = arise at 1 HP):</span>
           <div className="death-roll-row">
-            <input
-              type="number"
-              min={1}
-              max={20}
-              placeholder="d20"
-              value={deathRollInput}
-              onChange={e => setDeathRollInput(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleDeathSave()}
-              className="death-roll-input"
-            />
-            <button className="btn btn-small btn-primary" onClick={handleDeathSave}>
-              Roll
+            <button className="btn btn-small btn-primary" onClick={() => nat20DeathSave(c.id)}>
+              Nat 20 — Arise!
             </button>
           </div>
         </div>
