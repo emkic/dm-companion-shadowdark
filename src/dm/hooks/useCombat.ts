@@ -153,17 +153,16 @@ export function useCombat(): UseCombatReturn {
       const nextIndex = (prev.currentTurnIndex + 1) % prev.combatants.length
       const newRound = nextIndex === 0 ? prev.round + 1 : prev.round
 
-      // Advance death timers only when a new round starts
-      const updatedCombatants = nextIndex === 0
-        ? prev.combatants.map(c => {
-            if (!c.isDying || c.isDead || c.deathTimer === 0) return c
-            const newElapsed = c.deathRoundsElapsed + 1
-            if (newElapsed >= c.deathTimer) {
-              return { ...c, isDying: false, isDead: true, deathRoundsElapsed: newElapsed }
-            }
-            return { ...c, deathRoundsElapsed: newElapsed }
-          })
-        : prev.combatants
+      // Advance death timer only for the combatant whose turn is starting
+      const nextCombatant = prev.combatants[nextIndex]
+      const updatedCombatants = prev.combatants.map(c => {
+        if (c.id !== nextCombatant.id || !c.isDying || c.isDead || c.deathTimer === 0) return c
+        const newElapsed = c.deathRoundsElapsed + 1
+        if (newElapsed >= c.deathTimer) {
+          return { ...c, isDying: false, isDead: true, deathRoundsElapsed: newElapsed }
+        }
+        return { ...c, deathRoundsElapsed: newElapsed }
+      })
 
       return {
         ...prev,
@@ -185,13 +184,12 @@ export function useCombat(): UseCombatReturn {
         : prev.currentTurnIndex - 1
       const newRound = prev.currentTurnIndex === 0 ? prev.round - 1 : prev.round
 
-      // Reverse death timers when going back a round
-      const updatedCombatants = prev.currentTurnIndex === 0
-        ? prev.combatants.map(c => {
-            if (!c.isDying || c.deathTimer === 0 || c.deathRoundsElapsed <= 0) return c
-            return { ...c, deathRoundsElapsed: c.deathRoundsElapsed - 1 }
-          })
-        : prev.combatants
+      // Reverse death timer for the combatant whose turn we're undoing
+      const currentCombatant = prev.combatants[prev.currentTurnIndex]
+      const updatedCombatants = prev.combatants.map(c => {
+        if (c.id !== currentCombatant.id || !c.isDying || c.deathTimer === 0 || c.deathRoundsElapsed <= 0) return c
+        return { ...c, deathRoundsElapsed: c.deathRoundsElapsed - 1 }
+      })
 
       return {
         ...prev,
