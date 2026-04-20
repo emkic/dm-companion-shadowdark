@@ -9,11 +9,11 @@ export function YouTubeEmbed({ containerRef }: Props) {
     <div
       ref={containerRef}
       style={{
-        position: 'absolute',
-        width: 1,
-        height: 1,
-        overflow: 'hidden',
-        opacity: 0,
+        position: 'fixed',
+        left: -10000,
+        top: 0,
+        width: 400,
+        height: 300,
         pointerEvents: 'none'
       }}
     />

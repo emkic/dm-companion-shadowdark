@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import type { UseMediaReturn } from '../../hooks/useMedia'
 import type { UseAmbianceReturn } from '../../hooks/useAmbiance'
 import { AmbiancePlayer } from '../ambiance/AmbiancePlayer'
@@ -11,6 +11,35 @@ function getFileName(filePath: string): string {
 function isVideo(filePath: string): boolean {
   const ext = filePath.split('.').pop()?.toLowerCase() ?? ''
   return ['mp4', 'webm', 'mov', 'mkv'].includes(ext)
+}
+
+function VideoThumb({ src }: { src: string }) {
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const el = videoRef.current
+    if (!el || visible) return
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(e => e.isIntersecting)) {
+        setVisible(true)
+        observer.disconnect()
+      }
+    }, { rootMargin: '200px' })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [visible])
+
+  return (
+    <video
+      ref={videoRef}
+      src={visible ? src : undefined}
+      preload="metadata"
+      muted
+      playsInline
+      onError={e => { (e.target as HTMLVideoElement).style.display = 'none' }}
+    />
+  )
 }
 
 type Props = UseMediaReturn & { ambianceHook: UseAmbianceReturn }
@@ -59,6 +88,7 @@ export function MediaPanel({ media, openFolder, showFile, hideMedia, ambianceHoo
             >
               {video ? (
                 <div className="media-thumb video-thumb">
+                  <VideoThumb src={mediaUrl} />
                   <span className="video-icon">▶</span>
                   <span className="media-name">{name}</span>
                 </div>
@@ -67,6 +97,8 @@ export function MediaPanel({ media, openFolder, showFile, hideMedia, ambianceHoo
                   <img
                     src={mediaUrl}
                     alt={name}
+                    loading="lazy"
+                    decoding="async"
                     onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
                   />
                   <span className="media-name">{name}</span>

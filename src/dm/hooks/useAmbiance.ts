@@ -94,6 +94,7 @@ export function useAmbiance(): UseAmbianceReturn {
   const playerRef = useRef<YT.Player | null>(null)
   const playerContainerRef = useRef<HTMLDivElement | null>(null)
   const titlePollRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const ytSourceTypeRef = useRef<'playlist' | 'video' | null>(null)
 
   // Local audio refs + reactive state for UI
   const audioRef = useRef<HTMLAudioElement | null>(null)
@@ -128,8 +129,8 @@ export function useAmbiance(): UseAmbianceReturn {
     if (!isApiReady || !playerContainerRef.current || playerRef.current) return
 
     playerRef.current = new YT.Player(playerContainerRef.current, {
-      height: 1,
-      width: 1,
+      height: 300,
+      width: 400,
       playerVars: {
         autoplay: 0,
         controls: 0,
@@ -144,6 +145,11 @@ export function useAmbiance(): UseAmbianceReturn {
           if (state === YT.PlayerState.PLAYING) {
             startTitlePoll()
           } else if (state === YT.PlayerState.ENDED) {
+            if (ytSourceTypeRef.current === 'video' && playerRef.current) {
+              playerRef.current.seekTo(0, true)
+              playerRef.current.playVideo()
+              return
+            }
             setAmbiance(prev => ({ ...prev, isPlaying: false, currentTrackTitle: '' }))
             stopTitlePoll()
           } else if (state === YT.PlayerState.PAUSED) {
@@ -258,6 +264,7 @@ export function useAmbiance(): UseAmbianceReturn {
   // Stop whichever source is currently playing
   const stopCurrentSource = useCallback(() => {
     playerRef.current?.stopVideo()
+    ytSourceTypeRef.current = null
     if (audioRef.current) {
       audioRef.current.pause()
       audioRef.current.src = ''
@@ -274,6 +281,7 @@ export function useAmbiance(): UseAmbianceReturn {
     if (!parsed) return
 
     const effectiveVolume = Math.round((mood.volume / 100) * (masterVolume / 100) * 100)
+    ytSourceTypeRef.current = parsed.type
 
     if (parsed.type === 'playlist') {
       playerRef.current.loadPlaylist({ list: parsed.id, listType: 'playlist' })

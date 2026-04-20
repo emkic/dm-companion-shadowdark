@@ -89,7 +89,8 @@
   background: var(--bg);
 }
 
-.image-thumb img {
+.image-thumb img,
+.video-thumb video {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -107,7 +108,10 @@
   left: 50%;
   transform: translate(-50%, -60%);
   font-size: 1.4rem;
-  opacity: 0.6;
+  opacity: 0.8;
+  text-shadow: 0 0 6px rgba(0,0,0,0.9);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .media-name {

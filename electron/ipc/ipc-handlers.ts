@@ -95,9 +95,9 @@ export function registerIpcHandlers(): void {
     saveParties(parties)
   })
 
-  ipcMain.handle(IpcChannel.READ_MEDIA_FOLDER, (_event, folderPath: string) => {
+  ipcMain.handle(IpcChannel.READ_MEDIA_FOLDER, async (_event, folderPath: string) => {
     try {
-      const entries = fs.readdirSync(folderPath, { recursive: true }) as string[]
+      const entries = await fs.promises.readdir(folderPath, { recursive: true }) as string[]
       return entries.filter(entry => {
         const ext = path.extname(entry).toLowerCase()
         return IMAGE_EXTS.has(ext) || VIDEO_EXTS.has(ext)

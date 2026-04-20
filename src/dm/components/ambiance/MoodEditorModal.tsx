@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import type { MoodPreset } from '@shared/types'
 import './MoodEditorModal.css'
 
@@ -11,8 +11,6 @@ interface Props {
 let nextId = 100
 
 export function MoodEditorModal({ presets, onSave, onClose }: Props) {
-  const [draft, setDraft] = useState<MoodPreset[]>(() => presets.map(p => ({ ...p })))
-
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') {
@@ -25,12 +23,12 @@ export function MoodEditorModal({ presets, onSave, onClose }: Props) {
   }, [onClose])
 
   function updatePreset(id: string, patch: Partial<MoodPreset>) {
-    setDraft(prev => prev.map(p => p.id === id ? { ...p, ...patch } : p))
+    onSave(presets.map(p => p.id === id ? { ...p, ...patch } : p))
   }
 
   function addPreset() {
-    setDraft(prev => [
-      ...prev,
+    onSave([
+      ...presets,
       {
         id: String(nextId++),
         name: 'New Mood',
@@ -46,15 +44,14 @@ export function MoodEditorModal({ presets, onSave, onClose }: Props) {
   }
 
   function removePreset(id: string) {
-    setDraft(prev => prev.filter(p => p.id !== id))
+    onSave(presets.filter(p => p.id !== id))
   }
 
   async function handleAddAudioFiles(moodId: string) {
     const files = await window.electronAPI.openAudioDialog()
     if (files.length === 0) return
-    setDraft(prev => prev.map(p => {
+    onSave(presets.map(p => {
       if (p.id !== moodId) return p
-      // Append new files, avoiding duplicates
       const existing = new Set(p.audioFiles)
       const merged = [...p.audioFiles, ...files.filter(f => !existing.has(f))]
       return { ...p, audioFiles: merged }
@@ -62,15 +59,10 @@ export function MoodEditorModal({ presets, onSave, onClose }: Props) {
   }
 
   function removeAudioFile(moodId: string, filePath: string) {
-    setDraft(prev => prev.map(p => {
+    onSave(presets.map(p => {
       if (p.id !== moodId) return p
       return { ...p, audioFiles: p.audioFiles.filter(f => f !== filePath) }
     }))
-  }
-
-  async function handleSave() {
-    await onSave(draft)
-    onClose()
   }
 
   return (
@@ -82,7 +74,7 @@ export function MoodEditorModal({ presets, onSave, onClose }: Props) {
         </div>
 
         <div className="mood-editor-list">
-          {draft.map(mood => (
+          {presets.map(mood => (
             <div key={mood.id} className="mood-editor-item">
               <div className="mood-editor-row">
                 <input
@@ -213,8 +205,7 @@ export function MoodEditorModal({ presets, onSave, onClose }: Props) {
             + Add Mood
           </button>
           <div className="mood-editor-footer-right">
-            <button className="btn btn-ghost btn-small" onClick={onClose}>Cancel</button>
-            <button className="btn btn-primary btn-small" onClick={handleSave}>Save</button>
+            <button className="btn btn-primary btn-small" onClick={onClose}>Done</button>
           </div>
         </div>
       </div>
