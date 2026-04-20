@@ -10,11 +10,13 @@ Published under the Shadowdark RPG Third-Party License and is not affiliated wit
 
 - **Dual-screen display** — DM panel on your monitor, fullscreen player view on a projector or TV
 - **Combat tracker** — Drag-drop initiative, HP tracking, health estimates, Shadowdark death mechanic
+- **Multi-party roster** — Save persistent parties and drop them into combat with one click
 - **Crawling rounds** — Turn order, round tracking, encounter checks by danger level
 - **Light source system** — Multiple independent torch timers with pixel-art fire animations and a dramatic darkness overlay
 - **Hex crawling & travel** — Hex tracker, daily checklists, camping with watch order, weather reference
+- **Announcements** — Send text overlays to the player screen with optional auto-dismiss
 - **Ambiance player** — YouTube playlists or local audio, mood presets, crossfade, mini-player bar
-- **Media panel** — Display images or videos fullscreen on the player screen
+- **Media panel** — Display images or videos fullscreen on the player screen, with first-frame thumbnails for videos
 - **Session save/load** — Pick up exactly where you left off
 
 ## Download
@@ -79,6 +81,23 @@ Full initiative and combat management visible to both DM and players:
 - **Emoji identifiers** for each combatant so players can quickly tell who is who
 - **Duplicate combatant** — quickly copy a combatant to add multiples of the same monster
 - Monsters are automatically removed from the tracker when combat ends
+
+### Multi-Party Roster
+
+Save persistent parties so you never have to re-enter character names and HP between sessions:
+
+- **Named parties as tabs** — keep separate rosters for different campaigns or groups and switch between them with a click
+- **Inline editing** — edit name, max HP, and emoji directly in the roster without modals
+- **One-click "Add Party to Combat"** — drops every roster member into the combat tracker with their stats prefilled
+- **Persists across sessions** — parties are stored separately from session save/load, so they're always available
+
+### Announcements
+
+Send text messages to the player screen for dramatic reveals, clues, or scene cues:
+
+- **Send any text** from the DM header to the fullscreen player display as a styled overlay
+- **Optional auto-dismiss timer** — set a duration and the announcement fades out on its own, or leave it up until you dismiss manually
+- **DM-controlled** — players only see what you send, when you send it
 
 ### Crawling Rounds
 
@@ -145,6 +164,9 @@ Show the current location on the player screen:
 ### Media Panel
 
 Browse a local folder and display images or videos fullscreen on the player screen. Supports common formats (jpg, png, gif, webm, mp4, etc). Multi-column thumbnail grid for easy browsing. Useful for showing maps, artwork, handouts, or ambient scenes.
+
+- **Lazy-loaded thumbnails** — images and video first-frames only load as they scroll into view, so even folders with 100+ files stay responsive
+- **Video previews** — `.mp4`, `.webm`, `.mov`, and `.mkv` files show their first frame as a thumbnail so you can tell scenes apart at a glance
 
 ### Ambiance Player
 
