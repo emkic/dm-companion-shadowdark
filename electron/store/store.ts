@@ -7,6 +7,7 @@ interface StoreSchema {
   ambianceVolume: number
   roster: RosterPlayer[]  // legacy, migrated to parties on first load
   parties: Party[]
+  lastAudioFolder: string
 }
 
 const DEFAULT_MOOD_PRESETS: MoodPreset[] = [
@@ -40,6 +41,10 @@ const store = new Store<StoreSchema>({
     parties: {
       type: 'array',
       default: []
+    },
+    lastAudioFolder: {
+      type: 'string',
+      default: ''
     }
   }
 })
@@ -101,4 +106,12 @@ export function loadParties(): Party[] {
 
 export function saveParties(parties: Party[]): void {
   store.set('parties', parties)
+}
+
+export function loadLastAudioFolder(): string {
+  return store.get('lastAudioFolder', '')
+}
+
+export function saveLastAudioFolder(folder: string): void {
+  store.set('lastAudioFolder', folder)
 }

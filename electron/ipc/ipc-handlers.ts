@@ -2,7 +2,7 @@ import { ipcMain, dialog, app } from 'electron'
 import * as fs from 'fs'
 import * as path from 'path'
 import { IpcChannel } from '../../src/shared/ipcChannels'
-import { saveSession, loadSession, listSessions, deleteSession, loadMoodPresets, saveMoodPresets, loadAmbianceVolume, saveAmbianceVolume, loadParties, saveParties } from '../store/store'
+import { saveSession, loadSession, listSessions, deleteSession, loadMoodPresets, saveMoodPresets, loadAmbianceVolume, saveAmbianceVolume, loadParties, saveParties, loadLastAudioFolder, saveLastAudioFolder } from '../store/store'
 import { broadcastToPlayer, movePlayerToDisplay } from './state-bridge'
 import { getAllDisplays } from '../utils/display'
 import type { AppState, MoodPreset, Party } from '../../src/shared/types'
@@ -78,18 +78,24 @@ export function registerIpcHandlers(): void {
 
   ipcMain.handle(IpcChannel.OPEN_AUDIO_DIALOG, async (event) => {
     const win = require('electron').BrowserWindow.fromWebContents(event.sender)
-    let defaultPath: string | undefined
-    try { defaultPath = app.getPath('music') } catch { /* not available on all platforms */ }
+    // Prefer the last folder the user picked audio from. Fall back to the OS Music
+    // folder on first run so we don't inherit unrelated state from other dialogs.
+    let defaultPath = loadLastAudioFolder()
+    if (!defaultPath) {
+      try { defaultPath = app.getPath('music') } catch { defaultPath = '' }
+    }
     const result = await dialog.showOpenDialog(win!, {
       title: 'Select audio files for this mood',
-      defaultPath,
+      defaultPath: defaultPath || undefined,
       properties: ['openFile', 'multiSelections'],
       filters: [
         { name: 'Audio Files', extensions: ['mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac', 'wma', 'webm', 'opus'] },
         { name: 'All Files', extensions: ['*'] }
       ]
     })
-    return result.canceled ? [] : result.filePaths
+    if (result.canceled || result.filePaths.length === 0) return []
+    saveLastAudioFolder(path.dirname(result.filePaths[0]))
+    return result.filePaths
   })
 
   ipcMain.handle(IpcChannel.LOAD_PARTIES, () => {
