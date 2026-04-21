@@ -36,6 +36,52 @@
   white-space: nowrap;
 }
 
+.ambiance-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 10px;
+  background: rgba(200, 112, 112, 0.12);
+  border: 1px solid #c87070;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  color: var(--text);
+}
+
+.ambiance-error-icon {
+  font-weight: 700;
+  color: #c87070;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #c87070;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 12px;
+  font-size: 0.7rem;
+}
+
+.ambiance-error-text {
+  flex: 1;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.ambiance-error-dismiss {
+  background: none;
+  border: none;
+  color: var(--text);
+  opacity: 0.5;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+
+.ambiance-error-dismiss:hover {
+  opacity: 1;
+}
+
 .ambiance-mood-grid {
   display: flex;
   flex-wrap: wrap;

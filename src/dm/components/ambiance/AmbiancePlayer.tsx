@@ -9,10 +9,11 @@ interface Props {
 }
 
 export function AmbiancePlayer({ ambianceHook }: Props) {
-  const { ambiance, presets, localPlaylist, localTrackIndex, playMood, playTrack, togglePlayPause, skip, stop, setVolume, toggleFavorite, savePresets } = ambianceHook
+  const { ambiance, presets, apiLoadError, lastError, clearError, localPlaylist, localTrackIndex, playMood, playTrack, togglePlayPause, skip, stop, setVolume, toggleFavorite, savePresets } = ambianceHook
   const [editorOpen, setEditorOpen] = useState(false)
 
   const activeMood = presets.find(p => p.id === ambiance.currentMoodId)
+  const errorMessage = lastError ?? (apiLoadError ? `YouTube unavailable — ${apiLoadError}. Local audio still works.` : null)
 
   return (
     <div className="ambiance-player">
@@ -29,6 +30,20 @@ export function AmbiancePlayer({ ambianceHook }: Props) {
             <span className="ambiance-mood-dot" style={{ background: activeMood.color }} />
           )}
           <span className="ambiance-track-title">{ambiance.currentTrackTitle}</span>
+        </div>
+      )}
+
+      {errorMessage && (
+        <div className="ambiance-error" role="alert">
+          <span className="ambiance-error-icon">!</span>
+          <span className="ambiance-error-text">{errorMessage}</span>
+          <button
+            className="ambiance-error-dismiss"
+            onClick={clearError}
+            title="Dismiss"
+          >
+            ✕
+          </button>
         </div>
       )}
 

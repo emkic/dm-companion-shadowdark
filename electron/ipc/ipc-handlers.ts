@@ -1,4 +1,4 @@
-import { ipcMain, dialog } from 'electron'
+import { ipcMain, dialog, app } from 'electron'
 import * as fs from 'fs'
 import * as path from 'path'
 import { IpcChannel } from '../../src/shared/ipcChannels'
@@ -78,10 +78,15 @@ export function registerIpcHandlers(): void {
 
   ipcMain.handle(IpcChannel.OPEN_AUDIO_DIALOG, async (event) => {
     const win = require('electron').BrowserWindow.fromWebContents(event.sender)
+    let defaultPath: string | undefined
+    try { defaultPath = app.getPath('music') } catch { /* not available on all platforms */ }
     const result = await dialog.showOpenDialog(win!, {
+      title: 'Select audio files for this mood',
+      defaultPath,
       properties: ['openFile', 'multiSelections'],
       filters: [
-        { name: 'Audio Files', extensions: ['mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac', 'wma', 'webm'] }
+        { name: 'Audio Files', extensions: ['mp3', 'wav', 'ogg', 'flac', 'm4a', 'aac', 'wma', 'webm', 'opus'] },
+        { name: 'All Files', extensions: ['*'] }
       ]
     })
     return result.canceled ? [] : result.filePaths

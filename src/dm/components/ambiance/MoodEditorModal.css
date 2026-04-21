@@ -72,6 +72,25 @@
   font-size: 0.78rem;
 }
 
+.mood-editor-url-row {
+  flex-wrap: wrap;
+  row-gap: 4px;
+}
+
+.mood-editor-url-hint {
+  width: 100%;
+  font-size: 0.72rem;
+  padding-left: 2px;
+}
+
+.mood-editor-url-hint-ok {
+  color: #6abf7a;
+}
+
+.mood-editor-url-hint-bad {
+  color: #c87070;
+}
+
 .mood-editor-settings {
   font-size: 0.78rem;
   color: var(--text);

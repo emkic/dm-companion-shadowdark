@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import type { MoodPreset } from '@shared/types'
+import { isValidYouTubeUrl } from '../../hooks/useAmbiance'
 import './MoodEditorModal.css'
 
 interface Props {
@@ -120,17 +121,27 @@ export function MoodEditorModal({ presets, onSave, onClose }: Props) {
               </div>
 
               {/* YouTube URL input */}
-              {mood.source === 'youtube' && (
-                <div className="mood-editor-row">
-                  <input
-                    type="text"
-                    value={mood.youtubeUrl}
-                    onChange={e => updatePreset(mood.id, { youtubeUrl: e.target.value })}
-                    className="form-input mood-editor-url"
-                    placeholder="YouTube playlist or video URL"
-                  />
-                </div>
-              )}
+              {mood.source === 'youtube' && (() => {
+                const trimmed = mood.youtubeUrl.trim()
+                const valid = trimmed ? isValidYouTubeUrl(trimmed) : null
+                return (
+                  <div className="mood-editor-row mood-editor-url-row">
+                    <input
+                      type="text"
+                      value={mood.youtubeUrl}
+                      onChange={e => updatePreset(mood.id, { youtubeUrl: e.target.value })}
+                      className="form-input mood-editor-url"
+                      placeholder="YouTube playlist or video URL"
+                    />
+                    {valid === true && (
+                      <span className="mood-editor-url-hint mood-editor-url-hint-ok">✓ Saved · click the mood in Ambiance to play</span>
+                    )}
+                    {valid === false && (
+                      <span className="mood-editor-url-hint mood-editor-url-hint-bad">✗ Not a recognised YouTube link</span>
+                    )}
+                  </div>
+                )
+              })()}
 
               {/* Local audio files */}
               {mood.source === 'local' && (

@@ -5,21 +5,45 @@ import type { MoodPreset, AmbianceState } from '@shared/types'
 
 function parseYouTubeUrl(url: string): { type: 'playlist'; id: string } | { type: 'video'; id: string } | null {
   if (!url) return null
+  let cleaned = url.trim()
+  if (!cleaned) return null
+  // Auto-prepend protocol if missing (users often paste "youtube.com/watch?v=…")
+  if (!/^https?:\/\//i.test(cleaned)) cleaned = 'https://' + cleaned
   try {
-    const u = new URL(url)
+    const u = new URL(cleaned)
+    if (!/(^|\.)youtube\.com$/i.test(u.hostname) && u.hostname.toLowerCase() !== 'youtu.be') return null
     // Playlist: ?list=PLxxxx
     const list = u.searchParams.get('list')
     if (list) return { type: 'playlist', id: list }
     // Video: /watch?v=xxx or youtu.be/xxx
     const v = u.searchParams.get('v')
     if (v) return { type: 'video', id: v }
-    if (u.hostname === 'youtu.be') {
+    if (u.hostname.toLowerCase() === 'youtu.be') {
       const id = u.pathname.slice(1)
       if (id) return { type: 'video', id }
     }
+    // /embed/xxx or /shorts/xxx
+    const embedMatch = u.pathname.match(/^\/(?:embed|shorts)\/([^/]+)/)
+    if (embedMatch) return { type: 'video', id: embedMatch[1] }
     return null
   } catch {
     return null
+  }
+}
+
+// Exposed so the editor can give live validation feedback
+export function isValidYouTubeUrl(url: string): boolean {
+  return parseYouTubeUrl(url) !== null
+}
+
+function youTubeErrorMessage(code: number): string {
+  switch (code) {
+    case 2: return 'Invalid YouTube URL.'
+    case 5: return 'YouTube HTML5 player error.'
+    case 100: return 'Video not found or private.'
+    case 101:
+    case 150: return 'This video has embedding disabled by the uploader. Try a different video or playlist.'
+    default: return `YouTube playback error (code ${code}).`
   }
 }
 
@@ -29,15 +53,24 @@ let ytApiPromise: Promise<void> | null = null
 
 function loadYouTubeApi(): Promise<void> {
   if (ytApiPromise) return ytApiPromise
-  ytApiPromise = new Promise<void>((resolve) => {
+  ytApiPromise = new Promise<void>((resolve, reject) => {
     if (window.YT && window.YT.Player) {
       resolve()
       return
     }
-    window.onYouTubeIframeAPIReady = () => resolve()
+    let settled = false
+    const finish = (err?: Error) => {
+      if (settled) return
+      settled = true
+      if (err) { ytApiPromise = null; reject(err) } else resolve()
+    }
+    window.onYouTubeIframeAPIReady = () => finish()
     const tag = document.createElement('script')
     tag.src = 'https://www.youtube.com/iframe_api'
+    tag.onerror = () => finish(new Error('Failed to load YouTube IFrame API script'))
     document.head.appendChild(tag)
+    // 15s timeout — covers slow/blocked networks without waiting forever
+    setTimeout(() => finish(new Error('YouTube IFrame API load timed out (15s)')), 15000)
   })
   return ytApiPromise
 }
@@ -59,6 +92,9 @@ export interface UseAmbianceReturn {
   ambiance: AmbianceState
   presets: MoodPreset[]
   isApiReady: boolean
+  apiLoadError: string | null
+  lastError: string | null
+  clearError: () => void
   localPlaylist: string[]
   localTrackIndex: number
   playMood: (moodId: string) => void
@@ -90,6 +126,8 @@ export function useAmbiance(): UseAmbianceReturn {
     volume: 70
   })
   const [isApiReady, setIsApiReady] = useState(false)
+  const [apiLoadError, setApiLoadError] = useState<string | null>(null)
+  const [lastError, setLastError] = useState<string | null>(null)
 
   const playerRef = useRef<YT.Player | null>(null)
   const playerContainerRef = useRef<HTMLDivElement | null>(null)
@@ -121,7 +159,13 @@ export function useAmbiance(): UseAmbianceReturn {
 
   // Load YouTube API on mount
   useEffect(() => {
-    loadYouTubeApi().then(() => setIsApiReady(true))
+    loadYouTubeApi().then(
+      () => setIsApiReady(true),
+      (err: Error) => {
+        console.error('[Ambiance] YouTube API failed to load:', err)
+        setApiLoadError(err.message)
+      }
+    )
   }, [])
 
   // Create YT.Player once API is ready and container exists
@@ -156,8 +200,15 @@ export function useAmbiance(): UseAmbianceReturn {
             setAmbiance(prev => ({ ...prev, isPlaying: false }))
           }
         },
-        onError: () => {
-          playerRef.current?.nextVideo()
+        onError: (event) => {
+          const code = typeof event.data === 'number' ? event.data : -1
+          const message = youTubeErrorMessage(code)
+          console.error('[Ambiance] YouTube player error', code, message)
+          setLastError(message)
+          // For playlists, try to skip past the unplayable item
+          if (ytSourceTypeRef.current === 'playlist') {
+            playerRef.current?.nextVideo()
+          }
         }
       }
     })
@@ -276,9 +327,22 @@ export function useAmbiance(): UseAmbianceReturn {
   }, [stopTitlePoll])
 
   const loadYouTubeMood = useCallback((mood: MoodPreset, masterVolume: number) => {
-    if (!playerRef.current) return
+    if (!playerRef.current) {
+      const msg = apiLoadError
+        ? `YouTube player unavailable: ${apiLoadError}`
+        : 'YouTube player is still loading. Try again in a moment.'
+      console.warn('[Ambiance]', msg)
+      setLastError(msg)
+      return
+    }
     const parsed = parseYouTubeUrl(mood.youtubeUrl)
-    if (!parsed) return
+    if (!parsed) {
+      const msg = `Invalid YouTube URL: "${mood.youtubeUrl}". Use a youtube.com or youtu.be link.`
+      console.warn('[Ambiance]', msg)
+      setLastError(msg)
+      return
+    }
+    setLastError(null)
 
     const effectiveVolume = Math.round((mood.volume / 100) * (masterVolume / 100) * 100)
     ytSourceTypeRef.current = parsed.type
@@ -295,11 +359,12 @@ export function useAmbiance(): UseAmbianceReturn {
 
     playerRef.current.setVolume(0)
     setTimeout(() => fadeVolume(0, effectiveVolume, 400), 300)
-  }, [fadeVolume])
+  }, [fadeVolume, apiLoadError])
 
   const loadLocalMood = useCallback((mood: MoodPreset, masterVolume: number) => {
     const audio = audioRef.current
     if (!audio || mood.audioFiles.length === 0) return
+    setLastError(null)
 
     const playlist = mood.shuffle ? shuffleArray(mood.audioFiles) : [...mood.audioFiles]
     localPlaylistRef.current = playlist
@@ -449,6 +514,8 @@ export function useAmbiance(): UseAmbianceReturn {
     await window.electronAPI.saveMoodPresets(newPresets)
   }, [])
 
+  const clearError = useCallback(() => setLastError(null), [])
+
   const playTrack = useCallback((index: number) => {
     const audio = audioRef.current
     const playlist = localPlaylistRef.current
@@ -468,6 +535,9 @@ export function useAmbiance(): UseAmbianceReturn {
     ambiance,
     presets,
     isApiReady,
+    apiLoadError,
+    lastError,
+    clearError,
     localPlaylist,
     localTrackIndex,
     playMood,
