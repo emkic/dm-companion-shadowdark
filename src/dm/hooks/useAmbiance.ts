@@ -37,13 +37,22 @@ export function isValidYouTubeUrl(url: string): boolean {
 }
 
 function youTubeErrorMessage(code: number): string {
+  const tryLocal = ' Try a different video, or switch this mood to "Local Files" in Edit Moods to use your own audio.'
   switch (code) {
-    case 2: return 'Invalid YouTube URL.'
-    case 5: return 'YouTube HTML5 player error.'
-    case 100: return 'Video not found or private.'
+    case 2:
+      return "That URL doesn't look like a valid YouTube link."
+    case 5:
+      return 'The YouTube player ran into a problem. Try clicking the mood again.'
+    case 100:
+      return 'Video not found — it may be private, removed, or the URL is wrong.'
     case 101:
-    case 150: return 'This video has embedding disabled by the uploader. Try a different video or playlist.'
-    default: return `YouTube playback error (code ${code}).`
+    case 150:
+      return 'The uploader has disabled embedding for this video, so YouTube won\'t play it inside other apps.' + tryLocal
+    case 152:
+    case 153:
+      return "YouTube won't play this video inside embedded apps from your region — usually because it's age-restricted, geo-blocked, or requires being signed in to a Google account. This is a YouTube restriction, not an app bug." + tryLocal
+    default:
+      return `YouTube playback error (code ${code}). The video may be restricted.` + tryLocal
   }
 }
 
@@ -329,15 +338,15 @@ export function useAmbiance(): UseAmbianceReturn {
   const loadYouTubeMood = useCallback((mood: MoodPreset, masterVolume: number) => {
     if (!playerRef.current) {
       const msg = apiLoadError
-        ? `YouTube player unavailable: ${apiLoadError}`
-        : 'YouTube player is still loading. Try again in a moment.'
+        ? `Can't reach YouTube (${apiLoadError}). Check your internet connection, or switch this mood to "Local Files" in Edit Moods.`
+        : 'YouTube is still loading. Try again in a moment.'
       console.warn('[Ambiance]', msg)
       setLastError(msg)
       return
     }
     const parsed = parseYouTubeUrl(mood.youtubeUrl)
     if (!parsed) {
-      const msg = `Invalid YouTube URL: "${mood.youtubeUrl}". Use a youtube.com or youtu.be link.`
+      const msg = `That URL doesn't look like a YouTube link: "${mood.youtubeUrl}". Edit the mood and paste a youtube.com or youtu.be URL.`
       console.warn('[Ambiance]', msg)
       setLastError(msg)
       return

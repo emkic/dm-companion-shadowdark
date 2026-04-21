@@ -13,7 +13,7 @@ export function AmbiancePlayer({ ambianceHook }: Props) {
   const [editorOpen, setEditorOpen] = useState(false)
 
   const activeMood = presets.find(p => p.id === ambiance.currentMoodId)
-  const errorMessage = lastError ?? (apiLoadError ? `YouTube unavailable — ${apiLoadError}. Local audio still works.` : null)
+  const errorMessage = lastError ?? (apiLoadError ? `Can't reach YouTube (${apiLoadError}). Check your internet, or use the Local Files option for any mood. ` : null)
 
   return (
     <div className="ambiance-player">
