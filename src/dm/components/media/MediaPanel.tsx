@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { UseMediaReturn } from '../../hooks/useMedia'
 import type { UseAmbianceReturn } from '../../hooks/useAmbiance'
 import { AmbiancePlayer } from '../ambiance/AmbiancePlayer'

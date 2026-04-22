@@ -220,8 +220,7 @@ export function useCombat(): UseCombatReturn {
         .filter(c => c.type === 'player') // remove all monsters on combat end
         .map(c => ({
           ...c,
-          ...newCombatantDefaults(),
-          currentHP: c.isDead ? c.currentHP : c.currentHP // preserve HP but clear death state for alive players
+          ...newCombatantDefaults()
         }))
     }))
   }, [])

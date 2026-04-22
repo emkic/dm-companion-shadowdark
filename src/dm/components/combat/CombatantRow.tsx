@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { getHealthEstimate, HEALTH_ESTIMATE_COLORS } from '@shared/healthEstimate'

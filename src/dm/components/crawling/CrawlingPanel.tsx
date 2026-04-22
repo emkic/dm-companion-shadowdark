@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
   DndContext,
   closestCenter,
@@ -18,33 +18,12 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import type { UseCrawlingReturn } from '../../hooks/useCrawling'
 import type { DangerLevel, CrawlingTurnSlot } from '@shared/types'
+import { DANGER_LABELS, ENCOUNTER_INTERVAL, getEffectiveDanger } from '@shared/constants'
 import './CrawlingPanel.css'
 
 interface Props {
   crawlingHook: UseCrawlingReturn
   dangerLevel: DangerLevel
-}
-
-const ENCOUNTER_INTERVAL: Record<DangerLevel, number> = {
-  unsafe: 3,
-  risky: 2,
-  deadly: 1
-}
-
-const DANGER_LABELS: Record<DangerLevel, string> = {
-  unsafe: 'Unsafe',
-  risky: 'Risky',
-  deadly: 'Deadly'
-}
-
-function getEffectiveDanger(dangerLevel: DangerLevel, inTotalDarkness: boolean): DangerLevel {
-  return inTotalDarkness ? 'deadly' : dangerLevel
-}
-
-function isEncounterCheckRound(round: number, dangerLevel: DangerLevel, inTotalDarkness: boolean): boolean {
-  if (round <= 0) return false
-  const effective = getEffectiveDanger(dangerLevel, inTotalDarkness)
-  return round % ENCOUNTER_INTERVAL[effective] === 0
 }
 
 // ── Sortable turn slot (drag-and-drop) ──
@@ -83,6 +62,33 @@ function SortableTurnSlot({ id, index, slot, onNameChange, onRemove }: {
       >
         ✕
       </button>
+    </div>
+  )
+}
+
+// ── Sortable active-crawl turn entry (read-only row, drag handle) ──
+
+function SortableTurnEntry({ id, index, name, isActive }: {
+  id: string
+  index: number
+  name: string
+  isActive: boolean
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id })
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.7 : 1
+  }
+
+  return (
+    <div ref={setNodeRef} style={style} className={`turn-order-entry ${isActive ? 'active-entry' : ''}`}>
+      <div className="turn-drag-handle" {...attributes} {...listeners} title="Drag to reorder">
+        &#x2807;
+      </div>
+      <span className="turn-order-num">{index + 1}</span>
+      <span className="turn-order-name">{name}</span>
+      {isActive && <span className="turn-arrow">◀</span>}
     </div>
   )
 }
@@ -155,7 +161,7 @@ function CrawlSetup({ onStart }: { onStart: (turnOrder: CrawlingTurnSlot[]) => v
 // ── Active crawl: turn display + encounter checks ──
 
 export function CrawlingPanel({ crawlingHook, dangerLevel }: Props) {
-  const { crawling, startCrawl, endCrawl, nextTurn, toggleTotalDarkness, resolveEncounterCheck, markEncounter, setTurnName, reorderTurns } = crawlingHook
+  const { crawling, startCrawl, endCrawl, nextTurn, toggleTotalDarkness, resolveEncounterCheck, reorderTurns } = crawlingHook
   const effectiveDanger = getEffectiveDanger(dangerLevel, crawling.inTotalDarkness)
   const interval = ENCOUNTER_INTERVAL[effectiveDanger]
 
@@ -303,14 +309,13 @@ export function CrawlingPanel({ crawlingHook, dangerLevel }: Props) {
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleTurnDragEnd}>
             <SortableContext items={turnIds} strategy={verticalListSortingStrategy}>
               {crawling.turnOrder.map((slot, i) => (
-                <div
+                <SortableTurnEntry
                   key={turnIds[i]}
-                  className={`turn-order-entry ${i === crawling.currentTurnIndex ? 'active-entry' : ''}`}
-                >
-                  <span className="turn-order-num">{i + 1}</span>
-                  <span className="turn-order-name">{slot.name}</span>
-                  {i === crawling.currentTurnIndex && <span className="turn-arrow">◀</span>}
-                </div>
+                  id={turnIds[i]}
+                  index={i}
+                  name={slot.name}
+                  isActive={i === crawling.currentTurnIndex}
+                />
               ))}
             </SortableContext>
           </DndContext>

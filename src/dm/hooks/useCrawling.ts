@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import type { CrawlingState, CrawlingTurnSlot, DangerLevel } from '@shared/types'
+import { ENCOUNTER_INTERVAL, getEffectiveDanger } from '@shared/constants'
 
 const INITIAL_STATE: CrawlingState = {
   isActive: false,
@@ -12,17 +13,9 @@ const INITIAL_STATE: CrawlingState = {
   encounterFlash: false
 }
 
-/** How often to check for random encounters based on danger level */
-const ENCOUNTER_INTERVAL: Record<DangerLevel, number> = {
-  unsafe: 3,
-  risky: 2,
-  deadly: 1
-}
-
 function isEncounterCheckRound(round: number, dangerLevel: DangerLevel, inTotalDarkness: boolean): boolean {
   if (round <= 0) return false
-  const effective = inTotalDarkness ? 'deadly' : dangerLevel
-  return round % ENCOUNTER_INTERVAL[effective] === 0
+  return round % ENCOUNTER_INTERVAL[getEffectiveDanger(dangerLevel, inTotalDarkness)] === 0
 }
 
 export interface UseCrawlingReturn {

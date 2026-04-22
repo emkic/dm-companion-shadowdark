@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { PlayerTorch } from './components/PlayerTorch'
 import { PlayerMedia } from './components/PlayerMedia'
 import { PlayerLocation } from './components/PlayerLocation'

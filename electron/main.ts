@@ -1,6 +1,5 @@
 import { app, BrowserWindow, protocol, powerSaveBlocker } from 'electron'
 import { join } from 'path'
-import * as fs from 'fs'
 import { getPlayerDisplayBounds } from './utils/display'
 import { setPlayerWindow } from './ipc/state-bridge'
 import { registerIpcHandlers } from './ipc/ipc-handlers'

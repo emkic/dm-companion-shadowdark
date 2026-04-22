@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import type { MoodPreset } from '@shared/types'
 import { isValidYouTubeUrl } from '../../hooks/useAmbiance'
 import './MoodEditorModal.css'

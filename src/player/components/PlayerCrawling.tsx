@@ -1,4 +1,3 @@
-import React from 'react'
 import type { CrawlingState } from '@shared/types'
 import './PlayerCrawling.css'
 

@@ -1,13 +1,7 @@
-import React from 'react'
 import type { LocationState } from '@shared/types'
 import { ACTIVITY_LABELS } from '@shared/types'
+import { DANGER_LABELS } from '@shared/constants'
 import './PlayerLocation.css'
-
-const DANGER_LABELS: Record<string, string> = {
-  unsafe: 'Unsafe',
-  risky: 'Risky',
-  deadly: 'Deadly'
-}
 
 function formatDate(isoDate: string): string {
   const date = new Date(isoDate + 'T00:00:00')

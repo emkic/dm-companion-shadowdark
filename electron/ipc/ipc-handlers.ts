@@ -1,4 +1,4 @@
-import { ipcMain, dialog, app } from 'electron'
+import { ipcMain, dialog, app, BrowserWindow } from 'electron'
 import * as fs from 'fs'
 import * as path from 'path'
 import { IpcChannel } from '../../src/shared/ipcChannels'
@@ -34,15 +34,15 @@ export function registerIpcHandlers(): void {
   })
 
   ipcMain.handle(IpcChannel.OPEN_FOLDER_DIALOG, async (event) => {
-    const win = require('electron').BrowserWindow.fromWebContents(event.sender)
+    const win = BrowserWindow.fromWebContents(event.sender)
     const result = await dialog.showOpenDialog(win!, {
       properties: ['openDirectory']
     })
     return result.canceled ? null : result.filePaths[0]
   })
 
-  ipcMain.handle('dialog:open-image', async (event) => {
-    const win = require('electron').BrowserWindow.fromWebContents(event.sender)
+  ipcMain.handle(IpcChannel.OPEN_IMAGE_DIALOG, async (event) => {
+    const win = BrowserWindow.fromWebContents(event.sender)
     const result = await dialog.showOpenDialog(win!, {
       properties: ['openFile'],
       filters: [
@@ -77,7 +77,7 @@ export function registerIpcHandlers(): void {
   })
 
   ipcMain.handle(IpcChannel.OPEN_AUDIO_DIALOG, async (event) => {
-    const win = require('electron').BrowserWindow.fromWebContents(event.sender)
+    const win = BrowserWindow.fromWebContents(event.sender)
     // Prefer the last folder the user picked audio from. Fall back to the OS Music
     // folder on first run so we don't inherit unrelated state from other dialogs.
     let defaultPath = loadLastAudioFolder()

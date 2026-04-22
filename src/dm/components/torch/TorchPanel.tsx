@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import type { UseTorchReturn } from '../../hooks/useTorch'
 import type { TimerState, LightMode } from '@shared/types'
 import './TorchPanel.css'

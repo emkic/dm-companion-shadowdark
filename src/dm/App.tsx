@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { useTorch } from './hooks/useTorch'
 import { useCombat } from './hooks/useCombat'
 import { useCrawling } from './hooks/useCrawling'

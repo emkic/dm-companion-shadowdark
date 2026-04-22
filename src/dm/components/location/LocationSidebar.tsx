@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { WEATHER_BY_SEASON, SEASONS, DANGER_LEVELS } from '@shared/constants'
 import type { LocationState, Season, DangerLevel } from '@shared/types'
 import weatherHexImage from '../travel/weather-hex.png'

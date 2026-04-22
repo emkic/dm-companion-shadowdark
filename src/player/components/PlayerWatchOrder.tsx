@@ -1,4 +1,3 @@
-import React from 'react'
 import type { LocationState } from '@shared/types'
 import './PlayerWatchOrder.css'
 

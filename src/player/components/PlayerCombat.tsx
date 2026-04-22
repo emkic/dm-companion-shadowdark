@@ -1,4 +1,3 @@
-import React from 'react'
 import { getHealthEstimate, HEALTH_ESTIMATE_COLORS } from '@shared/healthEstimate'
 import type { CombatState, Combatant } from '@shared/types'
 import './PlayerCombat.css'

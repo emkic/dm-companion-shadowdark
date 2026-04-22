@@ -34,11 +34,6 @@ export function useRoster(): UseRosterReturn {
 
   const activeParty = parties.find(p => p.id === activePartyId) ?? null
 
-  function persist(updated: Party[]) {
-    setParties(updated)
-    window.electronAPI.saveParties(updated)
-  }
-
   const addParty = useCallback((name: string) => {
     const newParty: Party = { id: generateId(), name, players: [] }
     setParties(prev => {

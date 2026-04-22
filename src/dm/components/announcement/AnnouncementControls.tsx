@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import type { UseAnnouncementReturn } from '../../hooks/useAnnouncement'
 import './AnnouncementControls.css'
 

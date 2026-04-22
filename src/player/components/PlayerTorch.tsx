@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import type { TorchState, TimerState } from '@shared/types'
 import { DEFAULT_TORCH_SECONDS, LOW_TORCH_THRESHOLD } from '@shared/constants'
 import './PlayerTorch.css'

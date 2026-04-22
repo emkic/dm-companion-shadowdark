@@ -1,4 +1,3 @@
-import React from 'react'
 import './TabBar.css'
 
 export interface TabDef {

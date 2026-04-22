@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import type { MediaState, LocationState } from '@shared/types'
 import './PlayerMedia.css'
 

@@ -1,4 +1,3 @@
-import React from 'react'
 import type { AnnouncementState } from '@shared/types'
 import './PlayerAnnouncement.css'
 
