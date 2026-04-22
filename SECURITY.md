@@ -6,7 +6,7 @@ Only the latest release is supported with security updates.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.5.0  | ✅                 |
+| 2.5.2   | ✅                 |
 | Older   | ❌                 |
 
 ## Reporting a Vulnerability
