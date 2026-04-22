@@ -22,17 +22,28 @@ function setupCSP(): void {
   const csp = [
     `default-src 'self'`,
     `script-src ${scriptSrc}`,
-    `style-src 'self' 'unsafe-inline'`,
+    `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
     `img-src 'self' data: blob: media:`,
     `media-src 'self' blob: media:`,
-    `font-src 'self' data:`,
+    `font-src 'self' data: https://fonts.gstatic.com`,
     `connect-src ${connectSrc}`,
     `frame-src https://www.youtube.com https://www.youtube-nocookie.com`,
     `object-src 'none'`,
     `base-uri 'self'`
   ].join('; ')
 
+  // Only apply CSP to our own document responses. Subresources of that
+  // document inherit the policy automatically. Cross-origin frames (e.g. the
+  // YouTube ambiance iframe) load their own pages with their own CSP, and
+  // overwriting it here would break them.
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+    const isOurDocument =
+      details.resourceType === 'mainFrame' &&
+      (details.url.startsWith('file://') || details.url.startsWith('http://localhost:'))
+    if (!isOurDocument) {
+      callback({})
+      return
+    }
     callback({
       responseHeaders: {
         ...details.responseHeaders,
