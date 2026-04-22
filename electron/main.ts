@@ -23,7 +23,7 @@ function setupCSP(): void {
     `default-src 'self'`,
     `script-src ${scriptSrc}`,
     `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
-    `img-src 'self' data: blob: media:`,
+    `img-src 'self' data: blob: media: https://i.ytimg.com`,
     `media-src 'self' blob: media:`,
     `font-src 'self' data: https://fonts.gstatic.com`,
     `connect-src ${connectSrc}`,
