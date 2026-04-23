@@ -172,6 +172,12 @@
   min-width: 20px;
 }
 
+.pcr-emoji {
+  font-size: 1.6rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
 .pcr-name {
   font-family: 'Montserrat', sans-serif;
   font-size: 1.8rem;

@@ -17,12 +17,15 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import type { UseCrawlingReturn } from '../../hooks/useCrawling'
-import type { DangerLevel, CrawlingTurnSlot } from '@shared/types'
+import type { UseRosterReturn } from '../../hooks/useRoster'
+import type { DangerLevel, CrawlingTurnSlot, Party } from '@shared/types'
 import { DANGER_LABELS, ENCOUNTER_INTERVAL, getEffectiveDanger } from '@shared/constants'
+import { PartyRosterSection } from '../roster/PartyRosterSection'
 import './CrawlingPanel.css'
 
 interface Props {
   crawlingHook: UseCrawlingReturn
+  rosterHook: UseRosterReturn
   dangerLevel: DangerLevel
 }
 
@@ -48,6 +51,7 @@ function SortableTurnSlot({ id, index, slot, onNameChange, onRemove }: {
         &#x2807;
       </div>
       <span className="turn-number">{index + 1}</span>
+      {slot.emoji && <span className="turn-emoji">{slot.emoji}</span>}
       <input
         type="text"
         value={slot.name}
@@ -68,10 +72,11 @@ function SortableTurnSlot({ id, index, slot, onNameChange, onRemove }: {
 
 // ── Sortable active-crawl turn entry (read-only row, drag handle) ──
 
-function SortableTurnEntry({ id, index, name, isActive }: {
+function SortableTurnEntry({ id, index, name, emoji, isActive }: {
   id: string
   index: number
   name: string
+  emoji?: string
   isActive: boolean
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id })
@@ -87,6 +92,7 @@ function SortableTurnEntry({ id, index, name, isActive }: {
         &#x2807;
       </div>
       <span className="turn-order-num">{index + 1}</span>
+      {emoji && <span className="turn-emoji">{emoji}</span>}
       <span className="turn-order-name">{name}</span>
       {isActive && <span className="turn-arrow">◀</span>}
     </div>
@@ -95,7 +101,10 @@ function SortableTurnEntry({ id, index, name, isActive }: {
 
 // ── Setup phase: input turn order before starting ──
 
-function CrawlSetup({ onStart }: { onStart: (turnOrder: CrawlingTurnSlot[]) => void }) {
+function CrawlSetup({ onStart, activeParty }: {
+  onStart: (turnOrder: CrawlingTurnSlot[]) => void
+  activeParty: Party | null
+}) {
   const [slots, setSlots] = useState<CrawlingTurnSlot[]>([
     { name: '' }, { name: '' }, { name: '' }, { name: '' }
   ])
@@ -127,15 +136,29 @@ function CrawlSetup({ onStart }: { onStart: (turnOrder: CrawlingTurnSlot[]) => v
     setSlots(prev => prev.filter((_, i) => i !== index))
   }
 
+  function useParty() {
+    if (!activeParty || activeParty.players.length === 0) return
+    setSlots(activeParty.players.map(p => ({ name: p.name, emoji: p.emoji || '🛡️' })))
+  }
+
   function handleStart() {
     // Filter out empty names, but allow starting with no names (no turn tracking)
     const filled = slots.filter(s => s.name.trim() !== '')
     onStart(filled)
   }
 
+  const canUseParty = activeParty && activeParty.players.length > 0
+
   return (
     <div className="crawl-setup">
-      <label className="field-label">Turn Order (drag to reorder)</label>
+      <div className="setup-header">
+        <label className="field-label">Turn Order (drag to reorder)</label>
+        {canUseParty && (
+          <button className="btn btn-ghost btn-small" onClick={useParty} title="Replace slots with active party">
+            Use Party Roster
+          </button>
+        )}
+      </div>
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={slotIds} strategy={verticalListSortingStrategy}>
           {slots.map((slot, i) => (
@@ -160,8 +183,8 @@ function CrawlSetup({ onStart }: { onStart: (turnOrder: CrawlingTurnSlot[]) => v
 
 // ── Active crawl: turn display + encounter checks ──
 
-export function CrawlingPanel({ crawlingHook, dangerLevel }: Props) {
-  const { crawling, startCrawl, endCrawl, nextTurn, toggleTotalDarkness, resolveEncounterCheck, reorderTurns } = crawlingHook
+export function CrawlingPanel({ crawlingHook, rosterHook, dangerLevel }: Props) {
+  const { crawling, startCrawl, endCrawl, nextTurn, prevTurn, toggleTotalDarkness, resolveEncounterCheck, reorderTurns } = crawlingHook
   const effectiveDanger = getEffectiveDanger(dangerLevel, crawling.inTotalDarkness)
   const interval = ENCOUNTER_INTERVAL[effectiveDanger]
 
@@ -170,8 +193,8 @@ export function CrawlingPanel({ crawlingHook, dangerLevel }: Props) {
     : 0
 
   // Active turn tracking
-  const currentTurnName = crawling.turnOrder.length > 0
-    ? crawling.turnOrder[crawling.currentTurnIndex]?.name
+  const currentTurn = crawling.turnOrder.length > 0
+    ? crawling.turnOrder[crawling.currentTurnIndex]
     : null
 
   // Drag-and-drop for reordering turns during a crawl
@@ -197,7 +220,8 @@ export function CrawlingPanel({ crawlingHook, dangerLevel }: Props) {
         <div className="crawling-header">
           <h2 className="panel-title">Crawling Rounds</h2>
         </div>
-        <CrawlSetup onStart={startCrawl} />
+        <CrawlSetup onStart={startCrawl} activeParty={rosterHook.activeParty} />
+        <PartyRosterSection rosterHook={rosterHook} />
       </div>
     )
   }
@@ -209,9 +233,15 @@ export function CrawlingPanel({ crawlingHook, dangerLevel }: Props) {
         <div className="crawling-header-controls">
           <span className="round-badge">Round {crawling.round}</span>
           <button
+            className="btn btn-ghost btn-small"
+            onClick={prevTurn}
+            disabled={crawling.round <= 1 && crawling.currentTurnIndex === 0 && !crawling.pendingEncounterCheck}
+          >
+            ← Prev
+          </button>
+          <button
             className="btn btn-accent btn-small"
             onClick={() => nextTurn(dangerLevel)}
-            disabled={crawling.pendingEncounterCheck}
           >
             Next Turn →
           </button>
@@ -222,10 +252,11 @@ export function CrawlingPanel({ crawlingHook, dangerLevel }: Props) {
       </div>
 
       {/* Current turn indicator */}
-      {currentTurnName && (
+      {currentTurn && (
         <div className="current-turn-banner">
           <span className="current-turn-label">Current Turn</span>
-          <span className="current-turn-name">{currentTurnName}</span>
+          {currentTurn.emoji && <span className="current-turn-emoji">{currentTurn.emoji}</span>}
+          <span className="current-turn-name">{currentTurn.name}</span>
         </div>
       )}
 
@@ -314,6 +345,7 @@ export function CrawlingPanel({ crawlingHook, dangerLevel }: Props) {
                   id={turnIds[i]}
                   index={i}
                   name={slot.name}
+                  emoji={slot.emoji}
                   isActive={i === crawling.currentTurnIndex}
                 />
               ))}
@@ -346,6 +378,8 @@ export function CrawlingPanel({ crawlingHook, dangerLevel }: Props) {
           </div>
         </div>
       )}
+
+      <PartyRosterSection rosterHook={rosterHook} />
     </div>
   )
 }

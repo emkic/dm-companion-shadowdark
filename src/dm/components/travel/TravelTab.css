@@ -166,6 +166,19 @@
   gap: 6px;
 }
 
+.watch-order-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.watch-emoji {
+  font-size: 1.1rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
 .watch-slot {
   display: flex;
   align-items: center;

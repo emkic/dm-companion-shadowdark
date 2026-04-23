@@ -24,6 +24,7 @@ export interface UseCrawlingReturn {
   startCrawl: (turnOrder: CrawlingTurnSlot[]) => void
   endCrawl: () => void
   nextTurn: (dangerLevel: DangerLevel) => void
+  prevTurn: () => void
   toggleTotalDarkness: () => void
   setTotalDarkness: (value: boolean) => void
   resolveEncounterCheck: (encounter: boolean) => void
@@ -55,6 +56,20 @@ export function useCrawling(): UseCrawlingReturn {
 
   const nextTurn = useCallback((dangerLevel: DangerLevel) => {
     setCrawling(prev => {
+      // Pressing Next while an encounter check is pending skips the prompt
+      // and resolves as "No Encounter" — same result as clicking that button.
+      if (prev.pendingEncounterCheck) {
+        return {
+          ...prev,
+          pendingEncounterCheck: false,
+          currentTurnIndex: prev.turnOrder.length > 0 ? 0 : prev.currentTurnIndex,
+          encounterFlash: false,
+          encounterLog: prev.encounterLog.map(e =>
+            e.round === prev.round ? { ...e, encounter: false } : e
+          )
+        }
+      }
+
       if (prev.turnOrder.length === 0) {
         // No turn order set — just advance rounds
         const newRound = prev.round + 1
@@ -93,6 +108,53 @@ export function useCrawling(): UseCrawlingReturn {
       return {
         ...prev,
         currentTurnIndex: nextIndex,
+        encounterFlash: false
+      }
+    })
+  }, [])
+
+  const prevTurn = useCallback(() => {
+    setCrawling(prev => {
+      // Already at the very start
+      if (prev.round <= 1 && prev.currentTurnIndex === 0 && !prev.pendingEncounterCheck) return prev
+
+      // Undo an encounter-check round advance: we were parked on the last slot
+      // after entering round N. Drop back to the end of round N-1.
+      if (prev.pendingEncounterCheck) {
+        return {
+          ...prev,
+          round: prev.round - 1,
+          pendingEncounterCheck: false,
+          encounterFlash: false,
+          encounterLog: prev.encounterLog.filter(e => e.round !== prev.round)
+        }
+      }
+
+      // No turn order — step the round counter back
+      if (prev.turnOrder.length === 0) {
+        return {
+          ...prev,
+          round: Math.max(1, prev.round - 1),
+          encounterFlash: false,
+          encounterLog: prev.encounterLog.filter(e => e.round !== prev.round)
+        }
+      }
+
+      // Wrap back to the end of the previous round
+      if (prev.currentTurnIndex === 0) {
+        return {
+          ...prev,
+          round: prev.round - 1,
+          currentTurnIndex: prev.turnOrder.length - 1,
+          encounterFlash: false,
+          encounterLog: prev.encounterLog.filter(e => e.round !== prev.round)
+        }
+      }
+
+      // Normal step back within the current round
+      return {
+        ...prev,
+        currentTurnIndex: prev.currentTurnIndex - 1,
         encounterFlash: false
       }
     })
@@ -156,6 +218,7 @@ export function useCrawling(): UseCrawlingReturn {
     startCrawl,
     endCrawl,
     nextTurn,
+    prevTurn,
     toggleTotalDarkness,
     setTotalDarkness,
     resolveEncounterCheck,

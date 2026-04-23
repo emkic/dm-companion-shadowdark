@@ -39,6 +39,7 @@ export function PlayerCrawling({ crawling, combatIsActive }: Props) {
                 className={`pcr-slot ${i === crawling.currentTurnIndex ? 'pcr-active' : ''}`}
               >
                 <span className="pcr-number">{i + 1}</span>
+                {slot.emoji && <span className="pcr-emoji">{slot.emoji}</span>}
                 <span className="pcr-name">{slot.name}</span>
               </div>
             ))}

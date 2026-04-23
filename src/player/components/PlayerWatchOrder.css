@@ -44,6 +44,12 @@
   white-space: nowrap;
 }
 
+.pw-emoji {
+  font-size: 1.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
 .pw-name {
   font-family: 'Montserrat', sans-serif;
   font-size: 1.6rem;

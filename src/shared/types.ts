@@ -48,6 +48,7 @@ export interface EncounterCheckEntry {
 
 export interface CrawlingTurnSlot {
   name: string
+  emoji?: string
 }
 
 export interface CrawlingState {
@@ -79,6 +80,7 @@ export interface WatchSlot {
   name: string
   encounter: boolean
   interruption: boolean
+  emoji?: string
 }
 
 export interface LocationState {

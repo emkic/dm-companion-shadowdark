@@ -200,12 +200,14 @@ export default function App() {
             {activeTab === 'crawling' && (
               <CrawlingPanel
                 crawlingHook={crawlingHook}
+                rosterHook={rosterHook}
                 dangerLevel={locationHook.location.dangerLevel}
               />
             )}
             {activeTab === 'travel' && (
               <TravelTab
                 location={locationHook.location}
+                activeParty={rosterHook.activeParty}
                 setActivity={locationHook.setActivity}
                 newDay={locationHook.newDay}
                 setTravelMethod={locationHook.setTravelMethod}
@@ -217,6 +219,7 @@ export default function App() {
                 setWatchName={locationHook.setWatchName}
                 toggleWatchEncounter={locationHook.toggleWatchEncounter}
                 reorderWatches={locationHook.reorderWatches}
+                setWatches={locationHook.setWatches}
               />
             )}
             {activeTab === 'media' && <MediaPanel {...mediaHook} ambianceHook={ambianceHook} />}

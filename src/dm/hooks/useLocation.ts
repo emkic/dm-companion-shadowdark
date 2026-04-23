@@ -68,6 +68,7 @@ export interface UseLocationReturn {
   setWatchName: (index: number, name: string) => void
   toggleWatchEncounter: (index: number) => void
   reorderWatches: (newOrder: [WatchSlot, WatchSlot, WatchSlot, WatchSlot]) => void
+  setWatches: (watches: [WatchSlot, WatchSlot, WatchSlot, WatchSlot]) => void
   newDay: () => void
   setLocation: (location: LocationState) => void
 }
@@ -208,6 +209,10 @@ export function useLocation(): UseLocationReturn {
     setLocationState(prev => ({ ...prev, watches: newOrder }))
   }, [])
 
+  const setWatches = useCallback((watches: [WatchSlot, WatchSlot, WatchSlot, WatchSlot]) => {
+    setLocationState(prev => ({ ...prev, watches }))
+  }, [])
+
   const setLocation = useCallback((location: LocationState) => {
     setLocationState(location)
   }, [])
@@ -232,6 +237,7 @@ export function useLocation(): UseLocationReturn {
     setWatchName,
     toggleWatchEncounter,
     reorderWatches,
+    setWatches,
     newDay,
     setLocation
   }

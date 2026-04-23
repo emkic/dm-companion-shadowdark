@@ -20,6 +20,7 @@ export function PlayerWatchOrder({ location }: Props) {
           return (
             <div key={i} className="pw-slot">
               <span className="pw-number">Watch {i + 1}</span>
+              {watch.emoji && <span className="pw-emoji">{watch.emoji}</span>}
               <span className="pw-name">{watch.name}</span>
             </div>
           )

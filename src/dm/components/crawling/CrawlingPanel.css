@@ -27,6 +27,13 @@
   gap: 6px;
 }
 
+.setup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
 .turn-slot {
   display: flex;
   align-items: center;
@@ -54,6 +61,19 @@
   font-weight: 700;
   color: var(--accent);
   min-width: 16px;
+}
+
+.turn-emoji {
+  font-size: 1.1rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.current-turn-emoji {
+  font-size: 1.3rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin: 0 2px;
 }
 
 .turn-name-input {

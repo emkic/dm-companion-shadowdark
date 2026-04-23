@@ -16,7 +16,7 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { HEXES_PER_DAY, ACTIVITY_LABELS } from '@shared/types'
-import type { LocationState, ActivityState, TravelMethod, WatchSlot } from '@shared/types'
+import type { LocationState, ActivityState, TravelMethod, WatchSlot, Party } from '@shared/types'
 import './TravelTab.css'
 
 const ACTIVITIES: ActivityState[] = ['traveling', 'city']
@@ -31,6 +31,7 @@ const WATCH_LABELS = ['Watch 1', 'Watch 2', 'Watch 3', 'Watch 4']
 
 interface Props {
   location: LocationState
+  activeParty: Party | null
   setActivity: (activity: ActivityState) => void
   newDay: () => void
   setTravelMethod: (method: TravelMethod) => void
@@ -42,6 +43,7 @@ interface Props {
   setWatchName: (index: number, name: string) => void
   toggleWatchEncounter: (index: number) => void
   reorderWatches: (newOrder: [WatchSlot, WatchSlot, WatchSlot, WatchSlot]) => void
+  setWatches: (watches: [WatchSlot, WatchSlot, WatchSlot, WatchSlot]) => void
 }
 
 function SortableWatch({ id, index, watch, label, setWatchName, toggleWatchEncounter }: {
@@ -65,6 +67,7 @@ function SortableWatch({ id, index, watch, label, setWatchName, toggleWatchEncou
         &#x2807;
       </div>
       <span className="watch-label">{label}</span>
+      {watch.emoji && <span className="watch-emoji">{watch.emoji}</span>}
       <input
         type="text"
         value={watch.name}
@@ -85,9 +88,9 @@ function SortableWatch({ id, index, watch, label, setWatchName, toggleWatchEncou
 }
 
 export function TravelTab({
-  location, setActivity, newDay, setTravelMethod, togglePushing,
+  location, activeParty, setActivity, newDay, setTravelMethod, togglePushing,
   spendHexes, toggleChecklist, toggleCamping, toggleCampfire,
-  setWatchName, toggleWatchEncounter, reorderWatches
+  setWatchName, toggleWatchEncounter, reorderWatches, setWatches
 }: Props) {
   const maxHexes = location.isPushing
     ? Math.floor(HEXES_PER_DAY[location.travelMethod] * 1.5)
@@ -106,6 +109,23 @@ export function TravelTab({
     const reordered = arrayMove([...location.watches], oldIndex, newIndex) as [WatchSlot, WatchSlot, WatchSlot, WatchSlot]
     reorderWatches(reordered)
   }
+
+  function fillWatchesFromParty() {
+    if (!activeParty) return
+    // Fill up to 4 watch slots with party members; clear remaining slots.
+    const next = [0, 1, 2, 3].map(i => {
+      const p = activeParty.players[i]
+      return {
+        name: p?.name ?? '',
+        emoji: p ? (p.emoji || '🛡️') : '',
+        encounter: location.watches[i].encounter,
+        interruption: location.watches[i].interruption
+      }
+    }) as [WatchSlot, WatchSlot, WatchSlot, WatchSlot]
+    setWatches(next)
+  }
+
+  const canFillWatches = !!activeParty && activeParty.players.length > 0
 
   return (
     <div className="travel-tab">
@@ -282,7 +302,18 @@ export function TravelTab({
 
             {location.isCamping && (
               <div className="watch-order">
-                <label className="field-label">Watch Order (drag to reorder)</label>
+                <div className="watch-order-header">
+                  <label className="field-label">Watch Order (drag to reorder)</label>
+                  {canFillWatches && (
+                    <button
+                      className="btn btn-ghost btn-small"
+                      onClick={fillWatchesFromParty}
+                      title="Fill watch slots with active party members"
+                    >
+                      Fill from Party
+                    </button>
+                  )}
+                </div>
                 <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleWatchDragEnd}>
                   <SortableContext items={[...WATCH_IDS]} strategy={verticalListSortingStrategy}>
                     {location.watches.map((watch, i) => (
