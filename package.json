@@ -29,6 +29,9 @@
     "typescript": "^5.3.3",
     "vite": "^8.0.7"
   },
+  "overrides": {
+    "@xmldom/xmldom": "^0.8.13"
+  },
   "build": {
     "appId": "com.shadowdark.dm-app",
     "productName": "DM Companion for Shadowdark",
