@@ -1,5 +1,5 @@
 export type Season = 'spring' | 'summer' | 'autumn' | 'winter'
-export type DangerLevel = 'unsafe' | 'risky' | 'deadly'
+export type DangerLevel = 'safe' | 'unsafe' | 'risky' | 'deadly'
 export type HealthEstimate = 'Uninjured' | 'Injured' | 'Bloodied' | 'Near Death' | 'Dying' | 'Dead'
 
 export type LightMode = 'torch' | 'natural' | 'magical'
@@ -124,6 +124,13 @@ export interface AnnouncementState {
   timer: number | null  // seconds remaining, null = no auto-dismiss
 }
 
+export interface SavedLocation {
+  id: string
+  name: string
+  imagePath: string
+  dangerLevel: DangerLevel
+}
+
 export interface RosterPlayer {
   id: string
   name: string
@@ -144,6 +151,7 @@ export interface AppState {
   location: LocationState
   media: MediaState
   announcement: AnnouncementState
+  playerFontScale: number
 }
 
 export interface SessionData {

@@ -46,6 +46,156 @@
   border: 1px solid var(--border);
 }
 
+.saved-locations-row {
+  gap: 4px;
+}
+
+.sidebar-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0 2px;
+}
+
+.sidebar-subheading {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin: 0;
+  opacity: 0.85;
+}
+
+/* Saved-locations picker (custom dropdown) */
+.saved-picker {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.saved-picker-button {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  padding: 5px 8px;
+  font-size: 0.85rem;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.saved-picker-button:hover {
+  border-color: var(--accent);
+}
+
+.saved-picker-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.saved-picker-caret {
+  opacity: 0.6;
+  font-size: 0.7rem;
+}
+
+.saved-picker-popover {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 50;
+  min-width: 100%;
+  width: max-content;
+  max-width: 320px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.saved-picker-empty {
+  padding: 12px 8px;
+  font-size: 0.78rem;
+  opacity: 0.6;
+  font-style: italic;
+  text-align: center;
+}
+
+.saved-picker-row {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  border-radius: 3px;
+}
+
+.saved-picker-row:hover {
+  background: rgba(200, 168, 75, 0.06);
+}
+
+.saved-picker-row.is-selected {
+  background: rgba(200, 168, 75, 0.12);
+}
+
+.saved-picker-row-name {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  text-align: left;
+  padding: 6px 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.saved-picker-row-name span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.saved-picker-row-action {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  opacity: 0.55;
+  padding: 0 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.saved-picker-row-action:hover {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.saved-picker-row-delete:hover {
+  color: var(--danger-deadly);
+}
+
+.image-pick-button {
+  flex: 1;
+  min-width: 0;
+}
+
+.image-clear-button:hover {
+  color: var(--danger-deadly);
+}
+
 /* Weather Hex Modal */
 .weather-hex-backdrop {
   position: fixed;

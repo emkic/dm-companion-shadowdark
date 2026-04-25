@@ -2,10 +2,10 @@ import { ipcMain, dialog, app, BrowserWindow } from 'electron'
 import * as fs from 'fs'
 import * as path from 'path'
 import { IpcChannel } from '../../src/shared/ipcChannels'
-import { saveSession, loadSession, listSessions, deleteSession, loadMoodPresets, saveMoodPresets, loadAmbianceVolume, saveAmbianceVolume, loadParties, saveParties, loadLastAudioFolder, saveLastAudioFolder } from '../store/store'
+import { saveSession, loadSession, listSessions, deleteSession, loadMoodPresets, saveMoodPresets, loadAmbianceVolume, saveAmbianceVolume, loadParties, saveParties, loadSavedLocations, saveSavedLocations, loadPlayerFontScale, savePlayerFontScale, loadLastAudioFolder, saveLastAudioFolder } from '../store/store'
 import { broadcastToPlayer, movePlayerToDisplay } from './state-bridge'
 import { getAllDisplays } from '../utils/display'
-import type { AppState, MoodPreset, Party } from '../../src/shared/types'
+import type { AppState, MoodPreset, Party, SavedLocation } from '../../src/shared/types'
 
 const IMAGE_EXTS = new Set(['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp'])
 const VIDEO_EXTS = new Set(['.mp4', '.webm', '.mov', '.mkv'])
@@ -104,6 +104,22 @@ export function registerIpcHandlers(): void {
 
   ipcMain.handle(IpcChannel.SAVE_PARTIES, (_event, parties: Party[]) => {
     saveParties(parties)
+  })
+
+  ipcMain.handle(IpcChannel.LOAD_SAVED_LOCATIONS, () => {
+    return loadSavedLocations()
+  })
+
+  ipcMain.handle(IpcChannel.SAVE_SAVED_LOCATIONS, (_event, locations: SavedLocation[]) => {
+    saveSavedLocations(locations)
+  })
+
+  ipcMain.handle(IpcChannel.LOAD_PLAYER_FONT_SCALE, () => {
+    return loadPlayerFontScale()
+  })
+
+  ipcMain.handle(IpcChannel.SAVE_PLAYER_FONT_SCALE, (_event, scale: number) => {
+    savePlayerFontScale(scale)
   })
 
   ipcMain.handle(IpcChannel.READ_MEDIA_FOLDER, async (_event, folderPath: string) => {

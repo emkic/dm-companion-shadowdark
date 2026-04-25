@@ -8,6 +8,8 @@ import { useSession } from './hooks/useSession'
 import { useAmbiance } from './hooks/useAmbiance'
 import { useAnnouncement } from './hooks/useAnnouncement'
 import { useRoster } from './hooks/useRoster'
+import { useSavedLocations } from './hooks/useSavedLocations'
+import { usePlayerFontScale } from './hooks/usePlayerFontScale'
 import { TorchPanel } from './components/torch/TorchPanel'
 import { LocationSidebar } from './components/location/LocationSidebar'
 import { CombatPanel } from './components/combat/CombatPanel'
@@ -16,6 +18,7 @@ import { TravelTab } from './components/travel/TravelTab'
 import { MediaPanel } from './components/media/MediaPanel'
 import { SessionModal } from './components/session/SessionModal'
 import { DisplaySelector } from './components/display/DisplaySelector'
+import { PlayerFontControl } from './components/display/PlayerFontControl'
 import { TabBar, type TabDef } from './components/tabs/TabBar'
 import { AnnouncementControls } from './components/announcement/AnnouncementControls'
 import { YouTubeEmbed } from './components/ambiance/YouTubeEmbed'
@@ -36,6 +39,8 @@ export default function App() {
   const ambianceHook = useAmbiance()
   const announcementHook = useAnnouncement()
   const rosterHook = useRoster()
+  const savedLocationsHook = useSavedLocations()
+  const playerFontScaleHook = usePlayerFontScale()
 
   const [activeTab, setActiveTab] = useState<TabId>('combat')
   const [sessionModalOpen, setSessionModalOpen] = useState(false)
@@ -46,8 +51,9 @@ export default function App() {
     crawling: crawlingHook.crawling,
     location: locationHook.location,
     media: mediaHook.media,
-    announcement: announcementHook.announcement
-  }), [torchHook.torchState, combatHook.combat, crawlingHook.crawling, locationHook.location, mediaHook.media, announcementHook.announcement])
+    announcement: announcementHook.announcement,
+    playerFontScale: playerFontScaleHook.scale
+  }), [torchHook.torchState, combatHook.combat, crawlingHook.crawling, locationHook.location, mediaHook.media, announcementHook.announcement, playerFontScaleHook.scale])
 
   // Broadcast to player window only when state actually changes
   const prevStateRef = useRef<string>('')
@@ -168,6 +174,7 @@ export default function App() {
       <header className="dm-header">
         <h1 className="app-title">DM Companion</h1>
         <AnnouncementControls announcementHook={announcementHook} />
+        <PlayerFontControl fontScaleHook={playerFontScaleHook} />
         <DisplaySelector />
         <button
           className="btn btn-ghost btn-small"
@@ -190,6 +197,7 @@ export default function App() {
             toggleShowToPlayer={locationHook.toggleShowToPlayer}
             setDate={locationHook.setDate}
             toggleShowDate={locationHook.toggleShowDate}
+            savedLocationsHook={savedLocationsHook}
           />
         </aside>
 

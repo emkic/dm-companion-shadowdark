@@ -188,7 +188,8 @@ export function CrawlingPanel({ crawlingHook, rosterHook, dangerLevel }: Props) 
   const effectiveDanger = getEffectiveDanger(dangerLevel, crawling.inTotalDarkness)
   const interval = ENCOUNTER_INTERVAL[effectiveDanger]
 
-  const roundsUntilCheck = crawling.isActive
+  const checksDisabled = !isFinite(interval)
+  const roundsUntilCheck = crawling.isActive && !checksDisabled
     ? (crawling.pendingEncounterCheck ? 0 : interval - (crawling.round % interval || interval))
     : 0
 
@@ -270,12 +271,16 @@ export function CrawlingPanel({ crawlingHook, rosterHook, dangerLevel }: Props) 
         </div>
         <div className="crawling-info-item">
           <span className="info-label">Check every</span>
-          <span className="info-value">{interval} round{interval > 1 ? 's' : ''}</span>
+          <span className="info-value">
+            {checksDisabled ? '—' : `${interval} round${interval > 1 ? 's' : ''}`}
+          </span>
         </div>
         <div className="crawling-info-item">
           <span className="info-label">Next check in</span>
           <span className="info-value">
-            {crawling.pendingEncounterCheck ? 'NOW' : `${roundsUntilCheck} round${roundsUntilCheck > 1 ? 's' : ''}`}
+            {checksDisabled
+              ? 'Never'
+              : crawling.pendingEncounterCheck ? 'NOW' : `${roundsUntilCheck} round${roundsUntilCheck > 1 ? 's' : ''}`}
           </span>
         </div>
       </div>

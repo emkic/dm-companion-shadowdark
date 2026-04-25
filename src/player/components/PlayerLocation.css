@@ -76,6 +76,12 @@
   border: 1px solid;
 }
 
+.danger-badge.danger-safe {
+  color: #7ab06a;
+  border-color: #5a8a4a;
+  background: rgba(90, 138, 74, 0.15);
+}
+
 .danger-badge.danger-unsafe {
   color: #c8a84b;
   border-color: #c8a84b;

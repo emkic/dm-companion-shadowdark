@@ -1,0 +1,48 @@
+.player-font-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.player-font-label {
+  font-size: 0.78rem;
+  color: var(--accent);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.player-font-button {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1px;
+  padding: 4px 8px;
+}
+
+.player-font-icon {
+  font-weight: 700;
+  line-height: 1;
+}
+
+.player-font-icon-small {
+  font-size: 0.75rem;
+}
+
+.player-font-icon-large {
+  font-size: 1rem;
+}
+
+.player-font-sign {
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.player-font-value {
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  min-width: 38px;
+  text-align: center;
+  opacity: 0.85;
+}

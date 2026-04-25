@@ -102,17 +102,19 @@ export const WEATHER_BY_SEASON: Record<Season, string[]> = {
   ]
 }
 
-export const DANGER_LEVELS: DangerLevel[] = ['unsafe', 'risky', 'deadly']
+export const DANGER_LEVELS: DangerLevel[] = ['safe', 'unsafe', 'risky', 'deadly']
 export const SEASONS: Season[] = ['spring', 'summer', 'autumn', 'winter']
 
 export const DANGER_LABELS: Record<DangerLevel, string> = {
+  safe: 'Safe',
   unsafe: 'Unsafe',
   risky: 'Risky',
   deadly: 'Deadly'
 }
 
-/** How often to check for random encounters based on danger level */
+/** How often to check for random encounters based on danger level. `safe` = no checks. */
 export const ENCOUNTER_INTERVAL: Record<DangerLevel, number> = {
+  safe: Infinity,
   unsafe: 3,
   risky: 2,
   deadly: 1

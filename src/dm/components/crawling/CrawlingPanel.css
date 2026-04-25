@@ -158,6 +158,7 @@
   font-weight: 700;
 }
 
+.info-value.danger-safe { color: #7ab06a; }
 .info-value.danger-unsafe { color: #b8a060; }
 .info-value.danger-risky { color: #c87070; }
 .info-value.danger-deadly { color: #ff4444; }

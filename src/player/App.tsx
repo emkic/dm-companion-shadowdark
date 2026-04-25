@@ -37,7 +37,8 @@ const INITIAL_STATE: AppState = {
     checklist: { rationsConsumed: false, foragingAttempt: false, encounterDay1: false, encounterDay2: false, encounterNight1: false, encounterNight2: false }
   },
   media: { currentFile: null, fileType: null, isShowing: false, folderPath: '', files: [] },
-  announcement: { text: '', isShowing: false, timer: null }
+  announcement: { text: '', isShowing: false, timer: null },
+  playerFontScale: 1
 }
 
 export default function App() {
@@ -47,11 +48,16 @@ export default function App() {
     const cleanup = window.playerAPI.onStateUpdate((newState: AppState) => {
       setState({
         ...newState,
-        announcement: newState.announcement ?? INITIAL_STATE.announcement
+        announcement: newState.announcement ?? INITIAL_STATE.announcement,
+        playerFontScale: newState.playerFontScale ?? INITIAL_STATE.playerFontScale
       })
     })
     return cleanup
   }, [])
+
+  useEffect(() => {
+    document.documentElement.style.fontSize = `${16 * state.playerFontScale}px`
+  }, [state.playerFontScale])
 
   return (
     <div className="player-app">

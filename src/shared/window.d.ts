@@ -1,4 +1,4 @@
-import type { AppState, SessionData, DisplayInfo, MoodPreset, Party } from './types'
+import type { AppState, SessionData, DisplayInfo, MoodPreset, Party, SavedLocation } from './types'
 
 declare global {
   interface Window {
@@ -20,6 +20,10 @@ declare global {
       openAudioDialog: () => Promise<string[]>
       loadParties: () => Promise<Party[]>
       saveParties: (parties: Party[]) => Promise<void>
+      loadSavedLocations: () => Promise<SavedLocation[]>
+      saveSavedLocations: (locations: SavedLocation[]) => Promise<void>
+      loadPlayerFontScale: () => Promise<number>
+      savePlayerFontScale: (scale: number) => Promise<void>
     }
     playerAPI: {
       onStateUpdate: (callback: (state: AppState) => void) => () => void

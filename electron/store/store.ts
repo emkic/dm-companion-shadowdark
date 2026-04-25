@@ -1,5 +1,5 @@
 import Store from 'electron-store'
-import type { AppState, SessionData, MoodPreset, RosterPlayer, Party } from '../../src/shared/types'
+import type { AppState, SessionData, MoodPreset, RosterPlayer, Party, SavedLocation } from '../../src/shared/types'
 
 interface StoreSchema {
   sessions: Record<string, SessionData>
@@ -8,6 +8,8 @@ interface StoreSchema {
   roster: RosterPlayer[]  // legacy, migrated to parties on first load
   parties: Party[]
   lastAudioFolder: string
+  savedLocations: SavedLocation[]
+  playerFontScale: number
 }
 
 const DEFAULT_MOOD_PRESETS: MoodPreset[] = [
@@ -45,6 +47,14 @@ const store = new Store<StoreSchema>({
     lastAudioFolder: {
       type: 'string',
       default: ''
+    },
+    savedLocations: {
+      type: 'array',
+      default: []
+    },
+    playerFontScale: {
+      type: 'number',
+      default: 1
     }
   }
 })
@@ -106,6 +116,22 @@ export function loadParties(): Party[] {
 
 export function saveParties(parties: Party[]): void {
   store.set('parties', parties)
+}
+
+export function loadSavedLocations(): SavedLocation[] {
+  return store.get('savedLocations', [])
+}
+
+export function saveSavedLocations(locations: SavedLocation[]): void {
+  store.set('savedLocations', locations)
+}
+
+export function loadPlayerFontScale(): number {
+  return store.get('playerFontScale', 1)
+}
+
+export function savePlayerFontScale(scale: number): void {
+  store.set('playerFontScale', scale)
 }
 
 export function loadLastAudioFolder(): string {

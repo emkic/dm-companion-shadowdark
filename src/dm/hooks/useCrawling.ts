@@ -15,7 +15,9 @@ const INITIAL_STATE: CrawlingState = {
 
 function isEncounterCheckRound(round: number, dangerLevel: DangerLevel, inTotalDarkness: boolean): boolean {
   if (round <= 0) return false
-  return round % ENCOUNTER_INTERVAL[getEffectiveDanger(dangerLevel, inTotalDarkness)] === 0
+  const interval = ENCOUNTER_INTERVAL[getEffectiveDanger(dangerLevel, inTotalDarkness)]
+  if (!isFinite(interval)) return false
+  return round % interval === 0
 }
 
 export interface UseCrawlingReturn {

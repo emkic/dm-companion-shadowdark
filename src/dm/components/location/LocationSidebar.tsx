@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { WEATHER_BY_SEASON, SEASONS, DANGER_LEVELS } from '@shared/constants'
 import type { LocationState, Season, DangerLevel } from '@shared/types'
+import type { UseSavedLocationsReturn } from '../../hooks/useSavedLocations'
 import weatherHexImage from '../travel/weather-hex.png'
 import './LocationSidebar.css'
 
@@ -14,17 +15,79 @@ interface Props {
   toggleShowToPlayer: () => void
   setDate: (date: string) => void
   toggleShowDate: () => void
+  savedLocationsHook: UseSavedLocationsReturn
 }
 
 export function LocationSidebar({
   location, setName, setSeason, setWeather, setDangerLevel, setImagePath,
-  toggleShowToPlayer, setDate, toggleShowDate
+  toggleShowToPlayer, setDate, toggleShowDate, savedLocationsHook
 }: Props) {
   const [showWeatherHex, setShowWeatherHex] = useState(false)
+  const [pickerOpen, setPickerOpen] = useState(false)
+  const [selectedSavedId, setSelectedSavedId] = useState<string | null>(null)
+  const pickerRef = useRef<HTMLDivElement>(null)
+
+  const { savedLocations, addSavedLocation, updateSavedLocation, deleteSavedLocation } = savedLocationsHook
+
+  // Close picker on outside click
+  useEffect(() => {
+    if (!pickerOpen) return
+    function onMouseDown(e: MouseEvent) {
+      if (pickerRef.current && !pickerRef.current.contains(e.target as Node)) {
+        setPickerOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', onMouseDown)
+    return () => document.removeEventListener('mousedown', onMouseDown)
+  }, [pickerOpen])
+
+  // If selected location was deleted, clear selection
+  const selectedStillExists = selectedSavedId !== null && savedLocations.some(l => l.id === selectedSavedId)
+  const effectiveSelectedId = selectedStillExists ? selectedSavedId : null
+  const selectedLocation = effectiveSelectedId ? savedLocations.find(l => l.id === effectiveSelectedId) : null
 
   async function handlePickImage() {
     const filePath = await window.electronAPI.openImageDialog()
     if (filePath) setImagePath(filePath)
+  }
+
+  function handleClearImage() {
+    setImagePath('')
+  }
+
+  function handlePickSaved(id: string) {
+    const saved = savedLocations.find(l => l.id === id)
+    if (!saved) return
+    setName(saved.name)
+    setImagePath(saved.imagePath)
+    setDangerLevel(saved.dangerLevel)
+    setSelectedSavedId(id)
+    setPickerOpen(false)
+  }
+
+  function handleSaveAsNew() {
+    if (!location.name.trim()) return
+    const created = addSavedLocation({
+      name: location.name.trim(),
+      imagePath: location.imagePath,
+      dangerLevel: location.dangerLevel
+    })
+    setSelectedSavedId(created.id)
+  }
+
+  function handleOverwrite() {
+    if (!effectiveSelectedId) return
+    updateSavedLocation(effectiveSelectedId, {
+      name: location.name.trim(),
+      imagePath: location.imagePath,
+      dangerLevel: location.dangerLevel
+    })
+  }
+
+  function handleDeleteSaved(id: string, name: string) {
+    if (confirm(`Delete saved location "${name}"?`)) {
+      deleteSavedLocation(id)
+    }
   }
 
   return (
@@ -37,6 +100,73 @@ export function LocationSidebar({
         >
           {location.showToPlayer ? '👁 Shown' : '👁 Hidden'}
         </button>
+      </div>
+
+      <div className="sidebar-field">
+        <label className="field-label">Saved Locations</label>
+        <div className="sidebar-row saved-locations-row">
+          <div className="saved-picker" ref={pickerRef}>
+            <button
+              className="saved-picker-button"
+              onClick={() => setPickerOpen(o => !o)}
+              type="button"
+            >
+              <span className="saved-picker-label">
+                {selectedLocation ? selectedLocation.name : '— New / unsaved —'}
+              </span>
+              <span className="saved-picker-caret">▾</span>
+            </button>
+            {pickerOpen && (
+              <div className="saved-picker-popover">
+                {savedLocations.length === 0 ? (
+                  <div className="saved-picker-empty">No saved locations yet. Click ➕ to save the current one.</div>
+                ) : (
+                  savedLocations.map(l => (
+                    <div
+                      key={l.id}
+                      className={`saved-picker-row ${l.id === effectiveSelectedId ? 'is-selected' : ''}`}
+                    >
+                      <button
+                        className="saved-picker-row-name"
+                        onClick={() => handlePickSaved(l.id)}
+                        type="button"
+                        title={`Switch to "${l.name}"`}
+                      >
+                        <span>{l.name || '(unnamed)'}</span>
+                      </button>
+                      <button
+                        className="saved-picker-row-action saved-picker-row-delete"
+                        onClick={() => handleDeleteSaved(l.id, l.name)}
+                        title="Delete"
+                        type="button"
+                      >
+                        🗑
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
+          <button
+            className="btn btn-ghost btn-small"
+            onClick={handleOverwrite}
+            disabled={!effectiveSelectedId || !location.name.trim()}
+            title={effectiveSelectedId
+              ? `Overwrite "${selectedLocation?.name}" with current name, image, danger`
+              : 'Pick a saved location to overwrite'}
+          >
+            💾
+          </button>
+          <button
+            className="btn btn-ghost btn-small"
+            onClick={handleSaveAsNew}
+            disabled={!location.name.trim()}
+            title="Save current as a new entry"
+          >
+            ➕
+          </button>
+        </div>
       </div>
 
       <div className="sidebar-field">
@@ -62,6 +192,38 @@ export function LocationSidebar({
           ))}
         </select>
       </div>
+
+      <div className="sidebar-field">
+        <label className="field-label">Location Image</label>
+        <div className="sidebar-row">
+          <button className="btn btn-ghost btn-small image-pick-button" onClick={handlePickImage}>
+            📷 {location.imagePath ? 'Change Image' : 'Choose Image'}
+          </button>
+          {location.imagePath && (
+            <button
+              className="btn btn-ghost btn-small image-clear-button"
+              onClick={handleClearImage}
+              title="Clear image"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+        {location.imagePath && (
+          <div className="sidebar-image-preview">
+            <img
+              src={`media:///${location.imagePath.replace(/\\/g, '/')}`}
+              alt="Location"
+              onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
+            />
+            <span className="image-filename">{location.imagePath.split(/[\\/]/).pop()}</span>
+          </div>
+        )}
+      </div>
+
+      <div className="sidebar-divider" />
+
+      <h3 className="sidebar-subheading">Conditions</h3>
 
       <div className="sidebar-field">
         <label className="field-label">Date (player screen)</label>
@@ -116,23 +278,6 @@ export function LocationSidebar({
         </button>
       </div>
 
-      <div className="sidebar-field">
-        <label className="field-label">Location Image</label>
-        <button className="btn btn-ghost btn-small full-width" onClick={handlePickImage}>
-          📷 Choose Image
-        </button>
-        {location.imagePath && (
-          <div className="sidebar-image-preview">
-            <img
-              src={`media:///${location.imagePath.replace(/\\/g, '/')}`}
-              alt="Location"
-              onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
-            />
-            <span className="image-filename">{location.imagePath.split(/[\\/]/).pop()}</span>
-          </div>
-        )}
-      </div>
-
       {showWeatherHex && (
         <div className="weather-hex-backdrop" onClick={() => setShowWeatherHex(false)}>
           <div className="weather-hex-modal" onClick={e => e.stopPropagation()}>
@@ -147,6 +292,7 @@ export function LocationSidebar({
           </div>
         </div>
       )}
+
     </div>
   )
 }
