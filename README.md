@@ -12,11 +12,13 @@ Published under the Shadowdark RPG Third-Party License and is not affiliated wit
 - **Combat tracker** — Drag-drop initiative, HP tracking, health estimates, Shadowdark death mechanic
 - **Multi-party roster** — Save persistent parties and drop them into combat with one click
 - **Crawling rounds** — Turn order, round tracking, encounter checks by danger level
+- **Saved locations** — Build a library of recurring locations (towns, dungeons, landmarks) with image and danger level, swap between them with one click
 - **Light source system** — Multiple independent torch timers with pixel-art fire animations and a dramatic darkness overlay
 - **Hex crawling & travel** — Hex tracker, daily checklists, camping with watch order, weather reference
 - **Announcements** — Send text overlays to the player screen with optional auto-dismiss
 - **Ambiance player** — YouTube playlists or local audio, mood presets, crossfade, mini-player bar
 - **Media panel** — Display images or videos fullscreen on the player screen, with first-frame thumbnails for videos
+- **Player text size** — Scale the player screen text from the DM panel so it reads well from across the room
 - **Session save/load** — Pick up exactly where you left off
 
 ## Download
@@ -52,6 +54,7 @@ The app runs two windows simultaneously:
 - **DM Window** — A private control panel on your main monitor where you manage all game state
 - **Player Window** — A fullscreen, borderless display on a second monitor (projector, TV, or external screen) that shows only what you want the players to see
 - **Display selector** — Choose which monitor the player window appears on via a dropdown in the DM header. Refresh button to re-detect monitors on the fly.
+- **Player text size** — A pair of A−/A+ buttons in the DM header scale the player screen text from 80% to 160%. Useful when the player display is across the room. Setting persists across sessions; the location image and big viewport-fill alerts stay at their natural size.
 
 All changes on the DM side are broadcast to the player screen in real time.
 
@@ -105,7 +108,7 @@ Track dungeon exploration turn-by-turn with built-in encounter check timing:
 
 - **Turn order** — Add player names and reorder via drag-and-drop before or during a crawl
 - **Round tracking** — Advancing past the last player automatically starts a new round. Player screen shows the current round and whose turn it is.
-- **Encounter checks** — Automatically prompts for a random encounter roll after the last player in the round, based on the area's danger level: every 3 rounds (Unsafe), every 2 rounds (Risky), or every round (Deadly)
+- **Encounter checks** — Automatically prompts for a random encounter roll after the last player in the round, based on the area's danger level: never (Safe), every 3 rounds (Unsafe), every 2 rounds (Risky), or every round (Deadly)
 - **Total darkness** — When all torches go out during a crawl, danger level automatically jumps to Deadly (encounter check every round). The player screen shows a dramatic darkness overlay that fades out after a few seconds so the turn order stays visible.
 - **Reference tables** — Starting distance and monster activity tables appear on-screen when an encounter is triggered
 
@@ -157,9 +160,19 @@ Show the current location on the player screen:
 
 - Location name displayed in large Blackletter font
 - Season and weather (19 weather options per season)
-- Danger level badge: Unsafe (gold), Risky (orange), or Deadly (red)
+- Danger level badge: Safe (green), Unsafe (gold), Risky (orange), or Deadly (red). Safe areas (towns, sanctuaries) skip encounter checks entirely during a crawl.
 - Optional location image shown fullscreen behind all overlays
 - Toggle visibility on/off from the DM panel
+
+#### Saved Locations
+
+Save the locations you'll come back to — towns, dungeon levels, the party's home base — and switch between them in one click instead of retyping everything.
+
+- **Save current** — Hit ➕ to save the current name + image + danger level as a named entry. The new entry becomes the active selection.
+- **Switch instantly** — A dropdown in the sidebar lists all your saved locations. Picking one swaps the name, image, and danger level together; the show/hide state stays where you left it so you can stage a switch privately and reveal when ready.
+- **Overwrite a saved location** — Tweak any of the live fields (name, image, danger), then hit 💾 to push the changes back into the currently selected entry.
+- **Manage from the dropdown** — Each row in the dropdown has a 🗑 to delete that entry. No separate manage screen.
+- Persists across sessions, stored separately from session save/load so your library is always available.
 
 ### Media Panel
 
