@@ -8,6 +8,11 @@ on:
 permissions:
   contents: write
 
+env:
+  # Opt into Node.js 24 for JavaScript actions ahead of GitHub's June 2026 forced cutover.
+  # Removes the deprecation warnings from upload-artifact@v5 etc. running on Node.js 20.
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     strategy:
