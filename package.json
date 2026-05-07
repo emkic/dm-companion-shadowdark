@@ -30,7 +30,9 @@
     "vite": "^8.0.7"
   },
   "overrides": {
-    "@xmldom/xmldom": "^0.8.13"
+    "@xmldom/xmldom": "^0.8.13",
+    "postcss": "^8.5.10",
+    "ip-address": "^10.1.1"
   },
   "build": {
     "appId": "com.shadowdark.dm-app",
