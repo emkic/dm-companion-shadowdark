@@ -37,7 +37,7 @@ export function isValidYouTubeUrl(url: string): boolean {
 }
 
 function youTubeErrorMessage(code: number): string {
-  const tryLocal = ' Try a different video, or switch this mood to "Local Files" in Edit Moods to use your own audio.'
+  const tryLocal = ' Use "Open in Browser" to play it on YouTube directly, or switch this mood to "Local Files" in Edit Moods.'
   switch (code) {
     case 2:
       return "That URL doesn't look like a valid YouTube link."
@@ -47,12 +47,12 @@ function youTubeErrorMessage(code: number): string {
       return 'Video not found — it may be private, removed, or the URL is wrong.'
     case 101:
     case 150:
-      return 'The uploader has disabled embedding for this video, so YouTube won\'t play it inside other apps.' + tryLocal
+      return "YouTube won't play this video embedded inside other apps — usually because the uploader disabled embedding, or licensing forbids it. The same video may still play fine on youtube.com." + tryLocal
     case 152:
     case 153:
-      return "YouTube won't play this video inside embedded apps from your region — usually because it's age-restricted, geo-blocked, or requires being signed in to a Google account. This is a YouTube restriction, not an app bug." + tryLocal
+      return "YouTube won't play this video embedded inside other apps — usually because it's age-restricted, requires sign-in, or licensing forbids embedded playback. The same video may still play fine on youtube.com (this is a YouTube restriction, not an app bug)." + tryLocal
     default:
-      return `YouTube playback error (code ${code}). The video may be restricted.` + tryLocal
+      return `YouTube playback error (code ${code}). The video may be restricted from embedded playback.` + tryLocal
   }
 }
 

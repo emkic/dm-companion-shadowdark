@@ -6,7 +6,7 @@ Only the latest release is supported with security updates.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 2.7.1   | ✅                 |
+| 2.8.0   | ✅                 |
 | Older   | ❌                 |
 
 ## Reporting a Vulnerability

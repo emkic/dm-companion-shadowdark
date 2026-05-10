@@ -82,6 +82,23 @@
   opacity: 1;
 }
 
+.ambiance-error-action {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(200, 112, 112, 0.5);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.ambiance-error-action:hover {
+  background: rgba(200, 112, 112, 0.2);
+  border-color: rgba(200, 112, 112, 0.8);
+}
+
 .ambiance-mood-grid {
   display: flex;
   flex-wrap: wrap;

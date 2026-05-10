@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import type { UseAmbianceReturn } from '../../hooks/useAmbiance'
-import { moodHasContent } from '../../hooks/useAmbiance'
+import { moodHasContent, isValidYouTubeUrl } from '../../hooks/useAmbiance'
 import { MoodEditorModal } from './MoodEditorModal'
 import './AmbiancePlayer.css'
 
@@ -14,6 +14,10 @@ export function AmbiancePlayer({ ambianceHook }: Props) {
 
   const activeMood = presets.find(p => p.id === ambiance.currentMoodId)
   const errorMessage = lastError ?? (apiLoadError ? `Can't reach YouTube (${apiLoadError}). Check your internet, or use the Local Files option for any mood. ` : null)
+  const fallbackYouTubeUrl =
+    errorMessage && activeMood?.source === 'youtube' && isValidYouTubeUrl(activeMood.youtubeUrl)
+      ? activeMood.youtubeUrl
+      : null
 
   return (
     <div className="ambiance-player">
@@ -37,6 +41,15 @@ export function AmbiancePlayer({ ambianceHook }: Props) {
         <div className="ambiance-error" role="alert">
           <span className="ambiance-error-icon">!</span>
           <span className="ambiance-error-text">{errorMessage}</span>
+          {fallbackYouTubeUrl && (
+            <button
+              className="ambiance-error-action"
+              onClick={() => window.electronAPI.openExternal(fallbackYouTubeUrl)}
+              title="Open this video on YouTube in your default browser"
+            >
+              Open in Browser
+            </button>
+          )}
           <button
             className="ambiance-error-dismiss"
             onClick={clearError}

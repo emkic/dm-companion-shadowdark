@@ -24,6 +24,7 @@ declare global {
       saveSavedLocations: (locations: SavedLocation[]) => Promise<void>
       loadPlayerFontScale: () => Promise<number>
       savePlayerFontScale: (scale: number) => Promise<void>
+      openExternal: (url: string) => Promise<boolean>
     }
     playerAPI: {
       onStateUpdate: (callback: (state: AppState) => void) => () => void

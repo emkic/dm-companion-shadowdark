@@ -34,7 +34,7 @@ export function MoodEditorModal({ presets, onSave, onClose }: Props) {
         id: String(nextId++),
         name: 'New Mood',
         color: '#888888',
-        source: 'youtube',
+        source: 'local',
         youtubeUrl: '',
         audioFiles: [],
         volume: 50,
@@ -101,21 +101,21 @@ export function MoodEditorModal({ presets, onSave, onClose }: Props) {
                 </button>
               </div>
 
-              {/* Source toggle */}
+              {/* Source toggle — Local first (preferred), YouTube second */}
               <div className="mood-editor-row mood-editor-source-row">
                 <label className="mood-editor-source-label">Source</label>
                 <div className="mood-editor-source-toggle">
-                  <button
-                    className={`mood-source-btn ${mood.source === 'youtube' ? 'active' : ''}`}
-                    onClick={() => updatePreset(mood.id, { source: 'youtube' })}
-                  >
-                    YouTube
-                  </button>
                   <button
                     className={`mood-source-btn ${mood.source === 'local' ? 'active' : ''}`}
                     onClick={() => updatePreset(mood.id, { source: 'local' })}
                   >
                     Local Files
+                  </button>
+                  <button
+                    className={`mood-source-btn ${mood.source === 'youtube' ? 'active' : ''}`}
+                    onClick={() => updatePreset(mood.id, { source: 'youtube' })}
+                  >
+                    YouTube
                   </button>
                 </div>
               </div>

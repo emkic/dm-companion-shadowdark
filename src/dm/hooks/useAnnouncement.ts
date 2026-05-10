@@ -1,65 +1,46 @@
-import { useState, useCallback, useEffect, useRef } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import type { AnnouncementState } from '@shared/types'
 
 const INITIAL_STATE: AnnouncementState = {
   text: '',
   isShowing: false,
-  timer: null
+  timerEndsAt: null
 }
 
 export interface UseAnnouncementReturn {
   announcement: AnnouncementState
-  showAnnouncement: (text: string, timerSeconds: number | null) => void
+  showAnnouncement: (text: string, totalSeconds: number | null) => void
   dismissAnnouncement: () => void
 }
 
 export function useAnnouncement(): UseAnnouncementReturn {
   const [announcement, setAnnouncement] = useState<AnnouncementState>(INITIAL_STATE)
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  // Clear any running timer
-  function clearTimer() {
-    if (timerRef.current) {
-      clearInterval(timerRef.current)
-      timerRef.current = null
-    }
-  }
-
-  const showAnnouncement = useCallback((text: string, timerSeconds: number | null) => {
-    clearTimer()
-    setAnnouncement({ text, isShowing: true, timer: timerSeconds })
+  const showAnnouncement = useCallback((text: string, totalSeconds: number | null) => {
+    const timerEndsAt =
+      totalSeconds !== null && totalSeconds > 0 ? Date.now() + totalSeconds * 1000 : null
+    setAnnouncement({ text, isShowing: true, timerEndsAt })
   }, [])
 
   const dismissAnnouncement = useCallback(() => {
-    clearTimer()
     setAnnouncement(INITIAL_STATE)
   }, [])
 
-  // Countdown timer
+  // Auto-dismiss when the deadline is reached. Uses a single setTimeout against
+  // the absolute deadline rather than ticking every second, so we don't depend
+  // on the DM window staying focused. If the window is throttled while hidden,
+  // the dismiss may be delayed a bit — but the player's displayed countdown is
+  // independent and stays accurate.
   useEffect(() => {
-    if (!announcement.isShowing || announcement.timer === null || announcement.timer <= 0) {
-      if (announcement.timer === 0) {
-        dismissAnnouncement()
-      }
+    if (!announcement.isShowing || announcement.timerEndsAt === null) return
+    const remainingMs = announcement.timerEndsAt - Date.now()
+    if (remainingMs <= 0) {
+      dismissAnnouncement()
       return
     }
-
-    timerRef.current = setInterval(() => {
-      setAnnouncement(prev => {
-        if (prev.timer === null || prev.timer <= 1) {
-          return { ...prev, timer: 0 }
-        }
-        return { ...prev, timer: prev.timer - 1 }
-      })
-    }, 1000)
-
-    return () => clearTimer()
-  }, [announcement.isShowing, announcement.timer === null, announcement.timer === 0])
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => clearTimer()
-  }, [])
+    const id = setTimeout(dismissAnnouncement, remainingMs)
+    return () => clearTimeout(id)
+  }, [announcement.isShowing, announcement.timerEndsAt, dismissAnnouncement])
 
   return { announcement, showAnnouncement, dismissAnnouncement }
 }

@@ -121,7 +121,11 @@ export interface MediaState {
 export interface AnnouncementState {
   text: string
   isShowing: boolean
-  timer: number | null  // seconds remaining, null = no auto-dismiss
+  // Deadline (epoch ms) for auto-dismiss; null = no auto-dismiss. Stored as a
+  // deadline so each window computes the countdown from its own Date.now() —
+  // the player keeps ticking even if the DM window is alt-tabbed and its
+  // setInterval gets throttled by Chromium.
+  timerEndsAt: number | null
 }
 
 export interface SavedLocation {

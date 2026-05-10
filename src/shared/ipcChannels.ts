@@ -20,5 +20,6 @@ export const IpcChannel = {
   LOAD_SAVED_LOCATIONS: 'saved-locations:load',
   SAVE_SAVED_LOCATIONS: 'saved-locations:save',
   LOAD_PLAYER_FONT_SCALE: 'player-font-scale:load',
-  SAVE_PLAYER_FONT_SCALE: 'player-font-scale:save'
+  SAVE_PLAYER_FONT_SCALE: 'player-font-scale:save',
+  SHELL_OPEN_EXTERNAL: 'shell:open-external'
 } as const

@@ -50,13 +50,26 @@
 }
 
 .announcement-timer-input {
-  width: 50px;
+  width: 42px;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 4px;
   color: var(--text);
   padding: 4px 6px;
   font-size: 0.8rem;
+}
+
+.announcement-timer-fields {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.announcement-timer-unit {
+  font-size: 0.7rem;
+  color: var(--text);
+  opacity: 0.6;
+  margin-right: 2px;
 }
 
 .announcement-active {

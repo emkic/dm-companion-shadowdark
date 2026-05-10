@@ -1,4 +1,4 @@
-import { ipcMain, dialog, app, BrowserWindow } from 'electron'
+import { ipcMain, dialog, app, BrowserWindow, shell } from 'electron'
 import * as fs from 'fs'
 import * as path from 'path'
 import { IpcChannel } from '../../src/shared/ipcChannels'
@@ -120,6 +120,19 @@ export function registerIpcHandlers(): void {
 
   ipcMain.handle(IpcChannel.SAVE_PLAYER_FONT_SCALE, (_event, scale: number) => {
     savePlayerFontScale(scale)
+  })
+
+  ipcMain.handle(IpcChannel.SHELL_OPEN_EXTERNAL, async (_event, url: string) => {
+    // Only allow http/https. shell.openExternal can launch arbitrary protocols
+    // (file://, javascript:, etc.) so we must validate at the IPC boundary.
+    try {
+      const parsed = new URL(url)
+      if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false
+      await shell.openExternal(url)
+      return true
+    } catch {
+      return false
+    }
   })
 
   ipcMain.handle(IpcChannel.READ_MEDIA_FOLDER, async (_event, folderPath: string) => {
