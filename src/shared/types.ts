@@ -171,6 +171,24 @@ export interface DisplayInfo {
   isPrimary: boolean
 }
 
+// Table Overlay
+export interface TableZone {
+  id: string
+  name: string  // player display name; matched case-insensitively against combat/crawling turn order
+  x: number    // 0–100 percentage of overlay width (center anchor)
+  y: number    // 0–100 percentage of overlay height (center anchor)
+  mirrored?: boolean  // rotate 180° so players on the opposite side can read it
+}
+
+export interface TableLayout {
+  zones: TableZone[]
+  dmZone: { x: number; y: number } | null  // DM seat position; null = not placed
+  dmZoneActive: boolean                     // live toggle — show the red glow or not
+  showName: boolean                         // show player name label in zones
+  showHealth: boolean                       // show health estimate in zones during combat
+  torchbearerName: string | null            // which zone shows the torch flame icon
+}
+
 // Ambiance / Music
 export type AmbianceSource = 'youtube' | 'local'
 

@@ -1,6 +1,6 @@
 {
   "name": "shadowdark-dm-app",
-  "version": "2.8.0",
+  "version": "3.0.0",
   "description": "DM Companion App for Shadowdark RPG",
   "main": "out/main/index.js",
   "scripts": {
@@ -27,13 +27,16 @@
     "electron-builder": "^26.8.2",
     "electron-vite": "^5.0.0",
     "typescript": "^5.3.3",
-    "vite": "^8.0.7"
+    "vite": "^8.0.16"
   },
   "overrides": {
     "@xmldom/xmldom": "^0.8.13",
     "postcss": "^8.5.10",
     "ip-address": "^10.1.1",
-    "fast-uri": "^3.1.2"
+    "fast-uri": "^3.1.2",
+    "tar": "^7.5.16",
+    "form-data": "^4.0.6",
+    "tmp": "^0.2.6"
   },
   "build": {
     "appId": "com.shadowdark.dm-app",

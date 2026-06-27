@@ -21,5 +21,13 @@ export const IpcChannel = {
   SAVE_SAVED_LOCATIONS: 'saved-locations:save',
   LOAD_PLAYER_FONT_SCALE: 'player-font-scale:load',
   SAVE_PLAYER_FONT_SCALE: 'player-font-scale:save',
-  SHELL_OPEN_EXTERNAL: 'shell:open-external'
+  SHELL_OPEN_EXTERNAL: 'shell:open-external',
+  LOAD_TABLE_OVERLAY_ENABLED: 'table-overlay:load-enabled',
+  SET_TABLE_OVERLAY_ENABLED: 'table-overlay:set-enabled',
+  LOAD_TABLE_LAYOUT: 'table-overlay:load-layout',
+  SAVE_TABLE_LAYOUT: 'table-overlay:save-layout',
+  OVERLAY_STATE_UPDATE: 'overlay:state-update',
+  OVERLAY_LAYOUT_UPDATE: 'overlay:layout-update',
+  LOAD_OVERLAY_DISPLAY_ID: 'table-overlay:load-display-id',
+  SET_OVERLAY_DISPLAY_ID: 'table-overlay:set-display-id'
 } as const

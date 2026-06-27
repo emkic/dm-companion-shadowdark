@@ -1,4 +1,4 @@
-import type { AppState, SessionData, DisplayInfo, MoodPreset, Party, SavedLocation } from './types'
+import type { AppState, SessionData, DisplayInfo, MoodPreset, Party, SavedLocation, TableLayout } from './types'
 
 declare global {
   interface Window {
@@ -25,9 +25,20 @@ declare global {
       loadPlayerFontScale: () => Promise<number>
       savePlayerFontScale: (scale: number) => Promise<void>
       openExternal: (url: string) => Promise<boolean>
+      loadTableOverlayEnabled: () => Promise<boolean>
+      setTableOverlayEnabled: (enabled: boolean) => Promise<void>
+      loadTableLayout: () => Promise<TableLayout>
+      saveTableLayout: (layout: TableLayout) => Promise<void>
+      loadOverlayDisplayId: () => Promise<number>
+      setOverlayDisplayId: (displayId: number) => Promise<void>
     }
     playerAPI: {
       onStateUpdate: (callback: (state: AppState) => void) => () => void
+    }
+    overlayAPI: {
+      onStateUpdate: (callback: (state: AppState) => void) => () => void
+      onLayoutUpdate: (callback: (layout: TableLayout) => void) => () => void
+      loadLayout: () => Promise<TableLayout>
     }
   }
 }

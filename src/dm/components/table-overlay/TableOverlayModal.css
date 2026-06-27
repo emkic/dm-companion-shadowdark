@@ -1,0 +1,236 @@
+.tl-modal {
+  width: 720px;
+  max-width: 95vw;
+  max-height: 88vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tl-modal__experimental {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #c8a04b;
+  background: rgba(200, 160, 75, 0.12);
+  border: 1px solid rgba(200, 160, 75, 0.3);
+  border-radius: 4px;
+  padding: 2px 6px;
+  margin-left: 8px;
+  align-self: center;
+}
+
+.tl-modal__toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tl-modal__toggle-label {
+  font-size: 14px;
+  color: #c8bfaf;
+  flex: 1;
+}
+
+.tl-modal__hint {
+  width: 100%;
+  margin: 0;
+  font-size: 12px;
+  color: #7a7060;
+  line-height: 1.5;
+}
+
+.tl-modal__display-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Zone display options section */
+.tl-modal__section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5a5548;
+  padding-bottom: 2px;
+  border-bottom: 1px solid #2a2830;
+}
+
+.tl-modal__option-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: -4px;
+}
+
+.tl-modal__option-hint {
+  width: 100%;
+  font-size: 11px;
+  color: #5a5548;
+  margin-top: 2px;
+}
+
+/* Editor canvas */
+.tl-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tl-canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #0d0d12;
+  border: 2px solid #2a2a3a;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: default;
+  user-select: none;
+}
+
+.tl-canvas__label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 11px;
+  color: #2a2a3a;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+}
+
+.tl-zone {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  background: rgba(30, 28, 40, 0.92);
+  border: 1px solid #4a4468;
+  border-radius: 6px;
+  cursor: grab;
+  white-space: nowrap;
+  transition: border-color 0.15s;
+}
+
+.tl-zone:hover {
+  border-color: #d4a84b;
+}
+
+.tl-zone:active {
+  cursor: grabbing;
+}
+
+/* DM zone chip in editor canvas */
+.tl-zone--dm {
+  border-color: #6a2828;
+  background: rgba(40, 20, 20, 0.92);
+}
+
+.tl-zone--dm:hover {
+  border-color: #c84040;
+}
+
+.tl-zone--dm .tl-zone__name {
+  color: #e08080;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+}
+
+/* Mirrored zone shown with dashed border in editor */
+.tl-zone--mirrored {
+  border-style: dashed;
+}
+
+.tl-zone__name {
+  font-size: 13px;
+  color: #c8bfaf;
+}
+
+/* Torchbearer flame indicator on zone chip */
+.tl-zone__torch {
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* Mirror toggle button */
+.tl-zone__mirror {
+  background: none;
+  border: none;
+  color: #5a5560;
+  font-size: 13px;
+  line-height: 1;
+  padding: 0 2px;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.tl-zone__mirror:hover {
+  color: #c8a04b;
+}
+
+.tl-zone__mirror--active {
+  color: #c8a04b;
+}
+
+.tl-zone__delete {
+  background: none;
+  border: none;
+  color: #6a6060;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 2px;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.tl-zone__delete:hover {
+  color: #c84040;
+}
+
+/* Controls below canvas */
+.tl-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tl-dm-row {
+  display: flex;
+  align-items: center;
+}
+
+.tl-torchbearer-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tl-quick-add {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tl-quick-add__label {
+  font-size: 12px;
+  color: #7a7060;
+}
+
+.tl-manual-add {
+  display: flex;
+  gap: 8px;
+}
+
+.tl-manual-add .form-input {
+  flex: 1;
+}

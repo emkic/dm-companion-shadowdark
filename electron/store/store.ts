@@ -1,5 +1,5 @@
 import Store from 'electron-store'
-import type { AppState, SessionData, MoodPreset, RosterPlayer, Party, SavedLocation } from '../../src/shared/types'
+import type { AppState, SessionData, MoodPreset, RosterPlayer, Party, SavedLocation, TableLayout } from '../../src/shared/types'
 
 interface StoreSchema {
   sessions: Record<string, SessionData>
@@ -10,6 +10,9 @@ interface StoreSchema {
   lastAudioFolder: string
   savedLocations: SavedLocation[]
   playerFontScale: number
+  tableOverlayEnabled: boolean
+  tableLayout: TableLayout
+  overlayDisplayId: number
 }
 
 const DEFAULT_MOOD_PRESETS: MoodPreset[] = [
@@ -55,6 +58,18 @@ const store = new Store<StoreSchema>({
     playerFontScale: {
       type: 'number',
       default: 1
+    },
+    tableOverlayEnabled: {
+      type: 'boolean',
+      default: false
+    },
+    tableLayout: {
+      type: 'object',
+      default: { zones: [], dmZone: null, dmZoneActive: false, showName: true, showHealth: true, torchbearerName: null }
+    },
+    overlayDisplayId: {
+      type: 'number',
+      default: 0  // 0 = auto (prefers third display, falls back to second)
     }
   }
 })
@@ -140,4 +155,36 @@ export function loadLastAudioFolder(): string {
 
 export function saveLastAudioFolder(folder: string): void {
   store.set('lastAudioFolder', folder)
+}
+
+export function loadTableOverlayEnabled(): boolean {
+  return store.get('tableOverlayEnabled', false)
+}
+
+export function saveTableOverlayEnabled(enabled: boolean): void {
+  store.set('tableOverlayEnabled', enabled)
+}
+
+export function loadTableLayout(): TableLayout {
+  const stored: any = store.get('tableLayout', { zones: [] })
+  return {
+    zones: stored.zones ?? [],
+    dmZone: stored.dmZone ?? null,
+    dmZoneActive: stored.dmZoneActive ?? false,
+    showName: stored.showName ?? true,
+    showHealth: stored.showHealth ?? true,
+    torchbearerName: stored.torchbearerName ?? null,
+  }
+}
+
+export function saveTableLayout(layout: TableLayout): void {
+  store.set('tableLayout', layout)
+}
+
+export function loadOverlayDisplayId(): number {
+  return store.get('overlayDisplayId', 0)
+}
+
+export function saveOverlayDisplayId(id: number): void {
+  store.set('overlayDisplayId', id)
 }

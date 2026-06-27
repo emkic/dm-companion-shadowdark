@@ -1,0 +1,148 @@
+.overlay-root {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: transparent;
+}
+
+/* ── Player zone ── */
+
+.player-zone {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  min-width: 130px;
+  padding: 10px 14px;
+  background: rgba(10, 10, 10, 0.82);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: #e0d5c0;
+  font-family: 'Georgia', serif;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.player-zone--active {
+  border-color: #d4a84b;
+  box-shadow:
+    0 0 18px rgba(212, 168, 75, 0.75),
+    0 0 40px rgba(212, 168, 75, 0.35);
+  animation: zone-pulse 1.6s ease-in-out infinite;
+}
+
+.player-zone--next {
+  border-color: rgba(200, 200, 220, 0.35);
+  box-shadow: 0 0 12px rgba(180, 180, 210, 0.22);
+}
+
+.player-zone--mirrored {
+  transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.player-zone--mirrored.player-zone--active {
+  transform: translate(-50%, -50%) rotate(180deg);
+}
+
+@keyframes zone-pulse {
+  0%, 100% {
+    box-shadow: 0 0 18px rgba(212, 168, 75, 0.75), 0 0 40px rgba(212, 168, 75, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(212, 168, 75, 0.95), 0 0 60px rgba(212, 168, 75, 0.55);
+  }
+}
+
+.player-zone__name {
+  font-size: 17px;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* Death countdown (shows below health estimate when a player is dying) */
+.player-zone__death {
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 3px;
+  color: #c84040;
+  letter-spacing: 0.04em;
+  animation: death-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes death-pulse {
+  0%, 100% { opacity: 0.75; }
+  50%       { opacity: 1; color: #e04848; }
+}
+
+/* Health estimate (replaces HP bar) */
+.player-zone__health {
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 5px;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+/* ── Mini torch (torchbearer indicator) ── */
+
+.zone-torch-mini-wrap {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.zone-torch-mini {
+  width: 40px;
+  height: 40px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  /* Same spritesheet as the player screen torch, scaled to 40×40px (factor 40/192 ≈ 0.208) */
+  background-image: url('../assets/vfx_fire_vol_3/sprite_sheets_96x96/vfx_fire_vol_3-Sheet.png');
+  background-size: 480px 200px;   /* 2304 × (40/192), 960 × (40/192) */
+  background-position: 0 0;       /* row 1 = torch */
+  animation: playTorchMini 0.8s steps(9) infinite;
+}
+
+@keyframes playTorchMini {
+  to { background-position: -360px 0; }  /* 9 × 40px */
+}
+
+/* ── DM zone ── */
+
+.dm-zone {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  min-width: 100px;
+  padding: 10px 16px;
+  background: rgba(10, 10, 10, 0.82);
+  border: 2px solid rgba(200, 60, 60, 0.5);
+  border-radius: 8px;
+  font-family: 'Georgia', serif;
+  animation: dm-zone-pulse 2s ease-in-out infinite;
+  box-shadow:
+    0 0 16px rgba(180, 40, 40, 0.5),
+    0 0 40px rgba(180, 40, 40, 0.25);
+}
+
+@keyframes dm-zone-pulse {
+  0%, 100% {
+    box-shadow: 0 0 16px rgba(180, 40, 40, 0.5), 0 0 40px rgba(180, 40, 40, 0.25);
+    border-color: rgba(200, 60, 60, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(210, 60, 60, 0.85), 0 0 60px rgba(180, 40, 40, 0.45);
+    border-color: rgba(220, 80, 80, 0.8);
+  }
+}
+
+.dm-zone__label {
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #e08080;
+}

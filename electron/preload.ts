@@ -24,7 +24,13 @@ const CH = {
   SAVE_SAVED_LOCATIONS: 'saved-locations:save',
   LOAD_PLAYER_FONT_SCALE: 'player-font-scale:load',
   SAVE_PLAYER_FONT_SCALE: 'player-font-scale:save',
-  SHELL_OPEN_EXTERNAL: 'shell:open-external'
+  SHELL_OPEN_EXTERNAL: 'shell:open-external',
+  LOAD_TABLE_OVERLAY_ENABLED: 'table-overlay:load-enabled',
+  SET_TABLE_OVERLAY_ENABLED: 'table-overlay:set-enabled',
+  LOAD_TABLE_LAYOUT: 'table-overlay:load-layout',
+  SAVE_TABLE_LAYOUT: 'table-overlay:save-layout',
+  LOAD_OVERLAY_DISPLAY_ID: 'table-overlay:load-display-id',
+  SET_OVERLAY_DISPLAY_ID: 'table-overlay:set-display-id'
 }
 
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -72,5 +78,17 @@ contextBridge.exposeInMainWorld('electronAPI', {
   savePlayerFontScale: (scale: number) =>
     ipcRenderer.invoke(CH.SAVE_PLAYER_FONT_SCALE, scale),
   openExternal: (url: string) =>
-    ipcRenderer.invoke(CH.SHELL_OPEN_EXTERNAL, url)
+    ipcRenderer.invoke(CH.SHELL_OPEN_EXTERNAL, url),
+  loadTableOverlayEnabled: () =>
+    ipcRenderer.invoke(CH.LOAD_TABLE_OVERLAY_ENABLED),
+  setTableOverlayEnabled: (enabled: boolean) =>
+    ipcRenderer.invoke(CH.SET_TABLE_OVERLAY_ENABLED, enabled),
+  loadTableLayout: () =>
+    ipcRenderer.invoke(CH.LOAD_TABLE_LAYOUT),
+  saveTableLayout: (layout: unknown) =>
+    ipcRenderer.invoke(CH.SAVE_TABLE_LAYOUT, layout),
+  loadOverlayDisplayId: () =>
+    ipcRenderer.invoke(CH.LOAD_OVERLAY_DISPLAY_ID),
+  setOverlayDisplayId: (displayId: number) =>
+    ipcRenderer.invoke(CH.SET_OVERLAY_DISPLAY_ID, displayId)
 })

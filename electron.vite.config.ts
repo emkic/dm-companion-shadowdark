@@ -28,7 +28,8 @@ export default defineConfig({
       rollupOptions: {
         input: {
           index: resolve(__dirname, 'electron/preload.ts'),
-          player: resolve(__dirname, 'electron/preload-player.ts')
+          player: resolve(__dirname, 'electron/preload-player.ts'),
+          overlay: resolve(__dirname, 'electron/preload-overlay.ts')
         },
         external: nodeExternals,
         output: { format: 'cjs', entryFileNames: '[name].js' }
@@ -45,14 +46,16 @@ export default defineConfig({
       alias: {
         '@shared': resolve('src/shared'),
         '@dm': resolve('src/dm'),
-        '@player': resolve('src/player')
+        '@player': resolve('src/player'),
+        '@overlay': resolve('src/overlay')
       }
     },
     build: {
       rollupOptions: {
         input: {
           dm: resolve(__dirname, 'src/dm/index.html'),
-          player: resolve(__dirname, 'src/player/index.html')
+          player: resolve(__dirname, 'src/player/index.html'),
+          overlay: resolve(__dirname, 'src/overlay/index.html')
         }
       }
     }

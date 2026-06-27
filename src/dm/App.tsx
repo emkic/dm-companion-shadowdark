@@ -10,6 +10,7 @@ import { useAnnouncement } from './hooks/useAnnouncement'
 import { useRoster } from './hooks/useRoster'
 import { useSavedLocations } from './hooks/useSavedLocations'
 import { usePlayerFontScale } from './hooks/usePlayerFontScale'
+import { useTableOverlay } from './hooks/useTableOverlay'
 import { TorchPanel } from './components/torch/TorchPanel'
 import { LocationSidebar } from './components/location/LocationSidebar'
 import { CombatPanel } from './components/combat/CombatPanel'
@@ -21,6 +22,7 @@ import { DisplaySelector } from './components/display/DisplaySelector'
 import { PlayerFontControl } from './components/display/PlayerFontControl'
 import { TabBar, type TabDef } from './components/tabs/TabBar'
 import { AnnouncementControls } from './components/announcement/AnnouncementControls'
+import { TableOverlayModal } from './components/table-overlay/TableOverlayModal'
 import { YouTubeEmbed } from './components/ambiance/YouTubeEmbed'
 import { MiniPlayerBar } from './components/ambiance/MiniPlayerBar'
 import type { AppState } from '@shared/types'
@@ -42,8 +44,11 @@ export default function App() {
   const savedLocationsHook = useSavedLocations()
   const playerFontScaleHook = usePlayerFontScale()
 
+  const tableOverlayHook = useTableOverlay()
+
   const [activeTab, setActiveTab] = useState<TabId>('combat')
   const [sessionModalOpen, setSessionModalOpen] = useState(false)
+  const [tableOverlayModalOpen, setTableOverlayModalOpen] = useState(false)
 
   const appState: AppState = useMemo(() => ({
     torch: torchHook.torchState,
@@ -182,6 +187,13 @@ export default function App() {
         >
           💾 Sessions
         </button>
+        <button
+          className={`btn btn-small ${tableOverlayHook.enabled ? 'btn-primary' : 'btn-ghost'}`}
+          onClick={() => setTableOverlayModalOpen(true)}
+          title="Table overlay settings"
+        >
+          Table
+        </button>
       </header>
 
       <main className="dm-main">
@@ -243,6 +255,19 @@ export default function App() {
           currentState={appState}
           onLoad={handleLoadSession}
           onClose={() => setSessionModalOpen(false)}
+        />
+      )}
+
+      {tableOverlayModalOpen && (
+        <TableOverlayModal
+          enabled={tableOverlayHook.enabled}
+          onToggle={tableOverlayHook.toggleEnabled}
+          layout={tableOverlayHook.layout}
+          onLayoutChange={tableOverlayHook.saveLayout}
+          overlayDisplayId={tableOverlayHook.overlayDisplayId}
+          onDisplayChange={tableOverlayHook.changeDisplay}
+          partyNames={rosterHook.activeParty?.players.map(p => p.name) ?? []}
+          onClose={() => setTableOverlayModalOpen(false)}
         />
       )}
     </div>

@@ -2,10 +2,11 @@ import { ipcMain, dialog, app, BrowserWindow, shell } from 'electron'
 import * as fs from 'fs'
 import * as path from 'path'
 import { IpcChannel } from '../../src/shared/ipcChannels'
-import { saveSession, loadSession, listSessions, deleteSession, loadMoodPresets, saveMoodPresets, loadAmbianceVolume, saveAmbianceVolume, loadParties, saveParties, loadSavedLocations, saveSavedLocations, loadPlayerFontScale, savePlayerFontScale, loadLastAudioFolder, saveLastAudioFolder } from '../store/store'
+import { saveSession, loadSession, listSessions, deleteSession, loadMoodPresets, saveMoodPresets, loadAmbianceVolume, saveAmbianceVolume, loadParties, saveParties, loadSavedLocations, saveSavedLocations, loadPlayerFontScale, savePlayerFontScale, loadLastAudioFolder, saveLastAudioFolder, loadTableOverlayEnabled, saveTableOverlayEnabled, loadTableLayout, saveTableLayout, loadOverlayDisplayId, saveOverlayDisplayId } from '../store/store'
 import { broadcastToPlayer, movePlayerToDisplay } from './state-bridge'
+import { broadcastToOverlay, createOverlayWindow, destroyOverlayWindow, sendLayoutToOverlay, moveOverlayToDisplay } from './overlay-bridge'
 import { getAllDisplays } from '../utils/display'
-import type { AppState, MoodPreset, Party, SavedLocation } from '../../src/shared/types'
+import type { AppState, MoodPreset, Party, SavedLocation, TableLayout } from '../../src/shared/types'
 
 const IMAGE_EXTS = new Set(['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp'])
 const VIDEO_EXTS = new Set(['.mp4', '.webm', '.mov', '.mkv'])
@@ -13,6 +14,7 @@ const VIDEO_EXTS = new Set(['.mp4', '.webm', '.mov', '.mkv'])
 export function registerIpcHandlers(): void {
   ipcMain.on(IpcChannel.BROADCAST_STATE, (_event, state: AppState) => {
     broadcastToPlayer(state)
+    broadcastToOverlay(state)
   })
 
   ipcMain.handle(IpcChannel.SAVE_SESSION, (_event, name: string, appState: AppState) => {
@@ -145,5 +147,36 @@ export function registerIpcHandlers(): void {
     } catch {
       return []
     }
+  })
+
+  ipcMain.handle(IpcChannel.LOAD_TABLE_OVERLAY_ENABLED, () => {
+    return loadTableOverlayEnabled()
+  })
+
+  ipcMain.handle(IpcChannel.SET_TABLE_OVERLAY_ENABLED, (_event, enabled: boolean) => {
+    saveTableOverlayEnabled(enabled)
+    if (enabled) {
+      createOverlayWindow(loadOverlayDisplayId())
+    } else {
+      destroyOverlayWindow()
+    }
+  })
+
+  ipcMain.handle(IpcChannel.LOAD_OVERLAY_DISPLAY_ID, () => {
+    return loadOverlayDisplayId()
+  })
+
+  ipcMain.handle(IpcChannel.SET_OVERLAY_DISPLAY_ID, (_event, displayId: number) => {
+    saveOverlayDisplayId(displayId)
+    moveOverlayToDisplay(displayId)
+  })
+
+  ipcMain.handle(IpcChannel.LOAD_TABLE_LAYOUT, () => {
+    return loadTableLayout()
+  })
+
+  ipcMain.handle(IpcChannel.SAVE_TABLE_LAYOUT, (_event, layout: TableLayout) => {
+    saveTableLayout(layout)
+    sendLayoutToOverlay(layout)
   })
 }

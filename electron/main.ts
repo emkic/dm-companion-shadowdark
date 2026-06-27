@@ -3,6 +3,8 @@ import { join } from 'path'
 import { getPlayerDisplayBounds } from './utils/display'
 import { setPlayerWindow } from './ipc/state-bridge'
 import { registerIpcHandlers } from './ipc/ipc-handlers'
+import { initOverlayBridge, createOverlayWindow } from './ipc/overlay-bridge'
+import { loadTableOverlayEnabled, loadOverlayDisplayId } from './store/store'
 
 const isDev = !!process.env['ELECTRON_RENDERER_URL']
 
@@ -136,12 +138,15 @@ app.whenReady().then(() => {
   powerSaveBlocker.start('prevent-display-sleep')
   setupCSP()
   registerMediaProtocol()
+  initOverlayBridge(isDev, process.env['ELECTRON_RENDERER_URL'])
   registerIpcHandlers()
   createWindows()
+  if (loadTableOverlayEnabled()) createOverlayWindow(loadOverlayDisplayId())
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindows()
+      if (loadTableOverlayEnabled()) createOverlayWindow(loadOverlayDisplayId())
     }
   })
 })

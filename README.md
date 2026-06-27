@@ -20,6 +20,7 @@ Published under the Shadowdark RPG Third-Party License and is not affiliated wit
 - **Media panel** — Display images or videos fullscreen on the player screen, with first-frame thumbnails for videos
 - **Player text size** — Scale the player screen text from the DM panel so it reads well from across the room
 - **Session save/load** — Pick up exactly where you left off
+- **Table overlay** *(experimental)* — A transparent, click-through HUD for DMs who use a TV as a digital map table. Shows player zones, turn order, health estimates, and death countdowns on top of Foundry or any VTT without covering the map
 
 ## Download
 
@@ -197,6 +198,24 @@ Set the mood for your session with background music and soundscapes — switch b
 - **Per-mood volume + shuffle** — Each mood has its own volume level and shuffle toggle. A master volume slider controls overall loudness.
 - **Mood editor** — Full modal editor to customize mood names, colors, audio source, files/URLs, volume, shuffle, and favorite status.
 - **Volume persisted** — Master volume is saved across sessions so you don't have to adjust it every time.
+
+### Table Overlay *(experimental)*
+
+For DMs who use a TV as a digital map table — running Foundry, Roll20, or any VTT on a screen that players are gathered around — the Table Overlay adds a transparent, click-through HUD on top of it. Player zones sit over the map and light up on each player's turn. The VTT shows through the center untouched.
+
+This is a niche feature. If your setup is the standard projector-facing-the-wall with the player window, you don't need it. But if your players are seated around a TV lying flat or mounted low, this was built for you.
+
+- **Player zones** — Place a named badge for each seat by dragging it to match where that player sits. Zones glow gold when it's their turn. The next player in initiative gets a faint silver glow so they can already be thinking.
+- **Health estimates** — During combat, zones show the player's health state (Uninjured → Injured → Bloodied → Near Death → Dying) in color. No exact numbers — just enough for the table to feel the tension.
+- **Death countdown** — When a player hits 0 HP, their zone shows the d4 round timer right on the map. Everyone at the table sees it ticking.
+- **Torchbearer** — Assign one player as the torchbearer. Their zone gets a small animated torch flame using the same pixel-art sprite from the player screen.
+- **DM seat** — Add a zone for yourself with a pulsing red glow. Toggle the glow on and off from the overlay settings panel.
+- **Mirror mode** — Per-zone text rotation for players sitting on the opposite side of the table. Their zone reads right-side up from their seat.
+- **Toggleable display** — Turn player names and health estimates on or off independently.
+- **Click-through** — The overlay has no effect on the map. Clicks pass straight through to whatever is running behind it.
+- **Display selector** — Choose which monitor the overlay appears on, independent of the player window.
+
+Enable it via the **Table** button in the DM header. All zone positions are persisted between sessions.
 
 ### Session Save/Load
 
